@@ -12,7 +12,7 @@ class SportsController {
 		try {
 			res.render("sports/sports-list", {
 				sports,
-				user: req.user ? req.user : null
+				user: req.user
 			});
 
 		} catch (error) {
@@ -28,7 +28,7 @@ class SportsController {
 		try {
 			res.render("sports/sports-details", {
 				sport,
-				user: req.user ? req.user : null
+				user: req.user
 			});
 
 		} catch (error) {
@@ -40,8 +40,8 @@ class SportsController {
 		const dto: CreateSportDto = req.body;
 		
 		try {
-			const sport = await this.sportsService.addSport(dto)
-			res.redirect(`sports/${sport.id}`);
+			const createdSportId = await this.sportsService.addSport(dto)
+			res.redirect(`sports/${createdSportId}`);
 		} catch (error) {
 			next(error);
 		}

@@ -1,11 +1,13 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { Events, EventsId } from './events';
+import type { Users, UsersId } from './users';
 
 export interface EventRatingAttributes {
   id?: number;
-  rating: number;
+  would_recommend: boolean;
   created_at?: Date;
+  created_by: number;
   event_id: number;
 }
 
@@ -15,8 +17,9 @@ export type EventRatingCreationAttributes = Optional<EventRatingAttributes, Even
 
 export class EventRating extends Model<EventRatingAttributes, EventRatingCreationAttributes> implements EventRatingAttributes {
   id?: number;
-  rating!: number;
+  would_recommend!: boolean;
   created_at?: Date;
+  created_by!: number;
   event_id!: number;
 
   // EventRating belongsTo Events via event_id
@@ -24,6 +27,11 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
   getEvent!: Sequelize.BelongsToGetAssociationMixin<Events>;
   setEvent!: Sequelize.BelongsToSetAssociationMixin<Events, EventsId>;
   createEvent!: Sequelize.BelongsToCreateAssociationMixin<Events>;
+  // EventRating belongsTo Users via created_by
+  created_by_user!: Users;
+  getCreated_by_user!: Sequelize.BelongsToGetAssociationMixin<Users>;
+  setCreated_by_user!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
+  createCreated_by_user!: Sequelize.BelongsToCreateAssociationMixin<Users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof EventRating {
     EventRating.init({
@@ -33,8 +41,8 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
       allowNull: false,
       primaryKey: true
     },
-    rating: {
-      type: DataTypes.INTEGER,
+    would_recommend: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
     created_at: {
@@ -42,13 +50,23 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
+      },
+      unique: "unique_user_per_event"
+    },
     event_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'events',
         key: 'id'
-      }
+      },
+      unique: "unique_user_per_event"
     }
   }, {
     sequelize,
@@ -61,6 +79,14 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
         unique: true,
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "unique_user_per_event",
+        unique: true,
+        fields: [
+          { name: "created_by" },
+          { name: "event_id" },
         ]
       },
     ]

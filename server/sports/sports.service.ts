@@ -25,10 +25,11 @@ class SportsService {
 
 		const created = await Sports.create({
 			name: dto.name,
-			description: dto.description
-		 }, { include: this.entitiesToInclude })
+			description: dto.description,
+			created_by: dto.userId
+		 })
 
-		return this.mapToDto(created)
+		return created.id
 	}
 
 	private mapToDto(model: Sports): GetSportDto {

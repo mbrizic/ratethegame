@@ -1,15 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 import AuthService from '../auth/auth.service';
-import { RequestWithUser } from '../auth/auth.interface';
+import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
+import EventsService from '../events/events.service';
 
 class PageController {
-	public authService = new AuthService();
+	private authService = new AuthService();
+	private eventsService = new EventsService();
 
-	public getIndexPage = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+	public getIndexPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		const events = await this.eventsService.getAll()
+
 		try {
 			res.render("index/index", {
-				events: [],
-				user: req.user ? req.user : null
+				events,
+				user: req.user
 			});
 
 		} catch (error) {

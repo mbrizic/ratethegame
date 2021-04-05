@@ -9,7 +9,10 @@ append scripts
 append body
 	h1= event.name
 	p= event.sportName
-	p= `${event.rating.toFixed(2)}/10 (${event.totalRatings} ratings)`
+	if event.totalRatings > 0
+		p= `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings)`
+	else
+		p No ratings yet
 
 	include rating/rating-form.pug
 	

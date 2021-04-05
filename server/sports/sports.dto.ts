@@ -1,5 +1,3 @@
-import { GetEventDto } from "../events/events.dto";
-
 export interface GetSportDto {
   id: number;
   name: string;
@@ -15,4 +13,5 @@ export interface SportEventsDto {
 export interface CreateSportDto {
   name: string;
   description: string;
+  userId: number;
 }

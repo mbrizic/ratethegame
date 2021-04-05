@@ -1,10 +1,17 @@
-h3 Add new event
+if user
+	h3 Add new event
 
-form(action='/events', method='POST')
-	input(placeholder='Name', name='name')
-	input(placeholder='Description', name='description')
-	if sport
-		input(type="hidden", name='sportId', value=sport.id)
-	else
-		input(placeholder='Sport Id', name='sportId')
-	button(type='submit') Add event
+	form(action='/events', method='POST')
+		input(placeholder='Name', name='name')
+		input(placeholder='Description', name='description')
+		if sport
+			input(type="hidden", name='sportId', value=sport.id)
+		else
+			input(placeholder='Sport Id', name='sportId')
+		input(type="hidden", name='userId', value=user.id)
+		button(type='submit') Add event
+else
+	p
+		span Please 
+		a(href="/login") log in
+		span  to add new events

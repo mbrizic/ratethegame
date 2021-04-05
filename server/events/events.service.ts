@@ -19,6 +19,15 @@ class EventsService {
 		return this.mapToDto(event)
 	}
 
+	public async hasUserRatedEvent(id: number, userId: number) {
+		const rating = await EventRating.findOne({ where: {
+			created_by: userId,
+			event_id: id
+		}})
+
+		return rating != null
+	}
+
 	public async addEvent(dto: CreateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
@@ -26,33 +35,55 @@ class EventsService {
 
 		const created = await Events.create({
 			name: dto.name,
-			sport_id: dto.sportId
+			sport_id: dto.sportId,
+			created_by: dto.userId,
 		}, { include: this.entitiesToInclude });
 
 		return created.id
 	}
 
-	public async rateEvent(dto: RateEventDto) {
+	public async addRating(dto: RateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
 		await EventRating.create({
 			event_id: dto.eventId,
-			rating: dto.rating,
+			created_by: dto.userId,
+			would_recommend: dto.wouldRecommend,
 		})
 
 		return true
 	}
 
+	public async removeRating(dto: RateEventDto) {
+		if (isEmptyObject(dto)) {
+			throw new HttpException(400, "Invalid DTO");
+		}
+
+		const deleted = await EventRating.destroy({ 
+			where: { 
+				created_by: dto.userId,
+				event_id: dto.eventId
+			}
+		});
+
+		if (!deleted) {
+			throw new HttpException(409, "Rating not found");
+		}
+
+		return true
+	}
+
 	private mapToDto(model: Events): GetEventDto {
-		const ratings = model.event_ratings ?? []
+		const votes = model.event_ratings
+		const positiveVotes = votes.filter(r => r.would_recommend).length
 
 		return {
 			id: model.id,
 			name: model.name,
-			rating: average(ratings.map(er => er.rating)),
-			totalRatings: ratings.length,
+			ratingPercentage: positiveVotes / votes.length * 100,
+			totalRatings: votes.length,
 			sportId: model.sport.id,
 			sportName: model.sport.name
 		}

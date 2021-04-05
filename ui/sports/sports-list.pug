@@ -11,5 +11,6 @@ append body
 		div.sport
 			a(href="/sports/" + sport.id)
 				h1.heading= sport.name
+			div= sport.events.length + " events"
 
 	include sports-form.pug

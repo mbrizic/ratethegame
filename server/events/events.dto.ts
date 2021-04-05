@@ -4,16 +4,18 @@ export interface GetEventDto {
 	sportName: string;
 	sportId: number;
 	totalRatings: number;
-	rating: number;
+	ratingPercentage: number;
 }
 
 export interface CreateEventDto {
 	sportId: number;
+	userId: number;
 	name: string;
 	description: string;
 }
 
 export interface RateEventDto {
+	userId: number;
 	eventId: number;
-	rating: number;
+	wouldRecommend: boolean;
 }

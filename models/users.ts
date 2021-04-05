@@ -1,5 +1,8 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { EventRating, EventRatingId } from './event_rating';
+import type { Events, EventsId } from './events';
+import type { Sports, SportsId } from './sports';
 
 export interface UsersAttributes {
   id?: number;
@@ -20,6 +23,42 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
   is_admin!: boolean;
   created_at?: Date;
 
+  // Users hasMany EventRating via created_by
+  event_ratings!: EventRating[];
+  getEvent_ratings!: Sequelize.HasManyGetAssociationsMixin<EventRating>;
+  setEvent_ratings!: Sequelize.HasManySetAssociationsMixin<EventRating, EventRatingId>;
+  addEvent_rating!: Sequelize.HasManyAddAssociationMixin<EventRating, EventRatingId>;
+  addEvent_ratings!: Sequelize.HasManyAddAssociationsMixin<EventRating, EventRatingId>;
+  createEvent_rating!: Sequelize.HasManyCreateAssociationMixin<EventRating>;
+  removeEvent_rating!: Sequelize.HasManyRemoveAssociationMixin<EventRating, EventRatingId>;
+  removeEvent_ratings!: Sequelize.HasManyRemoveAssociationsMixin<EventRating, EventRatingId>;
+  hasEvent_rating!: Sequelize.HasManyHasAssociationMixin<EventRating, EventRatingId>;
+  hasEvent_ratings!: Sequelize.HasManyHasAssociationsMixin<EventRating, EventRatingId>;
+  countEvent_ratings!: Sequelize.HasManyCountAssociationsMixin;
+  // Users hasMany Events via created_by
+  events!: Events[];
+  getEvents!: Sequelize.HasManyGetAssociationsMixin<Events>;
+  setEvents!: Sequelize.HasManySetAssociationsMixin<Events, EventsId>;
+  addEvent!: Sequelize.HasManyAddAssociationMixin<Events, EventsId>;
+  addEvents!: Sequelize.HasManyAddAssociationsMixin<Events, EventsId>;
+  createEvent!: Sequelize.HasManyCreateAssociationMixin<Events>;
+  removeEvent!: Sequelize.HasManyRemoveAssociationMixin<Events, EventsId>;
+  removeEvents!: Sequelize.HasManyRemoveAssociationsMixin<Events, EventsId>;
+  hasEvent!: Sequelize.HasManyHasAssociationMixin<Events, EventsId>;
+  hasEvents!: Sequelize.HasManyHasAssociationsMixin<Events, EventsId>;
+  countEvents!: Sequelize.HasManyCountAssociationsMixin;
+  // Users hasMany Sports via created_by
+  sports!: Sports[];
+  getSports!: Sequelize.HasManyGetAssociationsMixin<Sports>;
+  setSports!: Sequelize.HasManySetAssociationsMixin<Sports, SportsId>;
+  addSport!: Sequelize.HasManyAddAssociationMixin<Sports, SportsId>;
+  addSports!: Sequelize.HasManyAddAssociationsMixin<Sports, SportsId>;
+  createSport!: Sequelize.HasManyCreateAssociationMixin<Sports>;
+  removeSport!: Sequelize.HasManyRemoveAssociationMixin<Sports, SportsId>;
+  removeSports!: Sequelize.HasManyRemoveAssociationsMixin<Sports, SportsId>;
+  hasSport!: Sequelize.HasManyHasAssociationMixin<Sports, SportsId>;
+  hasSports!: Sequelize.HasManyHasAssociationsMixin<Sports, SportsId>;
+  countSports!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Users {
     Users.init({

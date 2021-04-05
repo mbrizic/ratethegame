@@ -7,16 +7,12 @@ append scripts
 	include index.js
 
 append body
-	if user
-		p logged in as 
-			span= user.email
-			span . there are #{events.length} events.
-			form(action="/logout", method="POST")
-				button(type="submit") Log out
-	else 
-		a(href="/login") Log in
-
 	each event in events
 		div.event
-			a(href="/event/" + event.id)
+			a(href="/events/" + event.id)
 				h1.heading= event.name
+			div= "Sport: " + event.sportName
+			if event.totalRatings > 0
+				p= `${event.ratingPercentage}% would recommend this`
+			else
+				p No ratings for this one yet

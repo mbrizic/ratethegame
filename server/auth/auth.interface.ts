@@ -10,6 +10,10 @@ export interface TokenData {
   expiresIn: number;
 }
 
+export interface RequestWithPotentialUser extends Request {
+  user: GetUserDto | null;
+}
+
 export interface RequestWithUser extends Request {
   user: GetUserDto;
 }

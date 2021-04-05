@@ -11,5 +11,10 @@ append body
 		div.event
 			a(href="/events/" + event.id)
 				h1.heading= event.name
+			p= "Sport: " + event.sportName
+			if event.totalRatings > 0
+				p= `${event.ratingPercentage}% would recommend this`
+			else
+				p No ratings for this one yet
 
 	include events-form.pug

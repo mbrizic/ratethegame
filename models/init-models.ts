@@ -42,6 +42,12 @@ export function initModels(sequelize: Sequelize) {
   Events.hasMany(EventRating, { as: "event_ratings", foreignKey: "event_id"});
   Events.belongsTo(Sports, { as: "sport", foreignKey: "sport_id"});
   Sports.hasMany(Events, { as: "events", foreignKey: "sport_id"});
+  EventRating.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
+  Users.hasMany(EventRating, { as: "event_ratings", foreignKey: "created_by"});
+  Events.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
+  Users.hasMany(Events, { as: "events", foreignKey: "created_by"});
+  Sports.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
+  Users.hasMany(Sports, { as: "sports", foreignKey: "created_by"});
 
   return {
     EventRating: EventRating,

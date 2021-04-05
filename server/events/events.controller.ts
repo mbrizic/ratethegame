@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
-import { RequestWithUser } from '../auth/auth.interface';
+import { NextFunction, Response } from 'express';
+import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
 import { CreateEventDto, RateEventDto } from './events.dto';
 import EventsService from './events.service';
 
 class EventsController {
 	public eventsService = new EventsService();
 
-	public getEventsList = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+	public getEventsList = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		const events = await this.eventsService.getAll()
 
 		try {
@@ -20,17 +20,21 @@ class EventsController {
 		}
 	}
 
-	public getEventsDetails = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+	public getEventsDetails = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		const eventId = Number(req.params.id)
 		
 		const event = await this.eventsService.getById(eventId)
 
+		const hasUserAlreadyRated = req.user
+			? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
+			: false
+
 		try {
 			res.render("events/events-details", {
 				event,
-				user: req.user ? req.user : null
+				hasUserAlreadyRated,
+				user: req.user
 			});
-
 		} catch (error) {
 			next(error);
 		}
@@ -47,11 +51,22 @@ class EventsController {
 		}
 	}
 
-	public rateEvent = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+	public addVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const dto: RateEventDto = req.body;
 		
 		try {
-			const event = await this.eventsService.rateEvent(dto)
+			const event = await this.eventsService.addRating(dto)
+			res.redirect(`/events/${dto.eventId}`);
+		} catch (error) {
+			next(error);
+		}
+	}
+	
+	public removeVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+		const dto: RateEventDto = req.body;
+		
+		try {
+			const event = await this.eventsService.removeRating(dto)
 			res.redirect(`/events/${dto.eventId}`);
 		} catch (error) {
 			next(error);
