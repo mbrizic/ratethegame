@@ -1,0 +1,31 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    overflow-y: scroll;
+    color: #0a0202;
+    background: #d8d6d6;
+}
+
+input, button, select {
+    margin: 0 10px 20px 0;
+    padding: 0 10px;
+    height: 30px;
+}
+
+/* mods */
+
+.gone {
+    display: none;
+}
+
+.text-highlighted {
+    color: #e41b14;
+}
+
+.text-centered {
+    text-align: center;
+}
+
+a {
+    color: #d81212;
+    cursor: pointer;
+}

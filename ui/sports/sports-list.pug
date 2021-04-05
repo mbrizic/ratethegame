@@ -1,0 +1,15 @@
+extends ../_layout/layout.pug
+
+append style
+	include sports.css
+
+append scripts
+	include sports.js
+
+append body
+	each sport in sports
+		div.sport
+			a(href="/sports/" + sport.id)
+				h1.heading= sport.name
+
+	include sports-form.pug

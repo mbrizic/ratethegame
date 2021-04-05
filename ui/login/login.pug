@@ -1,0 +1,15 @@
+extends ../_layout/layout.pug
+
+append style
+	include login.css
+
+append scripts
+	include login.js
+
+append body
+	form(action='/login', method='POST')
+		input#username(placeholder='Username', name='username', value='mario@mail.com')
+		input#password(placeholder='Password', name='password', type='password', value='123456')
+		button#login(type='submit') Log in
+		a(href="/register") 
+			span ... or register instead

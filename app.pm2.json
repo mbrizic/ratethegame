@@ -1,0 +1,9 @@
+{
+  "apps": [
+      {
+          "name": "ratethegame",
+          "script": "npm",
+          "args" : "start"
+      }
+  ]
+}

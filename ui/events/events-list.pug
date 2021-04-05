@@ -1,0 +1,15 @@
+extends ../_layout/layout.pug
+
+append style
+	include events.css
+
+append scripts
+	include events.js
+
+append body
+	each event in events
+		div.event
+			a(href="/events/" + event.id)
+				h1.heading= event.name
+
+	include events-form.pug

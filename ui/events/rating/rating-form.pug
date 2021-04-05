@@ -1,0 +1,10 @@
+append style
+	include rating-form.css
+
+append scripts
+	include rating-form.js
+
+form(action=`/events/${event.id}/rating`, method='POST')
+	input(placeholder='Rating', name='rating', min='1', max='1')
+	input(type='hidden', name='eventId', value=event.id)
+	button(type='submit') Add rating

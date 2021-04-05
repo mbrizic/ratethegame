@@ -1,0 +1,15 @@
+extends ../_layout/layout.pug
+
+append style
+	include events.css
+
+append scripts
+	include events.js
+
+append body
+	h1= event.name
+	p= event.sportName
+	p= `${event.rating.toFixed(2)}/10 (${event.totalRatings} ratings)`
+
+	include rating/rating-form.pug
+	

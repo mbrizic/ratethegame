@@ -1,0 +1,20 @@
+doctype=html
+html
+	head
+		title Rate the game
+		style
+			block style
+				include layout.css
+				include ../main.css
+	body#body
+		block body
+			h1.text-highlighted.text-centered Rate the game
+			ul
+				li
+					a(href="/events") Events
+				li
+					a(href="/sports") Sports
+		block libs
+		script
+			block scripts
+				include ../helpers.js
