@@ -17,7 +17,7 @@ async function runMigrations() {
   console.log("Generating TypeScript classes from DB tables...")
   
   const sequelizeAuto = new SequelizeAuto(database, null, null, {
-    directory: "./models",
+    directory: "./database/models",
     dialect: "postgres",
     lang: "ts",
     caseModel: "p",

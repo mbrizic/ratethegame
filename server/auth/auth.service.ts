@@ -4,11 +4,10 @@ import { CreateUserDto, GetUserDto, LoginUserDto, UpdateUserCommand } from '../u
 import HttpException from '../core/exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
-import { Users } from '../../models/users';
 import UserService from '../users/users.service';
+import { Users } from '../../database/models/users';
 
 class AuthService {
-  private users = Users;
   private usersService = new UserService()
 
   public async signup(dto: CreateUserDto): Promise<GetUserDto> {
@@ -20,7 +19,7 @@ class AuthService {
       throw new HttpException(400, "Incorrect input data");
     }
 
-    const user = await this.users.findOne({ where: { email: dto.email } });
+    const user = await Users.findOne({ where: { email: dto.email } });
     if (!user) {
       throw new HttpException(409, `Email ${dto.email} not found`);
     } 
@@ -41,7 +40,7 @@ class AuthService {
       throw new HttpException(400, "Incorrect input data");
     }
 
-    const user = await this.users.findOne({ where: { password: userData.password } });
+    const user = await Users.findOne({ where: { password: userData.password } });
     if (!user) {
       throw new HttpException(409, "User not found");
     }

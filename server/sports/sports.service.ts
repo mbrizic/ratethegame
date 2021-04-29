@@ -1,6 +1,6 @@
 import HttpException from '../core/exceptions/HttpException'
 import { isEmptyObject } from '../core/util'
-import { Sports } from '../../models/sports'
+import { Sports } from '../../database/models/sports'
 import { CreateSportDto, GetSportDto } from './sports.dto'
 
 class SportsService {

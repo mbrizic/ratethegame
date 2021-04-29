@@ -4,7 +4,7 @@ import crypto = require('crypto')
 import path = require('path')
 
 const config: Config = {
-	scriptsPath: "./database",
+	scriptsPath: "./database/scripts",
 	encoding: "utf-8"
 }
 

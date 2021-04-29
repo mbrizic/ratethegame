@@ -1,8 +1,8 @@
+import { Events } from '../../database/models/events';
+import { EventRating } from '../../database/models/event_rating';
 import HttpException from '../core/exceptions/HttpException';
-import { average, isEmptyObject } from '../core/util';
-import { Events } from '../../models/events';
+import { isEmptyObject } from '../core/util';
 import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
-import { EventRating } from '../../models/event_rating';
 
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
