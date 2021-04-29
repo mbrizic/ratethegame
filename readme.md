@@ -26,7 +26,7 @@ Here are some concrete tasks that need to be resolved. I'll be working through t
 - create a home dashboard showing most recent and best rated sports/events 
 - think of some design that wouldn't be offensive to the eye
 - implement notifications system through emails (for recommendation system)
-- refactor database migrations system to not be tied to a build
+- ~~refactor database migrations system to not be tied to a build~~
 - remove unused dependencies from `package.json`
 
 What's done: 
@@ -37,12 +37,10 @@ What's done:
 
 ## Tech setup
 
+- Pug for HTML templating, plain old CSS for styling, no JS at all at the moment
 - Typescript + NodeJS on backend, exposing both JSON API endpoints and regular server-side rendered HTML pages 
 - PostgreSQL as a database, using Sequelize as ORM, but with database-first approach
-- Pug for HTML templating, plain old CSS for styling, no JS at all at the moment
-
-- SQL migration scripts are ran everytime the server runs (needs to be refactored), but ORM is generating TS classes only when you run this command:
- `node_modules\.bin\sequelize-auto -o "./models" -d ratethegame -h localhost -u ratethegame -p 5432 -x ratethegame -e postgres -l ts --cm p`
+- database migrations are done with `npm run db-migrate` command, which executes all newly added scripts and regenerates needed TS classes
 
  ## How to run the app
  
@@ -50,4 +48,5 @@ What's done:
  - create a Postgres role/database
  - copy `.env.template` file into `.env`, change `POSTGRES_URL` to your database
  - run `npm install`
+ - run `npm run db-migrate` to make sure your DB is up-to-date
  - run `npm start` to run the app, or `npm run dev` to run a live-reload dev server
