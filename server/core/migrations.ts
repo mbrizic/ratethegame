@@ -17,11 +17,7 @@ export async function migrateDatabase(database: Sequelize) {
 
 	await setupMigrationTables()
 
-	console.log("MIGRATION STARTED")
-
 	await readAllScriptFiles()
-
-	console.log("MIGRATION DONE")
 
 	async function readAllScriptFiles() {
 		const scripts = fs.readdirSync(config.scriptsPath)
@@ -35,13 +31,14 @@ export async function migrateDatabase(database: Sequelize) {
 			const isExecuted = await checkIfScriptExecuted(scriptName)
 
 			if (isExecuted) {
-				console.log("Already executed, skipping")
+				log(`${scriptName} already executed, skipping`)
 
 				const isModified = await checkIfScriptModified(scriptName, scriptContents)
 				if (isModified) {
 					error(`Error: script ${scriptName} modified.`)
 				}
 			} else {
+				log(`${scriptName} is new, executing`)
 				await executeScript(scriptContents)
 				await markAsExecuted(scriptName, scriptContents)
 			}
@@ -94,6 +91,15 @@ export async function migrateDatabase(database: Sequelize) {
 		return results.length > 0
 	}
 
+}
+
+export async function purgeDatabase(database: Sequelize) {
+	await database.query('DROP SCHEMA IF EXISTS migrations CASCADE;')
+	await database.query('DROP SCHEMA IF EXISTS public CASCADE;')
+}
+
+function log(message: string) {
+	console.log(` - ${message}`)
 }
 
 function error(err: string) {
