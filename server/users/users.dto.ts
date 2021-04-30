@@ -27,3 +27,4 @@ export interface UpdateUserCommand {
   password: string;
 }
 
+export type PotentialUser = GetUserDto | null;

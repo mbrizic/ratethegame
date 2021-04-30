@@ -3,7 +3,7 @@ import { isEmptyObject } from '../core/util'
 import { Sports } from '../../database/models/sports'
 import { CreateSportDto, GetSportDto } from './sports.dto'
 
-class SportsService {
+export class SportsService {
 	private entitiesToInclude = [ "events" ]
 
 	public async getAll(): Promise<GetSportDto[]> {

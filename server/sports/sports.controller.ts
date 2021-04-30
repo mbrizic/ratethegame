@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+import { SportDetailsPage } from '../../ui2/page/sport-details.page';
+import { SportListPage } from '../../ui2/page/sport-list.page';
 import { RequestWithUser } from '../auth/auth.interface';
 import { CreateSportDto } from './sports.dto';
 import SportsService from './sports.service';
@@ -10,10 +12,10 @@ class SportsController {
 		const sports = await this.sportsService.getAll()
 
 		try {
-			res.render("sports/sports-list", {
+			res.send(SportListPage({
 				sports,
 				user: req.user
-			});
+			}));
 
 		} catch (error) {
 			next(error);
@@ -26,11 +28,10 @@ class SportsController {
 		const sport = await this.sportsService.getById(sportId)
 
 		try {
-			res.render("sports/sports-details", {
+			res.send(SportDetailsPage({
 				sport,
 				user: req.user
-			});
-
+			}));
 		} catch (error) {
 			next(error);
 		}

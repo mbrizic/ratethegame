@@ -1,4 +1,6 @@
 import { NextFunction, Response } from 'express';
+import { EventDetailsPage } from '../../ui2/page/event-details.page';
+import { EventListPage } from '../../ui2/page/event-list.page';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
 import { CreateEventDto, RateEventDto } from './events.dto';
 import EventsService from './events.service';
@@ -10,10 +12,10 @@ class EventsController {
 		const events = await this.eventsService.getAll()
 
 		try {
-			res.render("events/events-list", {
+			res.send(EventListPage({
 				events: events,
 				user: req.user ? req.user : null
-			});
+			}));
 
 		} catch (error) {
 			next(error);
@@ -30,11 +32,11 @@ class EventsController {
 			: false
 
 		try {
-			res.render("events/events-details", {
+			res.send(EventDetailsPage({
 				event,
 				hasUserAlreadyRated,
 				user: req.user
-			});
+			}));
 		} catch (error) {
 			next(error);
 		}

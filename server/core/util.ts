@@ -32,3 +32,9 @@ export function average(array: number[]) {
 
     return sum(array) / array.length
 }
+
+export function concatNotNull(...array: (string | null)[]) {
+    return array
+        .filter(item => item != null)
+        .join("")
+}

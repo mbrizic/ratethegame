@@ -1,19 +1,19 @@
 import { Request } from 'express';
-import { GetUserDto } from '../users/users.dto';
+import { GetUserDto, PotentialUser } from '../users/users.dto';
 
 export interface DataStoredInToken {
-  id: number;
+	id: number;
 }
 
 export interface TokenData {
-  token: string;
-  expiresIn: number;
+	token: string;
+	expiresIn: number;
 }
 
 export interface RequestWithPotentialUser extends Request {
-  user: GetUserDto | null;
+	user: PotentialUser;
 }
 
 export interface RequestWithUser extends Request {
-  user: GetUserDto;
+	user: GetUserDto;
 }
