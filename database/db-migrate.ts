@@ -2,8 +2,9 @@ import { Sequelize } from 'sequelize';
 import { migrateDatabase } from '../server/core/migrations';
 import { SequelizeAuto } from "sequelize-auto";
 import 'dotenv/config';
+import { getAppConfig } from '../server/core/app.config';
 
-const database = new Sequelize(process.env.POSTGRES_URL, {
+const database = new Sequelize(getAppConfig().postgresURL, {
   logging: false
 })
 

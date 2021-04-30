@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize';
 import { initModels } from '../../database/models/init-models';
+import { getAppConfig } from './app.config'
 
-export const database = new Sequelize(process.env.POSTGRES_URL, {
+export const database = new Sequelize(getAppConfig().postgresURL, {
   // logging: false
 })
 

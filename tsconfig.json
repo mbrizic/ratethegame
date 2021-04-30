@@ -6,6 +6,7 @@
     "baseUrl": "./src",
     "alwaysStrict": true,
     "noImplicitAny": true,
+    "strictNullChecks": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
