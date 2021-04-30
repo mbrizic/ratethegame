@@ -21,7 +21,6 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
-    this.initializeViewEngine();
   }
 
   public listen() {
@@ -58,11 +57,6 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
-  }
-
-  private initializeViewEngine() {
-    this.app.set('views', './ui');
-    this.app.set('view engine', 'pug');
   }
 
 }
