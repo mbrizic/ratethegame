@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { EventDetailsPage } from '../../ui2/page/event-details.page';
-import { EventListPage } from '../../ui2/page/event-list.page';
+import { EventDetailsPage } from '../../ui/page/event-details.page';
+import { EventListPage } from '../../ui/page/event-list.page';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
 import { CreateEventDto, RateEventDto } from './events.dto';
 import EventsService from './events.service';

@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import AuthService from '../auth/auth.service';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
 import EventsService from '../events/events.service';
-import { IndexPage } from '../../ui2/page/index.page';
+import { IndexPage } from '../../ui/page/index.page';
 import SportsService from '../sports/sports.service';
-import { LoginPage } from '../../ui2/page/login.page';
-import { RegisterPage } from '../../ui2/page/register.page';
+import { LoginPage } from '../../ui/page/login.page';
+import { RegisterPage } from '../../ui/page/register.page';
 
 class PageController {
 	private authService = new AuthService();

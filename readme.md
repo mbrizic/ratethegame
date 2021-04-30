@@ -14,7 +14,6 @@ I started this project on my own, but I'm looking to share it with anyone who mi
 
 - branding - "Rate the game" is the best name I could think of, but we really need a better one. Something like "Is it worth watching" would be better
 - insights on how you'd want to use this app - I know F1 and UFC fans sometimes watch replays the day after if they missed the original run, but not sure if it's like that for other sports. Also, can this rating system maybe be used for other stuff apart from sports?
-- frontend work - for now I'm just showing server-side rendered HTMLs from Pug templates, which I even kind of like, due to how simple and fast that is. However, if someone wants to convert it to a SPA for better UX, why not, provided it remains as performant
 - design work - there's no design whatsoever in the app now, looking for any help possible (wireframes, color schemes, anything). It's currently looking ugly af
 - recommendation engine - the system should be able to track what the user likes, and then recommend sports events that might be interesting (and well rated) to them, and then push them that notification through email
 - _really advanced_ - mine some data from other sports websites with more analytics/stats, correlate it with our scores, then use that to extrapolate the scores for old games, or maybe even predict it for the upcoming ones
@@ -26,7 +25,7 @@ Here are some concrete tasks that need to be resolved. I'll be working through t
 - create a home dashboard showing most recent and best rated sports/events 
 - think of some design that wouldn't be offensive to the eye
 - implement notifications system through emails (for recommendation system)
-- ~~refactor database migrations system to not be tied to a build~~
+- implement some server-side logging so we know how the app performs
 - remove unused dependencies from `package.json`
 
 What's done: 
@@ -37,7 +36,7 @@ What's done:
 
 ## Tech setup
 
-- Pug for HTML templating, plain old CSS for styling, no JS at all at the moment
+- views are generated server-side using our custom TypeScript-based templating engine, plain old CSS for styling, no JS at all at the moment
 - Typescript + NodeJS on backend, exposing both JSON API endpoints and regular server-side rendered HTML pages 
 - PostgreSQL as a database, using Sequelize as ORM, but with database-first approach
 - database migrations are done with `npm run db-migrate` command, which executes all newly added scripts and regenerates needed TS classes

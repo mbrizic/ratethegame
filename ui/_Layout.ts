@@ -5,7 +5,7 @@ import { PageModel } from "./core/html.interfaces";
 
 export const Layout = (model: PageModel, ...children: string[]) => {
 
-    const css = readFile("./ui2/_Layout.css")
+    const css = readFile("./ui/_Layout.css")
 
     return Html(
         Head(

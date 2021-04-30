@@ -7,8 +7,8 @@ export function onlyUnique(value: object, index: number, self: any[]) {
 }
 
 export function matchAll(str: string, regex: RegExp) {
-    var result = [];
-    var m;
+    let result = [];
+    let m;
     if (regex.global) {
         while (m = regex.exec(str)) {
             result.push(m[0]);

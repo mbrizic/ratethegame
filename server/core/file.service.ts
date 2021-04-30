@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 
 export const getFilesFromFolder = (path: string): FileRequestResult[] => {
-    let files = fs.readdirSync(path, { withFileTypes: true })
+    const files = fs.readdirSync(path, { withFileTypes: true })
         .filter(file => file.isFile())
 
     return files.map(file => {
