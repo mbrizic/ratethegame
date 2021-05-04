@@ -16,6 +16,7 @@ export const IndexPage: Page<IndexModel> = (model: IndexModel) => {
 
     return Layout(model,
         Column(
+            Paragraph("What's this website about? Add some description here", { class: "text-centered" }),
             Heading2("List of all sports"),
             SportList(model.sports),
             Heading2("Here's the list of all events"),

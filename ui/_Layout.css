@@ -5,17 +5,35 @@ body {
     background: #d8d6d6;
     max-width: 800px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 input, button, select {
-    margin: 0 10px 20px 0;
+    margin: 10px 0;
     padding: 0 10px;
     height: 30px;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer {
+    text-align: center;
+}
+
 /* mods */
 
-.center {
+.text-centered {
     text-align: center;
 }
 
@@ -29,6 +47,10 @@ input, button, select {
 .column {
     display: flex;
     flex-direction: column;   
+}
+
+.column.centered {
+    align-self: center;
 }
 
 .spaced {

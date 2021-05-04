@@ -74,6 +74,7 @@ class UserService {
 			id: model.id,
 			email: model.email,
 			password: model.password,
+			isAdmin: model.is_admin,
 		}
 	}
 }

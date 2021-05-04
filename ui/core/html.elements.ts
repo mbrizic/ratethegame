@@ -1,3 +1,5 @@
+// nonvisual tags
+
 export const Html = (...children: string[]) => 
     `<html>${children.join("")}</html>`
 
@@ -10,11 +12,15 @@ export const Body = (...children: string[]) =>
 export const Style = (...children: string[]) => 
     `<style>${children.join("")}</style>`
 
+export const Script = (...children: string[]) => 
+    `<script>${children.join("")}</script>`
+
+// meta tags
+
 export const Title = (text: string) => 
     `<title>${text}</title>`
 
-export const Script = (...children: string[]) => 
-    `<script>${children.join("")}</script>`
+// visual tags
 
 export const Heading1 = (children: string, options: BasicAttributes = {}) => 
     `<h1 ${addBasicAttributes(options)}>
@@ -54,20 +60,11 @@ export const Tag = (text: string) =>
 export const Text = (text: string) =>
     `<span>${text}</span>`
 
-export const Row = (...children: string[]) =>
-    `<div class="row">${children.join("")}</div>`
-
-export const RowSpaced = (...children: string[]) =>
-    `<div class="row spaced">${children.join("")}</div>`
-
-export const Column = (...children: string[]) =>
-    `<div class="column">${children.join("")}</div>`
-
 export const Image = (options: { src: string, text: string, class?: string }) =>
     `<img src="${options.src}" alt="${options.text}" loading="lazy"/>`
 
-export const Paragraph = (...text: string[]) =>
-    `<p>${text.join("")}</p>`
+export const Paragraph = (text: string, options: BasicAttributes = {}) =>
+    `<p ${addBasicAttributes(options)}>${text}</p>`
 
 export const BlockQuote = (text: string) =>
     `<blockquote>${text}</blockquote>`
@@ -81,14 +78,33 @@ export const Strong = (text: string) =>
 export const Italic = (text: string) =>
     `<em>${text}</em>`
 
-export const Footer = (children: string) =>
-    `<footer>${children}</footer>`
+// semantic tags
+
+export const Header = (...children: string[]) =>
+    `<header>${children.join("")}</header>`
+
+export const Footer = (...children: string[]) =>
+    `<footer>${children.join("")}</footer>`
+
+export const Row = (...children: string[]) =>
+    `<div class="row">${children.join("")}</div>`
+
+export const RowSpaced = (...children: string[]) =>
+    `<div class="row spaced">${children.join("")}</div>`
+
+export const Column = (...children: string[]) =>
+    `<div class="column">${children.join("")}</div>`
+
+export const ColumnCentered = (...children: string[]) =>
+    `<div class="column centered">${children.join("")}</div>`
+
+// forms
 
 export const Form = (action: string, ...children: string[]) =>
     `<form method="POST" action="${action}">${children.join("")}</form>`
 
-export const SubmitButton = (...children: string[]) =>
-    `<button type="submit">${children}</button>`
+export const SubmitButton = (text: string, options: BasicAttributes = {}) =>
+    `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
 
 export const TextInput = (options: FormInputAttributes) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="text"></input>`

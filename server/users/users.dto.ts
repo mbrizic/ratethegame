@@ -20,6 +20,7 @@ export class GetUserDto {
 	public id: number;
 	public email: string;
 	public password: string;
+	public isAdmin: boolean;
 }
 
 export interface UpdateUserCommand {
