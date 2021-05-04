@@ -15,7 +15,9 @@ export const SportComponent: Component<GetSportDto> = (sport: GetSportDto) => {
             sport.events.length ? Inline(
                 ...sport.events.map(e => Column(
                     Link({ href: `/events/${e.id}`, text: e.name}),
-                    Text(`- ${e.ratingPercentage}% (${e.totalRatings})`),
+                    Text(e.totalRatings > 0 
+                        ? `- ${e.ratingPercentage}% (${e.totalRatings})`
+                        : `No ratings yet`,)
                 ))
             ) : Paragraph("No events for this sport yet. Add something pls.")
         )
