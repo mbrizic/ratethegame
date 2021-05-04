@@ -16,13 +16,17 @@ class PageController {
 		const events = await this.eventsService.getAll();
 		const sports = await this.sportsService.getAll();
 
-		res.send(
-			IndexPage({
-				user: req.user,
-				events,
-				sports
-			})
-		)
+		try {
+			res.send(
+				IndexPage({
+					user: req.user,
+					events,
+					sports
+				})
+			)	
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	public getLoginPage = async (req: Request, res: Response, next: NextFunction) => {
