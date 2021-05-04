@@ -1,5 +1,5 @@
 import { GetSportDto } from "../../server/sports/sports.dto";
-import { EnsureAdmin } from "../component/ensure-admin.component";
+import { AdminOnlyArea } from "../component/admin-area.component";
 import { SportForm } from "../component/sport-form.component";
 import { SportList } from "../component/sport-list.component";
 import { Column, Heading2 } from "../core/html.elements";
@@ -16,11 +16,8 @@ export const SportListPage: Page<SportListModel> = (model: SportListModel) => {
         Column(
             Heading2("List of all sports"),
             SportList(model.sports),
-            EnsureAdmin(model.user,
-                Column(
-                    Heading2("Add new sport: "),
-                    SportForm({ user: model.user })
-                )
+            AdminOnlyArea(model.user,
+                SportForm({ user: model.user })
             ),
         )
     )

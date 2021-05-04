@@ -25,13 +25,13 @@ class EventsController {
 	public getEventsDetails = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		const eventId = Number(req.params.id)
 		
-		const event = await this.eventsService.getById(eventId)
-
-		const hasUserAlreadyRated = req.user
-			? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
-			: false
-
 		try {
+			const event = await this.eventsService.getById(eventId)
+
+			const hasUserAlreadyRated = req.user
+				? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
+				: false
+
 			res.send(EventDetailsPage({
 				event,
 				hasUserAlreadyRated,

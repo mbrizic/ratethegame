@@ -13,7 +13,7 @@ export const EventListPage: Page<EventListModel> = (model: EventListModel) => {
     return Layout(model,
         Column(
             Heading2("List of all events"),
-            EventList(model.events)
+            EventList(model.events),
         )
     )
 

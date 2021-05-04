@@ -1,0 +1,25 @@
+.row {
+    display: flex;
+    flex-direction: row;   
+}
+
+.column {
+    display: flex;
+    flex-direction: column;   
+}
+
+.column.centered {
+    align-self: center;
+}
+
+.spaced {
+    justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+ 
+    .row {
+        flex-direction: column;
+    }
+    
+}

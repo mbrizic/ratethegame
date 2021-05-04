@@ -1,0 +1,12 @@
+.card {
+    border: 2px solid blue;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 100%;
+    margin: 5px;
+}
+
+.admin {
+    background-color: pink;
+}

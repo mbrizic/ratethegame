@@ -2,9 +2,17 @@ import HttpException from '../core/exceptions/HttpException'
 import { isEmptyObject } from '../core/util'
 import { Sports } from '../../database/models/sports'
 import { CreateSportDto, GetSportDto } from './sports.dto'
+import { Events } from '../../database/models/events'
+import { EventRating } from '../../database/models/event_rating'
+import { GetEventDto } from '../events/events.dto'
+import { mapToSportDto } from '../events/events.mapper'
 
 export class SportsService {
-	private entitiesToInclude = [ "events" ]
+	private entitiesToInclude = [{
+		model: Events, as: "events", include: [
+			{ model: EventRating, as: "event_ratings" }
+		]
+	}]
 
 	public async getAll(): Promise<GetSportDto[]> {
 		const sports = await Sports.findAll({ include: this.entitiesToInclude })
@@ -27,7 +35,7 @@ export class SportsService {
 			name: dto.name,
 			description: dto.description,
 			created_by: dto.userId
-		 })
+		})
 
 		return created.id
 	}
@@ -37,12 +45,13 @@ export class SportsService {
 			id: model.id,
 			name: model.name,
 			description: model.description,
-			events: model.events.map(event => ({
-				id: event.id,
-				name: event.name
-			}))
+			events: model.events.map(event =>
+				mapToSportDto(model.id, model.name, event)
+			)
 		}
 	}
+
+
 }
 
 export default SportsService

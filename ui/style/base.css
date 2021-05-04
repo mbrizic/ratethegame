@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow-y: scroll;
@@ -5,6 +9,7 @@ body {
     background: #d8d6d6;
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
 }
@@ -31,28 +36,6 @@ footer {
     text-align: center;
 }
 
-/* mods */
-
 .text-centered {
     text-align: center;
-}
-
-/* containers */
-
-.row {
-    display: flex;
-    flex-direction: row;   
-}
-
-.column {
-    display: flex;
-    flex-direction: column;   
-}
-
-.column.centered {
-    align-self: center;
-}
-
-.spaced {
-    justify-content: space-between;
 }

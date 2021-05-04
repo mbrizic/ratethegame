@@ -1,5 +1,6 @@
 import { GetEventDto } from "../../server/events/events.dto";
 import { GetSportDto } from "../../server/sports/sports.dto";
+import { AdminOnlyArea } from "../component/admin-area.component";
 import { EventList } from "../component/event-list.component";
 import { SportForm } from "../component/sport-form.component";
 import { SportList } from "../component/sport-list.component";
@@ -17,11 +18,14 @@ export const IndexPage: Page<IndexModel> = (model: IndexModel) => {
     return Layout(model,
         Column(
             Paragraph("What's this website about? Add some description here", { class: "text-centered" }),
-            Heading2("List of all sports"),
+            Heading2("Check out most popular sports:"),
             SportList(model.sports),
-            Heading2("Here's the list of all events"),
+            Heading2("Or browse recent events:"),
             EventList(model.events),
-            SportForm({ user: model.user })
+            AdminOnlyArea(
+                model.user,
+                SportForm({ user: model.user })
+            )
         )
     )
 

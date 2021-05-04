@@ -1,7 +1,7 @@
 import { GetEventDto } from "../../server/events/events.dto";
 import { PotentialUser } from "../../server/users/users.dto";
 import { EventRatingForm } from "../component/event-rating-form.component";
-import { EventComponent } from "../component/event.component";
+import { EventDetails } from "../component/event-details.component";
 import { Column } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
@@ -16,7 +16,7 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
 
     return Layout(model,
         Column(
-            EventComponent(model.event),
+            EventDetails(model.event),
             EventRatingForm({ 
                 event: model.event,
                 user: model.user,

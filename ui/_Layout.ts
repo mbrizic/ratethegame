@@ -6,7 +6,9 @@ import { Inline } from "./core/html.operator";
 
 export const Layout = (model: PageModel, ...children: string[]) => {
 
-    const css = readFile("./ui/_Layout.css")
+    const baseCss = readFile("./ui/style/base.css")
+    const frameworkCss = readFile("./ui/style/framework.css")
+    const appCss = readFile("./ui/style/app.css")
 
     const headerWithNavigation = Header(
         Heading1("Rate the game"),
@@ -24,7 +26,7 @@ export const Layout = (model: PageModel, ...children: string[]) => {
     return Html(
         Head(
             Title("Rate the game"),
-            Style(css),
+            Style(frameworkCss, baseCss, appCss),
         ),
         Body(
             headerWithNavigation,

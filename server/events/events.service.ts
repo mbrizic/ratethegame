@@ -3,6 +3,7 @@ import { EventRating } from '../../database/models/event_rating';
 import HttpException from '../core/exceptions/HttpException';
 import { isEmptyObject } from '../core/util';
 import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
+import { mapToDto } from './events.mapper';
 
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
@@ -10,13 +11,13 @@ class EventsService {
 	public async getAll(): Promise<GetEventDto[]> {
 		const events = await Events.findAll({ include: this.entitiesToInclude });
 
-		return events.map(this.mapToDto);
+		return events.map(mapToDto);
 	}
 
 	public async getById(id: number) {
 		const event = await Events.findByPk(id, { include: this.entitiesToInclude });
 
-		return this.mapToDto(event)
+		return mapToDto(event)
 	}
 
 	public async hasUserRatedEvent(id: number, userId: number) {
@@ -73,20 +74,6 @@ class EventsService {
 		}
 
 		return true
-	}
-
-	private mapToDto(model: Events): GetEventDto {
-		const votes = model.event_ratings
-		const positiveVotes = votes.filter(r => r.would_recommend).length
-
-		return {
-			id: model.id,
-			name: model.name,
-			ratingPercentage: positiveVotes / votes.length * 100,
-			totalRatings: votes.length,
-			sportId: model.sport.id,
-			sportName: model.sport.name
-		}
 	}
 }
 
