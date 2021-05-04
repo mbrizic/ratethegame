@@ -41,11 +41,15 @@ What's done:
 - PostgreSQL as a database, using Sequelize as ORM, but with database-first approach
 - database migrations are done with `npm run db-migrate` command, which executes all newly added scripts and regenerates needed TS classes
 
- ## How to run the app
- 
- - checkout code
- - create a Postgres role/database
- - copy `.env.template` file into `.env`, change `POSTGRES_URL` to your database
- - run `npm install`
- - run `npm run db-migrate` to make sure your DB is up-to-date
- - run `npm start` to run the app, or `npm run dev` to run a live-reload dev server
+## How to run the app
+
+- checkout code
+- create a Postgres role/database
+- copy `.env.template` file into `.env`, change `POSTGRES_URL` to your database
+- run `npm install`
+- run `npm run db-migrate` to make sure your DB is up-to-date
+- run `npm start` to run the app, or `npm run dev` to run a live-reload dev server
+
+## Deploying it on server
+- app is set up to use `pm2` on server and can be started by running `pm2 start npm --name ratethegame -- start`
+- demo is deployed here: http://ratethegame.supercollider.hr/
