@@ -6,19 +6,19 @@ import validationMiddleware from '../core/middleware/validation.middleware';
 import { authMiddleware, ensureAuthenticated } from '../core/middleware/auth.middleware';
 
 class AuthRoute implements Route {
-  public path = '/auth';
-  public router = Router();
-  public authController = new AuthController();
+	public path = '/auth';
+	public router = Router();
+	public authController = new AuthController();
 
-  constructor() {
-    this.initializeRoutes();
-  }
+	constructor() {
+		this.initializeRoutes();
+	}
 
-  private initializeRoutes() {
-    this.router.post(`${this.path}/signup`, validationMiddleware(CreateUserDto), this.authController.signUp);
-    this.router.post(`${this.path}/login`, validationMiddleware(CreateUserDto), this.authController.logIn);
-    this.router.post(`${this.path}/logout`, authMiddleware, ensureAuthenticated, this.authController.logOut);
-  }
+	private initializeRoutes() {
+		this.router.post(`${this.path}/signup`, validationMiddleware(CreateUserDto), this.authController.signUp);
+		this.router.post(`${this.path}/login`, validationMiddleware(CreateUserDto), this.authController.logIn);
+		this.router.post(`${this.path}/logout`, authMiddleware, ensureAuthenticated, this.authController.logOut);
+	}
 }
 
 export default AuthRoute;

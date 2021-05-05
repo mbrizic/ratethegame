@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, RequestHandler, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { DataStoredInToken, RequestWithUser } from '../../auth/auth.interface';
 import UserService from '../../users/users.service';

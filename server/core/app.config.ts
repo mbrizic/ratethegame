@@ -2,19 +2,23 @@ export interface AppConfig {
     postgresURL: string;
     jwtSecret: string;
     port: string;
+    nodeEnv: string;
 }
 
 export function getAppConfig(): AppConfig {
     return {
-        postgresURL: ensureExists(process.env.POSTGRES_URL),
-        jwtSecret: ensureExists(process.env.JWT_SECRET),
-        port: ensureExists(process.env.PORT),
+        postgresURL: ensureExists("POSTGRES_URL"),
+        jwtSecret: ensureExists("JWT_SECRET"),
+        port: ensureExists("PORT"),
+        nodeEnv: ensureExists("NODE_ENV"),
     }
 }
 
-function ensureExists(setting: string | undefined): string {
+function ensureExists(settingName: string): string {
+    const setting = process.env[settingName];
+
     if (setting == undefined) {
-        throw new Error("Setting does not exist");
+        throw new Error(`Setting ${settingName} does not exist`);
     }
 
     return setting;
