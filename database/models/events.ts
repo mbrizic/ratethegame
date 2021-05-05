@@ -7,6 +7,7 @@ import type { Users, UsersId } from './users';
 export interface EventsAttributes {
   id?: number;
   name: string;
+  datetime: Date;
   created_at?: Date;
   created_by: number;
   sport_id: number;
@@ -19,6 +20,7 @@ export type EventsCreationAttributes = Optional<EventsAttributes, EventsPk>;
 export class Events extends Model<EventsAttributes, EventsCreationAttributes> implements EventsAttributes {
   id?: number;
   name!: string;
+  datetime!: Date;
   created_at?: Date;
   created_by!: number;
   sport_id!: number;
@@ -56,6 +58,10 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
     },
     name: {
       type: DataTypes.TEXT,
+      allowNull: false
+    },
+    datetime: {
+      type: DataTypes.DATE,
       allowNull: false
     },
     created_at: {

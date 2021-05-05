@@ -38,6 +38,7 @@ class EventsService {
 			name: dto.name,
 			sport_id: dto.sportId,
 			created_by: dto.userId,
+			datetime: dto.date,
 		}, { include: this.entitiesToInclude });
 
 		return created.id

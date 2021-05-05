@@ -8,6 +8,7 @@ export function mapToDto(model: Events): GetEventDto {
 	return {
 		id: model.id,
 		name: model.name,
+		date: model.datetime,
 		ratingPercentage: positiveVotes / votes.length * 100,
 		totalRatings: votes.length,
 		sportId: model.sport.id,
@@ -22,6 +23,7 @@ export function mapToSportDto(sportId: number, sportName: string, event: Events)
 	return {
 		id: event.id,
 		name: event.name,
+		date: event.datetime,
 		ratingPercentage: positiveVotes / votes.length * 100,
 		totalRatings: votes.length,
 		sportId: sportId,

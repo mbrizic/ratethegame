@@ -4,7 +4,7 @@ import { AdminOnlyArea } from "../component/admin-area.component";
 import { EventList } from "../component/event-list.component";
 import { SportForm } from "../component/sport-form.component";
 import { SportList } from "../component/sport-list.component";
-import { Column, Heading1, Heading2, Paragraph } from "../core/html.elements";
+import { Column, Heading1, Heading2, Paragraph, Row, RowSpaced } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 

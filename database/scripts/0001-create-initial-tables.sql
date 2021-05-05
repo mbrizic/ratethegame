@@ -29,6 +29,7 @@ CREATE TABLE public.events
 (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
+    datetime TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     created_by INTEGER NOT NULL REFERENCES public.users (id),

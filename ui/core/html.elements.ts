@@ -112,6 +112,9 @@ export const SubmitButton = (text: string, options: BasicAttributes = {}) =>
 export const TextInput = (options: FormInputAttributes) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="text"></input>`
 
+export const DateInput = (options: FormInputAttributes) =>
+    `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="datetime-local"></input>`
+
 export const PasswordInput = (options: FormInputAttributes) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="password"></input>`
 

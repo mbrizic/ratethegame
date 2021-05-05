@@ -1,6 +1,7 @@
 export interface GetEventDto {
 	id: number;
 	name: string;
+	date: Date;
 	sportName: string;
 	sportId: number;
 	totalRatings: number;
@@ -12,6 +13,7 @@ export interface CreateEventDto {
 	userId: number;
 	name: string;
 	description: string;
+	date: Date;
 }
 
 export interface RateEventDto {
