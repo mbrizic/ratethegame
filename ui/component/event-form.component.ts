@@ -1,5 +1,7 @@
+import { roundToNextHour, toDatePickerFormat } from "../../server/core/date.service"
+import { CreateEventDto } from "../../server/events/events.dto"
 import { PotentialUser } from "../../server/users/users.dto"
-import { Column, Form, Heading3, HiddenInput, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
+import { Column, DateInput, Form, Heading3, HiddenInput, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
@@ -8,6 +10,12 @@ interface EventFormModel {
 }
 
 export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
+
+    const date = toDatePickerFormat(
+        roundToNextHour(
+            new Date()
+        )
+    )
 
     if (model.user == null) {
         return Paragraph("You need to be logged in to create an event.")
@@ -18,6 +26,7 @@ export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
         Form("/events",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
+            DateInput({ placeholder: "", name: "date", value: date }),
             HiddenInput({ name: "userId", value: model.user.id }),
             HiddenInput({ name: "sportId", value: model.sportId }),
             SubmitButton("Add event")
