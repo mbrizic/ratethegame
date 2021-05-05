@@ -1,4 +1,4 @@
-import { Column, ColumnCentered, Form, Heading1, Heading2, Link, Paragraph, PasswordInput, SubmitButton, TextInput } from "../core/html.elements";
+import { ColumnCentered, Form, Link, Paragraph, PasswordInput, SubmitButton, TextInput } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
@@ -13,8 +13,8 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
     return Layout(model,
         ColumnCentered(
             Form("/register",
-                TextInput({ placeholder: "Username", name: "username", value: "mario@mail.com" }),
-                PasswordInput({ placeholder: "Password", name: "password", value: "123456" }),
+                TextInput({ placeholder: "Username", name: "username", value: "" }),
+                PasswordInput({ placeholder: "Password", name: "password", value: "" }),
                 SubmitButton("Register")
             ),
             Paragraph(`... or ${loginLink} instead`)

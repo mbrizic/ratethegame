@@ -11,8 +11,9 @@ export const Layout = (model: PageModel, ...children: string[]) => {
     const appCss = readFile("./ui/style/app.css")
 
     const headerWithNavigation = Header(
-        Heading1("Rate the game"),
-        Link({ text: "Home", href: "/" }),
+        Heading1(
+            Link({ text: "Rate the game", href: "/" }),
+        ),
         Link({ text: "Sports", href: "/sports" }),
         Link({ text: "Events", href: "/events" }),
         model.user
