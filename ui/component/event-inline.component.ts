@@ -4,12 +4,16 @@ import { Component } from "../core/html.interfaces"
 
 export const EventInline: Component<GetEventDto> = (event: GetEventDto) => {
 
+    const icon = event.ratingPercentage >= 50 ? "✔️": "❌";
+
     return RowSpaced(
-        Link({ text: event.name, href: `/events/${event.id}` }),
-        Text(event.sportName),
+        Text(
+            Link({ text: event.name, href: `/events/${event.id}` }),
+            Text(` (${event.sportName})`),
+        ),
         Text(
             event.totalRatings > 0 
-                ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings)`
+                ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings) ${icon}`
                 : `No ratings yet`
         ),
     )

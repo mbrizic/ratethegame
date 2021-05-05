@@ -4,7 +4,10 @@ export const Html = (...children: string[]) =>
     `<html>${children.join("")}</html>`
 
 export const Head = (...children: string[]) => 
-    `<head>${children.join("")}</head>`
+    `<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        ${children.join("")}
+    </head>`
 
 export const Body = (...children: string[]) => 
     `<body>${children.join("")}</body>`
@@ -60,8 +63,8 @@ export const Tag = (text: string) =>
 export const Div = (text: string, options: BasicAttributes = {}) =>
     `<div ${addBasicAttributes(options)}>${text}</div>`
 
-export const Text = (text: string) =>
-    `<span>${text}</span>`
+export const Text = (...text: string[]) =>
+    `<span>${text.join("")}</span>`
 
 export const Image = (options: { src: string, text: string, class?: string }) =>
     `<img src="${options.src}" alt="${options.text}" loading="lazy"/>`

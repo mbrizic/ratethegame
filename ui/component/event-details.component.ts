@@ -5,6 +5,7 @@ import { Component } from "../core/html.interfaces"
 
 export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
 
+    const icon = event.ratingPercentage >= 50 ? "✔️": "❌"; 
     const sportLink = Link({ text: event.sportName, href: `/sports/${event.sportId}` })
 
     return Column(
@@ -17,7 +18,7 @@ export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
         ),
         Paragraph(
             event.totalRatings > 0 
-                ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings)`
+                ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings) ${icon}`
                 : `No ratings yet`
         ),
     )

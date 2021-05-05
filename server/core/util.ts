@@ -6,6 +6,22 @@ export function onlyUnique(value: object, index: number, self: any[]) {
     return self.indexOf(value) === index;
 }
 
+export function orderByAscending<T>(array: T[], fn: (a: T) => number) {
+    array.sort((a: T, b: T) => {
+        return fn(a) - fn(b)
+    })
+
+    return array
+}
+
+export function orderByDescending<T>(array: T[], fn: (a: T) => number) {
+    array.sort((a: T, b: T) => {
+        return fn(b) - fn(a)
+    })
+
+    return array
+}
+
 export function matchAll(str: string, regex: RegExp) {
     let result = [];
     let m;

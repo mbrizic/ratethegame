@@ -4,7 +4,6 @@ import { Sports } from '../../database/models/sports'
 import { CreateSportDto, GetSportDto } from './sports.dto'
 import { Events } from '../../database/models/events'
 import { EventRating } from '../../database/models/event_rating'
-import { GetEventDto } from '../events/events.dto'
 import { mapToSportDto } from '../events/events.mapper'
 
 export class SportsService {

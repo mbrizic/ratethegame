@@ -4,27 +4,33 @@ import { GetEventDto } from './events.dto';
 export function mapToDto(model: Events): GetEventDto {
 	const votes = model.event_ratings
 	const positiveVotes = votes.filter(r => r.would_recommend).length
+	const ratingPercentage = model.event_ratings.length > 0
+		? positiveVotes / votes.length * 100
+		: null;
 
 	return {
 		id: model.id,
 		name: model.name,
 		date: model.datetime,
-		ratingPercentage: positiveVotes / votes.length * 100,
+		ratingPercentage: ratingPercentage,
 		totalRatings: votes.length,
 		sportId: model.sport.id,
 		sportName: model.sport.name
 	}
 }
 
-export function mapToSportDto(sportId: number, sportName: string, event: Events): GetEventDto {
-	const votes = event.event_ratings
+export function mapToSportDto(sportId: number, sportName: string, model: Events): GetEventDto {
+	const votes = model.event_ratings
 	const positiveVotes = votes.filter(r => r.would_recommend).length
+	const ratingPercentage = model.event_ratings.length > 0
+		? positiveVotes / votes.length * 100
+		: null;
 
 	return {
-		id: event.id,
-		name: event.name,
-		date: event.datetime,
-		ratingPercentage: positiveVotes / votes.length * 100,
+		id: model.id,
+		name: model.name,
+		date: model.datetime,
+		ratingPercentage: ratingPercentage,
 		totalRatings: votes.length,
 		sportId: sportId,
 		sportName: sportName

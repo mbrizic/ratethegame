@@ -5,15 +5,18 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
 interface EventListModel extends PageModel {
-    events: GetEventDto[];
+    upcomingEvents: GetEventDto[];
+    bestRatedEvents: GetEventDto[];
 }
 
 export const EventListPage: Page<EventListModel> = (model: EventListModel) => {
 
     return Layout(model,
         Column(
-            Heading2("List of all events"),
-            EventList(model.events),
+            Heading2("Check best rated events:"),
+            EventList(model.bestRatedEvents),
+            Heading2("Or get hyped for upcoming ones:"),
+            EventList(model.upcomingEvents),
         )
     )
 

@@ -2,24 +2,28 @@ import { Column, Heading2, Heading3, Link, Paragraph, Row, Text } from "../core/
 import { GetSportDto } from "../../server/sports/sports.dto"
 import { Component } from "../core/html.interfaces"
 import { Card } from "./card.component"
-import { Inline } from "../core/html.operator"
-import { EventList } from "./event-list.component"
+import { orderByDescending } from "../../server/core/util"
 
 export const SportComponent: Component<GetSportDto> = (sport: GetSportDto) => {
+
+    const totalEvents = sport.events.length
+    const bestRatedEvent = orderByDescending(sport.events, e => e.ratingPercentage)[0]
+
+    const bestRatedEventLink = bestRatedEvent != null 
+        ? Link({ href: `/events/${bestRatedEvent.id}`, text: bestRatedEvent.name})
+        : null
 
     return Card(
         Column(
             Heading3(
                 Link({text: sport.name, href: `/sports/${sport.id}`})
             ),
-            sport.events.length ? Inline(
-                ...sport.events.map(e => Column(
-                    Link({ href: `/events/${e.id}`, text: e.name}),
-                    Text(e.totalRatings > 0
-                        ? `- ${e.ratingPercentage}% (${e.totalRatings})`
-                        : `No ratings yet`,)
-                ))
-            ) : Paragraph("No events for this sport yet. Add something pls.")
+            totalEvents 
+                ? Text(`Has ${totalEvents} events. `) 
+                : Text(`No events yet for this one.`),
+            bestRatedEvent != null && bestRatedEvent.totalRatings > 0
+                ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.totalRatings} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
+                : null
         )
     )
 

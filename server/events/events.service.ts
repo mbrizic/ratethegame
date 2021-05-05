@@ -1,17 +1,35 @@
-import { Events } from '../../database/models/events';
+import { FindOptions } from 'sequelize/types';
+import { Events, EventsAttributes } from '../../database/models/events';
 import { EventRating } from '../../database/models/event_rating';
+import { now } from '../core/date.service';
 import HttpException from '../core/exceptions/HttpException';
-import { isEmptyObject } from '../core/util';
+import { afterDate, beforeDate } from '../core/sequelize.hacks';
+import { isEmptyObject, orderByAscending, orderByDescending } from '../core/util';
 import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
 import { mapToDto } from './events.mapper';
 
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
 
-	public async getAll(): Promise<GetEventDto[]> {
-		const events = await Events.findAll({ include: this.entitiesToInclude });
+	public async getUpcoming(): Promise<GetEventDto[]> {
+		return this.getAll({
+			where: {
+				datetime: afterDate(now())
+			}
+		})
+	}
 
-		return events.map(mapToDto);
+	public async getBestRated(): Promise<GetEventDto[]> {
+		const events = await this.getAll({
+			where: {
+				datetime: beforeDate(now())
+			},
+			order: [ [ 'name', 'DESC'] ]
+		})
+		
+		orderByDescending(events, a => a.ratingPercentage)
+
+		return events;
 	}
 
 	public async getById(id: number) {
@@ -75,6 +93,15 @@ class EventsService {
 		}
 
 		return true
+	}
+
+	private async getAll(options: FindOptions<EventsAttributes> | null = null): Promise<GetEventDto[]> {
+		const events = await Events.findAll({ 
+			...options,
+			include: this.entitiesToInclude 
+		});
+
+		return events.map(mapToDto);
 	}
 }
 

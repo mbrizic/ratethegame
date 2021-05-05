@@ -6,6 +6,10 @@ export const weekInMs = dayInMs * 7
 export const monthInMs = dayInMs * 30
 export const yearInMs = monthInMs * 12
 
+export function now() {
+    return new Date()
+} 
+
 export function humanize(date: Date) {
     const now = new Date()
 

@@ -5,6 +5,7 @@ import { EventDetails } from "../component/event-details.component";
 import { Column } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
+import { Card } from "../component/card.component";
 
 interface EventDetailsModel extends PageModel {
     user: PotentialUser;
@@ -15,13 +16,15 @@ interface EventDetailsModel extends PageModel {
 export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsModel) => {
 
     return Layout(model,
-        Column(
-            EventDetails(model.event),
-            EventRatingForm({ 
-                event: model.event,
-                user: model.user,
-                hasUserAlreadyRated: model.hasUserAlreadyRated
-            })
+        Card(
+            Column(
+                EventDetails(model.event),
+                EventRatingForm({ 
+                    event: model.event,
+                    user: model.user,
+                    hasUserAlreadyRated: model.hasUserAlreadyRated
+                })
+            )
         )
     )
 
