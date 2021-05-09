@@ -1,5 +1,6 @@
 import { ColumnCentered, Form, Link, Paragraph, PasswordInput, SubmitButton, TextInput } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
+import { Error } from '../component/error.component'
 import { Layout } from "../_Layout";
 
 interface RegisterModel extends PageModel {
@@ -15,6 +16,7 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
             Form("/register",
                 TextInput({ placeholder: "Username", name: "username", value: "" }),
                 PasswordInput({ placeholder: "Password", name: "password", value: "" }),
+                Error(model.errorMessage),
                 SubmitButton("Register")
             ),
             Paragraph(`... or ${loginLink} instead`)

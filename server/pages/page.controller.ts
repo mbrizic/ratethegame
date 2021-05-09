@@ -50,7 +50,11 @@ export default class PageController {
 
 			res.redirect("/")
 		} catch (error) {
-			next(error);
+
+			res.send(LoginPage({
+				user: null,
+				errorMessage: "Oops, login not successful."
+			}))
 		}
 	}
 	
@@ -71,7 +75,10 @@ export default class PageController {
 
 			res.redirect("/login")
 		} catch (error) {
-			next(error);
+			res.send(RegisterPage({
+				user: null,
+				errorMessage: error.message
+			}))
 		}
 	}
 

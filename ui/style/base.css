@@ -39,3 +39,7 @@ footer {
 .text-centered {
     text-align: center;
 }
+
+.text-danger {
+    color: red;
+}

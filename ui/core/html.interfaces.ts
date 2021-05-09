@@ -6,6 +6,7 @@ export interface Page<T> {
 
 export interface PageModel {
     user: PotentialUser
+    errorMessage?: string | null;
 }
 
 export interface SimpleComponent {
