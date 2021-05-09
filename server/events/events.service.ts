@@ -3,6 +3,7 @@ import { Events, EventsAttributes } from '../../database/models/events';
 import { EventRating } from '../../database/models/event_rating';
 import { now } from '../core/date.service';
 import HttpException from '../core/exceptions/HttpException';
+import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByAscending, orderByDescending } from '../core/util';
 import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
@@ -55,6 +56,8 @@ class EventsService {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
+
+		ensureInputIsClean(dto.name)
 
 		const created = await Events.create({
 			name: dto.name,

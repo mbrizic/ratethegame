@@ -5,6 +5,7 @@ import { CreateSportDto, GetSportDto } from './sports.dto'
 import { Events } from '../../database/models/events'
 import { EventRating } from '../../database/models/event_rating'
 import { mapToSportDto } from '../events/events.mapper'
+import { ensureInputIsClean } from '../core/input-sanitizer'
 
 export class SportsService {
 	private entitiesToInclude = [{
@@ -29,6 +30,9 @@ export class SportsService {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO")
 		}
+
+		ensureInputIsClean(dto.name)
+		ensureInputIsClean(dto.description)
 
 		const created = await Sports.create({
 			name: dto.name,

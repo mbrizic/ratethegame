@@ -3,6 +3,7 @@ import { CreateUserDto, GetUserDto, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/HttpException';
 import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
+import { ensureInputIsClean } from '../core/input-sanitizer';
 
 class UserService {
 
@@ -25,6 +26,9 @@ class UserService {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
+
+		ensureInputIsClean(dto.email)
+		ensureInputIsClean(dto.password)
 
 		const user = await Users.findOne({ where: { email: dto.email } });
 
