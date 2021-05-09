@@ -1,14 +1,16 @@
-import { readFile } from "../server/core/file.service";
 import { Logout } from "./component/logout.component";
+import { readCssFiles } from "./core/css.service";
 import { Body, Footer, Head, Header, Heading1, Html, Link, Style, Text, Title } from "./core/html.elements";
 import { PageModel } from "./core/html.interfaces";
 import { Inline } from "./core/html.operator";
 
 export const Layout = (model: PageModel, ...children: string[]) => {
 
-    const baseCss = readFile("./ui/style/base.css")
-    const frameworkCss = readFile("./ui/style/framework.css")
-    const appCss = readFile("./ui/style/app.css")
+    const css = readCssFiles(
+        "./ui/style/base.css",
+        "./ui/style/framework.css",
+        "./ui/style/app.css"
+    );
 
     const headerWithNavigation = Header(
         Heading1(
@@ -27,7 +29,7 @@ export const Layout = (model: PageModel, ...children: string[]) => {
     return Html(
         Head(
             Title("Rate the game"),
-            Style(frameworkCss, baseCss, appCss),
+            Style(css),
         ),
         Body(
             headerWithNavigation,
