@@ -1,7 +1,6 @@
 import { Div } from "../core/html.elements"
-import { Component } from "../core/html.interfaces"
 
-export const Error: Component<string> = (error: string | null) => {
+export const Error = (error: string | null | undefined) => {
 
     if (error == null) {
         return null

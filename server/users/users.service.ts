@@ -75,7 +75,7 @@ class UserService {
 
 	private mapToDto(model: Users): GetUserDto {
 		return {
-			id: model.id,
+			id: model.id!,
 			email: model.email,
 			password: model.password,
 			isAdmin: model.is_admin,

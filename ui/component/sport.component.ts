@@ -21,7 +21,7 @@ export const SportComponent: Component<GetSportDto> = (sport: GetSportDto) => {
             totalEvents 
                 ? Text(`Has ${totalEvents} events. `) 
                 : Text(`No events yet for this one.`),
-            bestRatedEvent != null && bestRatedEvent.totalRatings > 0
+            bestRatedEvent && bestRatedEvent.totalRatings > 0
                 ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.totalRatings} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
                 : null
         )

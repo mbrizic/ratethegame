@@ -14,7 +14,7 @@ export function orderByAscending<T>(array: T[], fn: (a: T) => number) {
     return array
 }
 
-export function orderByDescending<T>(array: T[], fn: (a: T) => number) {
+export function orderByDescending<T>(array: T[], fn: (a: T) => number): T[] {
     array.sort((a: T, b: T) => {
         return fn(b) - fn(a)
     })

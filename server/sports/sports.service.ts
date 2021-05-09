@@ -7,7 +7,7 @@ import { EventRating } from '../../database/models/event_rating'
 import { mapToSportDto } from '../events/events.mapper'
 import { ensureInputIsClean } from '../core/input-sanitizer'
 
-export class SportsService {
+export default class SportsService {
 	private entitiesToInclude = [{
 		model: Events, as: "events", include: [
 			{ model: EventRating, as: "event_ratings" }
@@ -21,9 +21,13 @@ export class SportsService {
 	}
 
 	public async getById(id: number) {
-		const Sport = await Sports.findByPk(id, { include: this.entitiesToInclude })
+		const sport = await Sports.findByPk(id, { include: this.entitiesToInclude })
 
-		return this.mapToDto(Sport)
+		if (sport == null) {
+			throw new HttpException(400, "No sport with that ID");
+		}
+
+		return this.mapToDto(sport)
 	}
 
 	public async addSport(dto: CreateSportDto) {
@@ -45,16 +49,13 @@ export class SportsService {
 
 	private mapToDto(model: Sports): GetSportDto {
 		return {
-			id: model.id,
+			id: model.id!,
 			name: model.name,
 			description: model.description,
 			events: model.events.map(event =>
-				mapToSportDto(model.id, model.name, event)
+				mapToSportDto(model.id!, model.name, event)
 			)
 		}
 	}
 
-
 }
-
-export default SportsService

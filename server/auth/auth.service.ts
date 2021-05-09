@@ -6,7 +6,8 @@ import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
 import UserService from '../users/users.service';
 import { Users } from '../../database/models/users';
-
+import { getAppConfig } from '../core/app.config'
+ 
 class AuthService {
 	private usersService = new UserService()
 
@@ -29,7 +30,7 @@ class AuthService {
 			throw new HttpException(409, "Password not matching");
 		}
 
-		const tokenData = this.createToken(user.id);
+		const tokenData = this.createToken(user.id!);
 		const cookie = this.createCookie(tokenData);
 
 		return { cookie, user: this.mapToDto(user) };
@@ -50,8 +51,9 @@ class AuthService {
 
 	public createToken(userId: number): TokenData {
 		const dataStoredInToken: DataStoredInToken = { id: userId };
-		const secret: string = process.env.JWT_SECRET;
-		const expiresIn: number = 60 * 60 * 24;
+
+		const secret = getAppConfig().jwtSecret
+		const expiresIn = 60 * 60 * 24;
 
 		return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
 	}
@@ -62,7 +64,7 @@ class AuthService {
 
 	private mapToDto(model: Users): GetUserDto {
 		return {
-			id: model.id,
+			id: model.id!,
 			email: model.email,
 			password: model.password,
 			isAdmin: model.is_admin,

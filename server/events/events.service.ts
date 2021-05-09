@@ -9,6 +9,8 @@ import { isEmptyObject, orderByAscending, orderByDescending } from '../core/util
 import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
 import { mapToDto } from './events.mapper';
 
+export const defaultEventRatingPercentage = 50
+
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
 
@@ -39,6 +41,10 @@ class EventsService {
 
 	public async getById(id: number) {
 		const event = await Events.findByPk(id, { include: this.entitiesToInclude });
+
+		if (event == null) {
+			throw new HttpException(400, "No event with that ID");
+		}
 
 		return mapToDto(event)
 	}

@@ -3,7 +3,7 @@ import { GetEventDto } from "../events/events.dto";
 export interface GetSportDto {
   id: number;
   name: string;
-  description: string;
+  description?: string;
   events: GetEventDto[]
 }
 
