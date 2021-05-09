@@ -1,5 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS public;
 
+-- Make sure all dates are written in UTC without timezone data
+SET TIMEZONE TO UTC;
+
 CREATE TABLE public.users
 (
     id SERIAL PRIMARY KEY,

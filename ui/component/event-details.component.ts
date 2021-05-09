@@ -14,7 +14,7 @@ export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
         ),
         Paragraph(`Sport: ${sportLink}`),
         Paragraph(
-            `${humanize(event.date)} (${event.date})`
+            `${humanize(event.date)} (${event.date.toUTCString()})`
         ),
         Paragraph(
             event.totalRatings > 0 
