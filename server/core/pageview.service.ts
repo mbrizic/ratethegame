@@ -4,7 +4,7 @@ export const pageViewsPerDate: PageViewsForDate = {};
 
 export function recordPageView(url: string) {
     const today = roundToMidnight(now())
-    const dateKey = today.toISOString()
+    const dateKey = today.toISOString().substring(0, 10)
 
     if (pageViewsPerDate[dateKey] == null) {
         pageViewsPerDate[dateKey] = {}
