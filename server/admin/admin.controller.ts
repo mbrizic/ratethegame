@@ -4,6 +4,7 @@ import { RequestWithPotentialUser } from '../auth/auth.interface';
 import EventsService from '../events/events.service';
 import { StatsPage } from '../../ui/page/stats.page';
 import UserService from '../users/users.service';
+import { pageViewsPerDate } from '../core/pageview.service';
 
 export class AdminController {
 	private authService = new AuthService();
@@ -13,6 +14,7 @@ export class AdminController {
 	public getStatsPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		const events = await this.eventsService.getAllEvents();
 		const users = await this.userService.getAll();
+		const pageviews = pageViewsPerDate;
 
 		try {
 			res.send(
@@ -20,6 +22,7 @@ export class AdminController {
 					user: req.user,
 					users,
 					events,
+					pageviews
 				})
 			)	
 		} catch (error) {

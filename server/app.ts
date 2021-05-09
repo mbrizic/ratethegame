@@ -7,6 +7,7 @@ import * as logger from 'morgan';
 import Routes from './core/route.interface';
 import errorMiddleware from './core/middleware/error.middleware';
 import { database } from './core/database';
+import pageViewMiddleware from './core/middleware/pageview.middleware';
 
 class App {
 	public app: express.Application;
@@ -47,6 +48,7 @@ class App {
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(cookieParser());
+		this.app.use(pageViewMiddleware())
 	}
 
 	private initializeRoutes(routes: Routes[]) {

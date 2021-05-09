@@ -39,6 +39,16 @@ export function humanize(date: Date) {
 export function roundToNextHour(date: Date) {
     date.setHours(date.getHours() + 1)
     date.setMinutes(0)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+
+    return date
+}
+
+export function roundToMidnight(date: Date) {
+    date.setHours(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
     date.setMilliseconds(0)
 
     return date

@@ -6,11 +6,12 @@ import { Component } from "../core/html.interfaces"
 export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
 
     const icon = event.ratingPercentage >= 50 ? "✔️": "❌"; 
+    const eventLink = Link({ text: event.name, href: `/events/${event.id}` })
     const sportLink = Link({ text: event.sportName, href: `/sports/${event.sportId}` })
 
     return Column(
         Heading2(
-            Link({ text: event.name, href: `/events/${event.id}` })
+            eventLink
         ),
         Paragraph(`Sport: ${sportLink}`),
         Paragraph(
