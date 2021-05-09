@@ -7,7 +7,7 @@ import SportsService from '../sports/sports.service';
 import { LoginPage } from '../../ui/page/login.page';
 import { RegisterPage } from '../../ui/page/register.page';
 
-class PageController {
+export default class PageController {
 	private authService = new AuthService();
 	private eventsService = new EventsService();
 	private sportsService = new SportsService();
@@ -86,5 +86,3 @@ class PageController {
 		}
 	  }
 }
-
-export default PageController;

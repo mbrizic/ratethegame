@@ -11,6 +11,10 @@ import { mapToDto } from './events.mapper';
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
 
+	public async getAllEvents(): Promise<GetEventDto[]> {
+		return this.getAll({ })
+	}
+
 	public async getUpcoming(): Promise<GetEventDto[]> {
 		return this.getAll({
 			where: {
