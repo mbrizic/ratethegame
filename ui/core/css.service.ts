@@ -9,14 +9,14 @@ const pattern = {
     consecutiveWhitespace: /[ ]{2,}/gm
 }
 
+let cssCache: { [fileName: string]: string } = {} 
+
 export function minifyCss(css: string) {
     return css
         .replace(pattern.leadingWhitespace, pattern.nothing)
         .replace(pattern.consecutiveNewlines, pattern.nothing)
         .replace(pattern.newline, pattern.nothing)
 }
-
-const cache: { [fileName: string]: string } = {} 
 
 export function readCssFiles(...filePaths: string[]) {
     return filePaths
@@ -25,15 +25,19 @@ export function readCssFiles(...filePaths: string[]) {
 }
 
 export function readCssFile(filePath: string) {
-    if (cache[filePath]) {
-        return cache[filePath]
+    if (cssCache[filePath]) {
+        return cssCache[filePath]
     }
 
     const fileContents = minifyCss(
         readFile(filePath)
     )
 
-    cache[filePath] = fileContents
+    cssCache[filePath] = fileContents
 
     return fileContents
+}
+
+export function clearCssCache() {
+    cssCache = {}
 }

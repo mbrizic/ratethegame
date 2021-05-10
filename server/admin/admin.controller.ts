@@ -4,7 +4,9 @@ import { RequestWithPotentialUser } from '../auth/auth.interface';
 import EventsService from '../events/events.service';
 import { StatsPage } from '../../ui/page/stats.page';
 import UserService from '../users/users.service';
-import { pageViewsPerDate } from '../core/pageview.service';
+import { clearPageViews, getPageViewsPerDate } from '../core/pageview.service';
+import { clearRecordedErrors, getRecordedErrors } from '../core/error.service';
+import { clearCssCache } from '../../ui/core/css.service';
 
 export class AdminController {
 	private authService = new AuthService();
@@ -14,7 +16,8 @@ export class AdminController {
 	public getStatsPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		const events = await this.eventsService.getAllEvents();
 		const users = await this.userService.getAll();
-		const pageviews = pageViewsPerDate;
+		const pageviews = getPageViewsPerDate();
+		const recordedErrors = getRecordedErrors()
 
 		try {
 			res.send(
@@ -22,12 +25,28 @@ export class AdminController {
 					user: req.user,
 					users,
 					events,
-					pageviews
+					pageviews,
+					recordedErrors
 				})
 			)	
 		} catch (error) {
 			next(error)
 		}
+	}
+
+	public clearRecordedErrors = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		clearRecordedErrors()
+		res.redirect("/admin")
+	}
+
+	public clearPageviews = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		clearPageViews()
+		res.redirect("/admin")
+	}
+
+	public clearCssCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		clearCssCache()
+		res.redirect("/admin")
 	}
 
 }

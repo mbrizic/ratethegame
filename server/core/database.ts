@@ -3,11 +3,11 @@ import { initModels } from '../../database/models/init-models';
 import { getAppConfig } from './app.config'
 
 export const database = new Sequelize(getAppConfig().postgresURL, {
-  // logging: false
+	logging: getAppConfig().dbLoggingEnabled
 })
 
 initModels(database)
 
 database.authenticate().catch((err: Error) => {
-  console.error('Unable to connect to the database:', err);
+	console.error('Unable to connect to the database:', err);
 });

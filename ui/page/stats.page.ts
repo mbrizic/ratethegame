@@ -1,7 +1,8 @@
+import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
 import { GetEventDto } from "../../server/events/events.dto";
 import { GetUserDto } from "../../server/users/users.dto";
-import { Column, Heading2, Heading3, Heading4, ListItem, Paragraph, Row, UnorderedList } from "../core/html.elements";
+import { Column, Form, Heading2, Heading3, Heading4, ListItem, Paragraph, Row, SubmitButton, UnorderedList } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
@@ -9,6 +10,7 @@ interface StatsModel extends PageModel {
     users: GetUserDto[];
     events: GetEventDto[];
     pageviews: PageViewsForDate;
+    recordedErrors: RecordedError[];
 }
 
 export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
@@ -35,6 +37,25 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                     )
                 )
             )),
+            Heading3(`Errors (${model.recordedErrors.length}): `),
+            UnorderedList(
+                ...model.recordedErrors.map(err => 
+                    ListItem(`${err.timestamp.toISOString()} - ${err.errorStatus} - ${err.errorMessage}`)
+                )
+            ),
+            Heading3("Actions: "),
+            Row(
+                Form("/admin/errors/clear", 
+                    SubmitButton("Clear all errors")
+                ),
+                Form("/admin/pageviews/clear", 
+                    SubmitButton("Clear pageviews")
+                ),
+                Form("/admin/css-cache/clear", 
+                    SubmitButton("Clear css cache")
+                ),
+            )
+            
         )
     )
 }

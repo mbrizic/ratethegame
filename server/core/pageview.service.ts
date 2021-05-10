@@ -1,6 +1,6 @@
 import { roundToMidnight, now } from "./date.service";
 
-export const pageViewsPerDate: PageViewsForDate = {};
+let pageViewsPerDate: PageViewsForDate = {};
 
 export function recordPageView(url: string) {
     const today = roundToMidnight(now())
@@ -17,6 +17,14 @@ export function recordPageView(url: string) {
     } else {
         date[url] = date[url] + 1
     }
+}
+
+export function getPageViewsPerDate() {
+    return pageViewsPerDate
+}
+
+export function clearPageViews() {
+    pageViewsPerDate = {}
 }
 
 export interface PageViewsForDate {
