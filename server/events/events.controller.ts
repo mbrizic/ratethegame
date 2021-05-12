@@ -57,7 +57,7 @@ class EventsController {
 
 	public addVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const dto: RateEventDto = req.body;
-		
+
 		try {
 			const event = await this.eventsService.addRating(dto)
 			res.redirect(`/events/${dto.eventId}`);

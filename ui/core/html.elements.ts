@@ -51,8 +51,8 @@ export const ListItem = (children: string, options: BasicAttributes = {}) =>
 export const UnorderedList = (...children: ChildElement[]) => 
     `<ul>${children.join("")}</ul>`
 
-export const Link = (options: { text: string, href: string }) => 
-    `<a href="${options.href}">${options.text}</a>`
+export const Link = (required: { text: string, href: string }, options: BasicAttributes = {}) => 
+    `<a href="${required.href}" ${addBasicAttributes(options)}>${required.text}</a>`
 
 export const Span = (options: { text: string, class?: string }) =>
     `<span class="${options?.class ?? ""}">${options.text}</span>`
@@ -98,6 +98,9 @@ export const Row = (...children: ChildElement[]) =>
 export const RowSpaced = (...children: ChildElement[]) =>
     `<div class="row spaced">${children.join("")}</div>`
 
+export const RowCentered = (...children: ChildElement[]) =>
+    `<div class="row centered">${children.join("")}</div>`
+
 export const Column = (...children: ChildElement[]) =>
     `<div class="column">${children.join("")}</div>`
 
@@ -139,6 +142,10 @@ function addBasicAttributes(options: BasicAttributes) {
         output += `onClick="${options.onClick}"`
     }
 
+    if (options.style) {
+        output += `style="${options.style}"`
+    }
+
     return output
 }
 
@@ -146,6 +153,7 @@ export interface BasicAttributes {
     id?: string;
     class?: string;
     onClick?: string;
+    style?: string;
 }
 
 export interface FormInputAttributes {

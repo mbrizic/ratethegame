@@ -1,7 +1,8 @@
 import { humanize } from "../../server/core/date.service"
 import { GetEventDto } from "../../server/events/events.dto"
-import { Column, Heading2, Link, Paragraph, Row } from "../core/html.elements"
+import { Column, Div, Heading2, Heading3, Link, Paragraph, Row } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
+import { EventRating } from "./event-rating.component"
 
 export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
 
@@ -10,18 +11,26 @@ export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
     const sportLink = Link({ text: event.sportName, href: `/sports/${event.sportId}` })
 
     return Column(
-        Heading2(
-            eventLink
+        Row(
+            Column(
+                Heading2(
+                    eventLink
+                ),
+                Paragraph(
+                    `${humanize(event.date)} (${event.date.toUTCString()})`
+                )
+            ),
+            Column(
+                Paragraph(`Sport: ${sportLink}`),
+            )
         ),
-        Paragraph(`Sport: ${sportLink}`),
-        Paragraph(
-            `${humanize(event.date)} (${event.date.toUTCString()})`
-        ),
-        Paragraph(
-            event.totalRatings > 0 
-                ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings) ${icon}`
-                : `No ratings yet`
-        ),
+        event.totalRatings > 0 ? Column(
+            Heading3(`${event.ratingPercentage}% would recommend this ${icon}`, { class: "text-centered"}),
+            EventRating(event),
+            Paragraph(`As voted by ${event.totalRatings} users.`, { class: "text-centered" })
+        ) : Column(
+            Heading3(`No ratings yet. Be the first one to vote:`, { class: "text-centered" })
+        )
     )
 
 }

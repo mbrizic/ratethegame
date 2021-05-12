@@ -1,6 +1,6 @@
 import { GetEventDto } from "../../server/events/events.dto"
 import { PotentialUser } from "../../server/users/users.dto"
-import { Column, Form, HiddenInput, Paragraph, SubmitButton } from "../core/html.elements"
+import { Form, HiddenInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
@@ -11,29 +11,27 @@ interface EventFormModel {
 
 export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel) => {
 
-    if (model.user == null) {
-        return Paragraph("You need to be logged in to post a rating.")
-    }
+    const userId = model.user ? model.user.id : -1;
 
 	if (model.hasUserAlreadyRated) {
 		return Form(`/events/${model.event.id}/unvote`, 
 			HiddenInput({ name: "eventId", value: model.event.id }),
-			HiddenInput({ name: "userId", value: model.user.id }),
+			HiddenInput({ name: "userId", value: userId }),
 			SubmitButton("Remove your vote")
 		)
 	}
 
-    return Column(
+    return RowCentered(
         Form(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: true }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
-			HiddenInput({ name: "userId", value: model.user.id }),
+			HiddenInput({ name: "userId", value: userId }),
 			SubmitButton("Would recommend 👍")
 		),
 		Form(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: false }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
-			HiddenInput({ name: "userId", value: model.user.id }),
+			HiddenInput({ name: "userId", value: userId }),
 			SubmitButton("Would not recommend 👎")
 		)
     )

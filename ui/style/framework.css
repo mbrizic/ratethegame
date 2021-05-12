@@ -12,8 +12,12 @@
     align-self: center;
 }
 
-.spaced {
+.row.spaced {
     justify-content: space-between;
+}
+
+.row.centered {
+    justify-content: center;
 }
 
 @media (max-width: 600px) {

@@ -10,3 +10,14 @@
 .admin {
     background-color: pink;
 }
+
+.progress-bar-background {
+    height: 20px;
+    width: 100%;
+    background-color: red;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: green;
+}
