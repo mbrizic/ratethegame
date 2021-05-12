@@ -6,6 +6,7 @@ import { IndexPage } from '../../ui/page/index.page';
 import SportsService from '../sports/sports.service';
 import { LoginPage } from '../../ui/page/login.page';
 import { RegisterPage } from '../../ui/page/register.page';
+import { returnUrlQueryParam } from '../core/constants';
 
 export default class PageController {
 	private authService = new AuthService();
@@ -25,7 +26,7 @@ export default class PageController {
 					upcomingEvents,
 					sports
 				})
-			)	
+			)
 		} catch (error) {
 			next(error)
 		}
@@ -48,7 +49,11 @@ export default class PageController {
 
 			res.setHeader('Set-Cookie', [result.cookie]);
 
-			res.redirect("/")
+			const returnUrl = req.query[returnUrlQueryParam]
+				? req.query[returnUrlQueryParam] as string
+				: "/"
+
+			res.redirect(returnUrl)
 		} catch (error) {
 
 			res.send(LoginPage({
@@ -57,7 +62,7 @@ export default class PageController {
 			}))
 		}
 	}
-	
+
 	public getRegisterPage = async (req: Request, res: Response, next: NextFunction) => {
 		res.send(
 			RegisterPage({
@@ -83,13 +88,18 @@ export default class PageController {
 	}
 
 	public logout = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-	
+
 		try {
-		  await this.authService.logout(req.user);
-		  res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-		  res.redirect("/login")
+			await this.authService.logout(req.user);
+
+			const returnUrl = req.query[returnUrlQueryParam]
+				? req.query[returnUrlQueryParam] as string
+				: "/"
+
+			res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
+			res.redirect(returnUrl)
 		} catch (error) {
-		  next(error);
+			next(error);
 		}
-	  }
+	}
 }

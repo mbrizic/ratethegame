@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { DataStoredInToken, RequestWithUser } from '../../auth/auth.interface';
 import UserService from '../../users/users.service';
 import { getAppConfig } from '../app.config';
+import { returnUrlQueryParam } from '../constants';
 
 const userService = new UserService()
 
@@ -30,7 +31,7 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 	} else {
 		res.status(401)
 		res.statusMessage = 'No authentication token'
-		res.redirect("/login")
+		res.redirect(`/login?${returnUrlQueryParam}=${req.path}`)
 	}
 }
 
