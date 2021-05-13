@@ -1,9 +1,10 @@
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, GetUserDto, UpdateUserDto } from './users.dto';
-import HttpException from '../core/exceptions/HttpException';
+import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
 import { ensureInputIsClean } from '../core/input-sanitizer';
+import { ensureInputIsEmail, ensureLongerThan } from '../core/validation';
 
 class UserService {
 
@@ -29,6 +30,9 @@ class UserService {
 
 		ensureInputIsClean(dto.email)
 		ensureInputIsClean(dto.password)
+
+		ensureInputIsEmail(dto.email)
+		ensureLongerThan(dto.password, 6)
 
 		const user = await Users.findOne({ where: { email: dto.email } });
 

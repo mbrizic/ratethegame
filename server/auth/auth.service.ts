@@ -8,6 +8,7 @@ import UserService from '../users/users.service';
 import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
 import { RegisterUserDto, LoginUserDto } from './auth.dto';
+import { ensureInputIsEmail } from '../core/validation';
  
 class AuthService {
 	private usersService = new UserService()
@@ -20,6 +21,8 @@ class AuthService {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
+
+		ensureInputIsEmail(dto.email)
 
 		const user = await Users.findOne({ where: { email: dto.email } });
 		if (!user) {
