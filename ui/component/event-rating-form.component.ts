@@ -1,4 +1,4 @@
-import { GetEventDto } from "../../server/events/events.dto"
+import { GetEventDto, RateEventDto } from "../../server/events/events.dto"
 import { PotentialUser } from "../../server/users/users.dto"
 import { Form, HiddenInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
@@ -12,19 +12,19 @@ interface EventFormModel {
 export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel) => {
 
 	if (model.hasUserAlreadyRated) {
-		return Form(`/events/${model.event.id}/unvote`, 
-			HiddenInput({ name: "eventId", value: model.event.id }),
+		return Form<RateEventDto>(`/events/${model.event.id}/unvote`, 
+			HiddenInput<RateEventDto>({ name: "eventId", value: model.event.id }),
 			SubmitButton("Remove your vote")
 		)
 	}
 
     return RowCentered(
-        Form(`/events/${model.event.id}/vote`, 
+        Form<RateEventDto>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: true }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
 			SubmitButton("Would recommend 👍")
 		),
-		Form(`/events/${model.event.id}/vote`, 
+		Form<RateEventDto>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: false }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
 			SubmitButton("Would not recommend 👎")

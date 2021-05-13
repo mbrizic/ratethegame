@@ -1,7 +1,7 @@
-import { userInfo } from "os"
+import { CreateSportDto } from "../../server/sports/sports.dto"
 import { PotentialUser } from "../../server/users/users.dto"
-import { Column, Form, Heading3, HiddenInput, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
-import { Component, SimpleComponent } from "../core/html.interfaces"
+import { Column, Form, Heading3, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
+import { Component } from "../core/html.interfaces"
 
 interface SportFormModel {
     user: PotentialUser;
@@ -15,7 +15,7 @@ export const SportForm: Component<SportFormModel> = (model: SportFormModel) => {
 
     return Column(
         Heading3("Add new sport: "),
-        Form("/sports",
+        Form<CreateSportDto>("/sports",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
             SubmitButton("Add event")

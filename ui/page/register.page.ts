@@ -3,6 +3,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Error } from '../component/error.component'
 import { Layout } from "../_Layout";
 import { ExecuteJs } from "../core/html.operator";
+import { RegisterUserDto } from "../../server/auth/auth.dto";
 
 interface RegisterModel extends PageModel {
   
@@ -14,10 +15,10 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
 
     return Layout(model,
         ColumnCentered(
-            Form("/register",
-                TextInput({ placeholder: "Username", name: "username", value: "" }),
+            Form<RegisterUserDto>("/register",
+                TextInput({ placeholder: "Username", name: "email", value: "" }),
                 PasswordInput({ placeholder: "Password", name: "password", value: "" }),
-                Error(model.errorMessage),
+                Error(model.errorMessage) as any,
                 SubmitButton("Register")
             ),
             Paragraph(`... or ${loginLink} instead`)

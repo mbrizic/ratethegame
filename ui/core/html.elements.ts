@@ -109,23 +109,33 @@ export const ColumnCentered = (...children: ChildElement[]) =>
 
 // forms
 
-export const Form = (action: string, ...children: ChildElement[]) =>
+export const Form = <T> (action: string, ...children: FormInputElement<T>[]) =>
     `<form method="POST" action="${action}">${children.join("")}</form>`
 
 export const SubmitButton = (text: ChildElement, options: BasicAttributes = {}) =>
     `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
 
-export const TextInput = (options: FormInputAttributes) =>
+export const TextInput: FormInputFunction = <T> (options: FormInputAttributes<T>) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="text"></input>`
 
-export const DateInput = (options: FormInputAttributes) =>
+export const DateInput: FormInputFunction = <T> (options: FormInputAttributes<T>) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="datetime-local"></input>`
 
-export const PasswordInput = (options: FormInputAttributes) =>
+export const PasswordInput: FormInputFunction = <T> (options: FormInputAttributes<T>) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="password"></input>`
 
-export const HiddenInput = (options: FormInputAttributes) =>
+export const HiddenInput: FormInputFunction = <T> (options: FormInputAttributes<T>) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value}" type="hidden"></input>`
+
+type FormInputElement<T> = FormInputResult<T> | string | null
+type FormInputFunction = <T> (options: FormInputAttributes<T>) => FormInputResult<T>
+interface FormInputResult<T> extends String { }
+
+export interface FormInputAttributes<T> {
+    name: keyof T;
+    placeholder?: string;
+    value?: string | number | boolean; 
+}
 
 function addBasicAttributes(options: BasicAttributes) {
     let output = ""
@@ -154,12 +164,6 @@ export interface BasicAttributes {
     class?: string;
     onClick?: string;
     style?: string;
-}
-
-export interface FormInputAttributes {
-    name: string;
-    placeholder?: string;
-    value?: string | number | boolean; 
 }
 
 export type ChildElement = string | null

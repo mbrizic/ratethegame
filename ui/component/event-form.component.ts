@@ -23,7 +23,7 @@ export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
 
     return Column(
         Heading3("Add new event: "),
-        Form("/events",
+        Form<CreateEventDto>("/events",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
             DateInput({ placeholder: "", name: "date", value: date }),
