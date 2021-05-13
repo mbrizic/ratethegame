@@ -10,10 +10,12 @@ export interface TokenData {
 	expiresIn: number;
 }
 
-export interface RequestWithPotentialUser extends Request {
+export interface RequestWithPotentialUser<T = any> extends Request {
 	user?: PotentialUser;
+	body: T;
 }
 
-export interface RequestWithUser extends Request {
+export interface RequestWithUser<T = any> extends Request {
 	user: GetUserDto;
+	body: T;
 }

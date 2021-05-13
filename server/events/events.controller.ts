@@ -44,8 +44,8 @@ class EventsController {
 		}
 	}
 
-	public addEvent = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: CreateEventDto = req.body;
+	public addEvent = async (req: RequestWithUser<CreateEventDto>, res: Response, next: NextFunction) => {
+		const dto = req.body;
 		
 		try {
 			const createdEventId = await this.eventsService.addEvent(req.user.id, dto)

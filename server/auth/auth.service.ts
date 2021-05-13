@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { GetUserDto, UpdateUserDto } from '../users/users.dto';
-import HttpException from '../core/exceptions/HttpException';
+import HttpException from '../core/exceptions/http.exception';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
 import UserService from '../users/users.service';

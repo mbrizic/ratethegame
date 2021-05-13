@@ -1,4 +1,4 @@
-import { ColumnCentered, Form, Link, Paragraph, PasswordInput, SubmitButton, TextInput } from "../core/html.elements";
+import { ColumnCentered, Form, Heading2, Heading3, Link, Paragraph, PasswordInput, SubmitButton, TextInput } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Error } from '../component/error.component'
 import { Layout } from "../_Layout";
@@ -15,13 +15,14 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
 
     return Layout(model,
         ColumnCentered(
+            Heading3("Join us, it should be quick:"),
             Form<RegisterUserDto>("/register",
                 TextInput({ placeholder: "Username", name: "email", value: "" }),
                 PasswordInput({ placeholder: "Password", name: "password", value: "" }),
                 Error(model.errorMessage) as any,
                 SubmitButton("Register")
             ),
-            Paragraph(`... or ${loginLink} instead`)
+            Paragraph(`... or ${loginLink} instead`, { class: "text-centered" })
         ),
         ExecuteJs(`
             const form = document.getElementsByTagName("form")[0]

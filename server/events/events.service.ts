@@ -2,7 +2,7 @@ import { FindOptions } from 'sequelize/types';
 import { Events, EventsAttributes } from '../../database/models/events';
 import { EventRating } from '../../database/models/event_rating';
 import { now } from '../core/date.service';
-import HttpException from '../core/exceptions/HttpException';
+import HttpException from '../core/exceptions/http.exception';
 import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByAscending, orderByDescending } from '../core/util';

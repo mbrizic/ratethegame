@@ -15,7 +15,7 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 	} else {
 		res.status(401)
 		res.statusMessage = 'No authentication token'
-		res.redirect(`/login?${returnUrlQueryParam}=${req.path}`)
+		res.redirect(`/register?${returnUrlQueryParam}=${req.path}`)
 	}
 }
 
@@ -27,7 +27,7 @@ export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, 
 	} else {
 		res.status(401)
 		res.statusMessage = 'No authentication token'
-		res.redirect("/login")
+		res.redirect("/register")
 	}
 }
 

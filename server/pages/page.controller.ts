@@ -83,7 +83,7 @@ export default class PageController {
 				password: dto.password
 			});
 
-			res.redirect("/login")
+			await this.login(req, res, next)
 		} catch (error) {
 			res.send(RegisterPage({
 				user: null,
