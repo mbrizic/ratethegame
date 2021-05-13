@@ -11,7 +11,7 @@ export interface TokenData {
 }
 
 export interface RequestWithPotentialUser extends Request {
-	user: PotentialUser;
+	user?: PotentialUser;
 }
 
 export interface RequestWithUser extends Request {

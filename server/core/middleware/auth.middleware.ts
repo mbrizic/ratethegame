@@ -1,16 +1,50 @@
 import { NextFunction, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { DataStoredInToken, RequestWithUser } from '../../auth/auth.interface';
+import { DataStoredInToken, RequestWithPotentialUser, RequestWithUser } from '../../auth/auth.interface';
 import UserService from '../../users/users.service';
 import { getAppConfig } from '../app.config';
 import { returnUrlQueryParam } from '../constants';
 
 const userService = new UserService()
 
-export async function authMiddleware(req: RequestWithUser, res: Response, next: NextFunction) {
+export async function ensureAuthenticated(req: RequestWithUser, res: Response, next: NextFunction) {
+	await getUserFromCookieIfExists(req)
+
+	if (req.user) {
+		next()
+	} else {
+		res.status(401)
+		res.statusMessage = 'No authentication token'
+		res.redirect(`/login?${returnUrlQueryParam}=${req.path}`)
+	}
+}
+
+export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, next: NextFunction) {
+	await getUserFromCookieIfExists(req)
+
+	if (req.user && req.user.isAdmin) {
+		next()
+	} else {
+		res.status(401)
+		res.statusMessage = 'No authentication token'
+		res.redirect("/login")
+	}
+}
+
+export async function readUserCredentials(req: RequestWithPotentialUser, res: Response, next: NextFunction) {
+	await getUserFromCookieIfExists(req)
+	next();
+}
+
+export async function getUserFromCookieIfExists(req: RequestWithPotentialUser) {
+	if (req.user) {
+		return
+	}
+
 	const cookies = req.cookies;
 
 	if (cookies && cookies.Authorization) {
+
 		const secret = getAppConfig().jwtSecret;
 
 		const verificationResponse = jwt.verify(cookies.Authorization, secret) as DataStoredInToken;
@@ -21,27 +55,4 @@ export async function authMiddleware(req: RequestWithUser, res: Response, next: 
 			req.user = user;
 		}
 	}
-
-	next();
 }
-
-export async function ensureAuthenticated(req: RequestWithUser, res: Response, next: NextFunction) {
-	if (req.user) {
-		next()
-	} else {
-		res.status(401)
-		res.statusMessage = 'No authentication token'
-		res.redirect(`/login?${returnUrlQueryParam}=${req.path}`)
-	}
-}
-
-export async function ensureAdmin(req: RequestWithUser, res: Response, next: NextFunction) {
-	if (req.user && req.user.isAdmin) {
-		next()
-	} else {
-		res.status(401)
-		res.statusMessage = 'No authentication token'
-		res.redirect("/login")
-	}
-}
-

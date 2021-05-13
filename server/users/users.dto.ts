@@ -15,4 +15,4 @@ export class UpdateUserDto {
 	password: string;
 }
 
-export type PotentialUser = GetUserDto | null;
+export type PotentialUser = GetUserDto | null | undefined;

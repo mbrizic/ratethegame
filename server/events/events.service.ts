@@ -10,6 +10,7 @@ import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
 import { mapToDto } from './events.mapper';
 
 export const defaultEventRatingPercentage = 50
+const defaultPageSize = 10;
 
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
@@ -22,7 +23,8 @@ class EventsService {
 		return this.getAll({
 			where: {
 				datetime: afterDate(now())
-			}
+			},
+			limit: defaultPageSize
 		})
 	}
 
@@ -31,7 +33,8 @@ class EventsService {
 			where: {
 				datetime: beforeDate(now())
 			},
-			order: [ [ 'name', 'DESC'] ]
+			order: [ [ 'name', 'DESC'] ],
+			limit: defaultPageSize
 		})
 		
 		orderByDescending(events, a => a.ratingPercentage)

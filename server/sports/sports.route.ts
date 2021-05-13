@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authMiddleware, ensureAuthenticated } from '../core/middleware/auth.middleware'
+import { ensureAuthenticated, readUserCredentials } from '../core/middleware/auth.middleware'
 import Route from '../core/route.interface'
 import SportsController from './sports.controller'
 
@@ -13,9 +13,10 @@ class SportsRoute implements Route {
 	}
 
 	private initializeRoutes() {
-		this.router.get(`${this.path}`, authMiddleware, this.controller.getSportsList)
-		this.router.get(`${this.path}/:id(\\d+)`, authMiddleware, this.controller.getSportsDetails)
-		this.router.post(`${this.path}`, authMiddleware, ensureAuthenticated, this.controller.addSport)
+		this.router.get(`${this.path}`, readUserCredentials, this.controller.getSportsList)
+		this.router.get(`${this.path}/:id(\\d+)`, readUserCredentials, this.controller.getSportsDetails)
+
+		this.router.post(`${this.path}`, ensureAuthenticated, this.controller.addSport)
 	}
 }
 

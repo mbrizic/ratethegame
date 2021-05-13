@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authMiddleware, ensureAuthenticated } from '../core/middleware/auth.middleware';
+import { ensureAuthenticated, readUserCredentials } from '../core/middleware/auth.middleware';
 import Route from '../core/route.interface';
 import EventsController from './events.controller';
 
@@ -13,15 +13,15 @@ class EventsRoute implements Route {
 	}
 
 	private initializeRoutes() {
-		this.router.get(`${this.path}`, authMiddleware, this.controller.getEventsList);
-		this.router.get(`${this.path}/:id(\\d+)`, authMiddleware, this.controller.getEventsDetails);
+		this.router.get(`${this.path}`, readUserCredentials, this.controller.getEventsList);
+		this.router.get(`${this.path}/:id(\\d+)`, readUserCredentials, this.controller.getEventsDetails);
 		
-		this.router.post(`${this.path}`, authMiddleware, ensureAuthenticated, this.controller.addEvent);
-		this.router.post(`${this.path}/:id(\\d+)/vote`, authMiddleware, ensureAuthenticated, this.controller.addVote);
-		this.router.post(`${this.path}/:id(\\d+)/unvote`, authMiddleware, ensureAuthenticated, this.controller.removeVote);
+		this.router.post(`${this.path}`, ensureAuthenticated, this.controller.addEvent);
+		this.router.post(`${this.path}/:id(\\d+)/vote`, ensureAuthenticated, this.controller.addVote);
+		this.router.post(`${this.path}/:id(\\d+)/unvote`, ensureAuthenticated, this.controller.removeVote);
 
 		// redirects after user logs in
-		this.router.get(`${this.path}/:id(\\d+)/vote`, authMiddleware, ensureAuthenticated, this.controller.getEventsDetails);
+		this.router.get(`${this.path}/:id(\\d+)/vote`, ensureAuthenticated, this.controller.getEventsDetails);
 	}
 }
 

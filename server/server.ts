@@ -12,7 +12,7 @@ initializeServer()
 function initializeServer() {
 	const app = new App([
 		new PageRoute(),
-		new UsersRoute(),
+		// new UsersRoute(),
 		new AuthRoute(),
 		new EventsRoute(),
 		new SportsRoute(),

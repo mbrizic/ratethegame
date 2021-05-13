@@ -1,19 +1,26 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "target": "es2017",
-    "outDir": "./dist",
-    "baseUrl": "./src",
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
-    "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types"]
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"sourceMap": true,
+		"target": "es2017",
+		"outDir": "./dist",
+		"baseUrl": "./src",
+		"alwaysStrict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": false,
+		"moduleResolution": "node",
+		"typeRoots": [
+			"./node_modules/@types"
+		]
+	},
+	"include": [
+		"server/**/*.ts",
+		"ui/**/*.ts",
+	],
+	"exclude": [
+		"node_modules"
+	]
 }

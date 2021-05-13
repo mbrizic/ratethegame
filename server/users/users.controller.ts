@@ -6,7 +6,7 @@ import UserService from './users.service';
 class UsersController {
 	public userService = new UserService();
 
-	public getUsers = async (req: Request, res: Response, next: NextFunction) => {
+	public getUsers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		try {
 			const findAllUsersData = await this.userService.getAll();
 			res.status(200).json({ data: findAllUsersData, message: 'findAll' });
@@ -15,7 +15,7 @@ class UsersController {
 		}
 	}
 
-	public getUserById = async (req: Request, res: Response, next: NextFunction) => {
+	public getUserById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userId: number = Number(req.params.id);
 
 		try {
@@ -26,7 +26,7 @@ class UsersController {
 		}
 	}
 
-	public createUser = async (req: Request, res: Response, next: NextFunction) => {
+	public createUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userData: CreateUserDto = req.body;
 
 		try {
@@ -48,7 +48,7 @@ class UsersController {
 		}
 	}
 
-	public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+	public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userId: number = Number(req.params.id);
 
 		try {
