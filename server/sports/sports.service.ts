@@ -30,7 +30,7 @@ export default class SportsService {
 		return this.mapToDto(sport)
 	}
 
-	public async addSport(dto: CreateSportDto) {
+	public async addSport(userId: number, dto: CreateSportDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO")
 		}
@@ -41,7 +41,7 @@ export default class SportsService {
 		const created = await Sports.create({
 			name: dto.name,
 			description: dto.description,
-			created_by: dto.userId
+			created_by: userId
 		})
 
 		return created.id

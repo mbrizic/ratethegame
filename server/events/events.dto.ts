@@ -10,14 +10,12 @@ export interface GetEventDto {
 
 export interface CreateEventDto {
 	sportId: number;
-	userId: number;
 	name: string;
 	description: string;
 	date: Date;
 }
 
 export interface RateEventDto {
-	userId: number;
 	eventId: number;
 	wouldRecommend: boolean;
 }

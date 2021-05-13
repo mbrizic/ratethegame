@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateUserDto } from '../users/users.dto';
+import { RegisterUserDto } from '../auth/auth.dto';
 import AuthService from './auth.service';
 import { RequestWithUser } from '../auth/auth.interface';
 
 class AuthController {
 	public authService = new AuthService();
 
-	public signUp = async (req: Request, res: Response, next: NextFunction) => {
-		const userData: CreateUserDto = req.body;
+	public register = async (req: Request, res: Response, next: NextFunction) => {
+		const userData: RegisterUserDto = req.body;
 
 		try {
 			const created = await this.authService.signup(userData);
@@ -18,7 +18,7 @@ class AuthController {
 	}
 
 	public logIn = async (req: Request, res: Response, next: NextFunction) => {
-		const userData: CreateUserDto = req.body;
+		const userData: RegisterUserDto = req.body;
 
 		try {
 			const { cookie, user } = await this.authService.login(userData);

@@ -1,17 +1,18 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { CreateUserDto, GetUserDto, LoginUserDto, UpdateUserCommand } from '../users/users.dto';
+import { GetUserDto, UpdateUserDto } from '../users/users.dto';
 import HttpException from '../core/exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
 import UserService from '../users/users.service';
 import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
+import { RegisterUserDto, LoginUserDto } from './auth.dto';
  
 class AuthService {
 	private usersService = new UserService()
 
-	public async signup(dto: CreateUserDto): Promise<GetUserDto> {
+	public async signup(dto: RegisterUserDto): Promise<GetUserDto> {
 		return await this.usersService.createUser(dto)
 	}
 
@@ -36,7 +37,7 @@ class AuthService {
 		return { cookie, user: this.mapToDto(user) };
 	}
 
-	public async logout(userData: UpdateUserCommand): Promise<GetUserDto> {
+	public async logout(userData: UpdateUserDto): Promise<GetUserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}

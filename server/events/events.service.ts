@@ -58,7 +58,7 @@ class EventsService {
 		return rating != null
 	}
 
-	public async addEvent(dto: CreateEventDto) {
+	public async addEvent(userId: number, dto: CreateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
@@ -68,35 +68,35 @@ class EventsService {
 		const created = await Events.create({
 			name: dto.name,
 			sport_id: dto.sportId,
-			created_by: dto.userId,
+			created_by: userId,
 			datetime: dto.date,
-		}, { include: this.entitiesToInclude });
+		});
 
 		return created.id
 	}
 
-	public async addRating(dto: RateEventDto) {
+	public async addRating(userId: number, dto: RateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
 		await EventRating.create({
 			event_id: dto.eventId,
-			created_by: dto.userId,
+			created_by: userId,
 			would_recommend: dto.wouldRecommend,
 		})
 
 		return true
 	}
 
-	public async removeRating(dto: RateEventDto) {
+	public async removeRating(userId: number, dto: RateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
 		const deleted = await EventRating.destroy({ 
 			where: { 
-				created_by: dto.userId,
+				created_by: userId,
 				event_id: dto.eventId
 			}
 		});

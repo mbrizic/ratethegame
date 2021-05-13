@@ -27,7 +27,6 @@ export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
             DateInput({ placeholder: "", name: "date", value: date }),
-            HiddenInput({ name: "userId", value: model.user.id }),
             HiddenInput({ name: "sportId", value: model.sportId }),
             SubmitButton("Add event")
         )

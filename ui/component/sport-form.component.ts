@@ -18,7 +18,6 @@ export const SportForm: Component<SportFormModel> = (model: SportFormModel) => {
         Form("/sports",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
-            HiddenInput({ name: "userId", value: model.user.id }),
             SubmitButton("Add event")
         )
     )

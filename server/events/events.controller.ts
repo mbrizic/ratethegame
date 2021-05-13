@@ -48,7 +48,7 @@ class EventsController {
 		const dto: CreateEventDto = req.body;
 		
 		try {
-			const createdEventId = await this.eventsService.addEvent(dto)
+			const createdEventId = await this.eventsService.addEvent(req.user.id, dto)
 			res.redirect(`/events/${createdEventId}`);
 		} catch (error) {
 			next(error);
@@ -59,7 +59,7 @@ class EventsController {
 		const dto: RateEventDto = req.body;
 
 		try {
-			const event = await this.eventsService.addRating(dto)
+			const event = await this.eventsService.addRating(req.user.id, dto)
 			res.redirect(`/events/${dto.eventId}`);
 		} catch (error) {
 			next(error);
@@ -70,7 +70,7 @@ class EventsController {
 		const dto: RateEventDto = req.body;
 		
 		try {
-			const event = await this.eventsService.removeRating(dto)
+			const event = await this.eventsService.removeRating(req.user.id, dto)
 			res.redirect(`/events/${dto.eventId}`);
 		} catch (error) {
 			next(error);

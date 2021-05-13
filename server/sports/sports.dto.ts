@@ -10,5 +10,4 @@ export interface GetSportDto {
 export interface CreateSportDto {
   name: string;
   description: string;
-  userId: number;
 }
