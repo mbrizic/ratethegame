@@ -7,6 +7,8 @@ import { returnUrlQueryParam } from '../constants';
 
 const userService = new UserService()
 
+const redirectUrl = getAppConfig().isDebugMode ? "/login" : "/register"
+
 export async function ensureAuthenticated(req: RequestWithUser, res: Response, next: NextFunction) {
 	await getUserFromCookieIfExists(req)
 
@@ -15,7 +17,7 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 	} else {
 		res.status(401)
 		res.statusMessage = 'No authentication token'
-		res.redirect(`/register?${returnUrlQueryParam}=${req.path}`)
+		res.redirect(`${redirectUrl}?${returnUrlQueryParam}=${req.path}`)
 	}
 }
 
@@ -27,7 +29,7 @@ export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, 
 	} else {
 		res.status(401)
 		res.statusMessage = 'No authentication token'
-		res.redirect("/register")
+		res.redirect(redirectUrl)
 	}
 }
 

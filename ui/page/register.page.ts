@@ -4,12 +4,14 @@ import { Error } from '../component/error.component'
 import { Layout } from "../_Layout";
 import { ExecuteJs } from "../core/html.operator";
 import { RegisterUserDto } from "../../server/auth/auth.dto";
+import { getAppConfig } from "../../server/core/app.config";
 
-interface RegisterModel extends PageModel {
-  
-}
+interface RegisterModel extends PageModel { }
 
 export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
+
+    const username = getAppConfig().isDebugMode ? "mario@mail.com" : ""
+    const password = getAppConfig().isDebugMode ? "123456" : ""
 
     const loginLink = Link({ href: "/login", text: "login"}, { id: "login" })
 
@@ -17,8 +19,8 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
         ColumnCentered(
             Heading3("Join us, it should be quick:"),
             Form<RegisterUserDto>("/register",
-                TextInput({ placeholder: "Username", name: "email", value: "" }),
-                PasswordInput({ placeholder: "Password", name: "password", value: "" }),
+                TextInput({ placeholder: "Username", name: "email", value: username }),
+                PasswordInput({ placeholder: "Password", name: "password", value: password }),
                 Error(model.errorMessage) as any,
                 SubmitButton("Register")
             ),

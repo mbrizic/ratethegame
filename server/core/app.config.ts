@@ -2,18 +2,24 @@ export interface AppConfig {
     postgresURL: string;
     jwtSecret: string;
     dbLoggingEnabled: boolean;
+    cssCachingEnabled: boolean;
+    isDebugMode: boolean;
     port: string;
     nodeEnv: string;
 }
 
-export function getAppConfig(): AppConfig {
-    return {
-        postgresURL: ensureExists("POSTGRES_URL"),
-        jwtSecret: ensureExists("JWT_SECRET"),
-        dbLoggingEnabled: ensureExists("DB_LOGGING_ENABLED") === "true",
-        port: ensureExists("PORT"),
-        nodeEnv: ensureExists("NODE_ENV"),
-    }
+export function getAppConfig() {
+    return appConfig
+}
+
+const appConfig: AppConfig = {
+    postgresURL: ensureExists("POSTGRES_URL"),
+    jwtSecret: ensureExists("JWT_SECRET"),
+    dbLoggingEnabled: ensureExists("DB_LOGGING_ENABLED") === "true",
+    cssCachingEnabled: ensureExists("CSS_CACHING_ENABLED") === "true",
+    isDebugMode: ensureExists("IS_DEBUG_MODE") === "true",
+    port: ensureExists("PORT"),
+    nodeEnv: ensureExists("NODE_ENV"),
 }
 
 function ensureExists(settingName: string): string {
