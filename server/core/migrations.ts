@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
-import fs = require('fs')
-import crypto = require('crypto')
-import path = require('path')
+import * as fs from 'fs'
+import * as crypto from 'crypto'
+import * as path from 'path'
 
 const config: Config = {
 	scriptsPath: "./database/scripts",

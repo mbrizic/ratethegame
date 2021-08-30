@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import App from './app';
-import UsersRoute from './users/users.route';
 import AuthRoute from './auth/auth.route';
 import PageRoute from './pages/page.route';
 import EventsRoute from './events/events.route';

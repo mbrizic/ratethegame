@@ -41,6 +41,12 @@ export const readFile = (path: string) => {
     return fs.readFileSync(path, "utf-8")
 }
 
+export const deleteFile = (path: string) => {
+    if (fs.existsSync(path)) {
+        return fs.unlinkSync(path)
+    }
+}
+
 export const readFileForgiving = (path: string) => {
     if (!checkIfExists(path)) {
         return null

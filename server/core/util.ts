@@ -37,6 +37,10 @@ export function matchAll(str: string, regex: RegExp) {
     return result;
 }
 
+export function replaceAll(str: string, find: string, replace: string) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+  
 export function sum(array: number[]) {
     return array.reduce((acc, value) => acc + value, 0)
 }
