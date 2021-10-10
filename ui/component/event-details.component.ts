@@ -1,6 +1,6 @@
 import { humanize } from "../../server/core/date.service"
 import { GetEventDto } from "../../server/events/events.dto"
-import { Column, Div, Heading2, Heading3, Link, Paragraph, Row } from "../core/html.elements"
+import { ChildElement, Column, Div, Heading2, Heading3, Link, Paragraph, Row } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { EventRating } from "./event-rating.component"
 
@@ -9,7 +9,7 @@ interface EventFormModel {
     event: GetEventDto
 }
 
-function getRatings(model: EventFormModel): import("/home/jbaban@reversinglabs.lan/personal/ratethegame/ui/core/html.elements").ChildElement {
+function getRatings(model: EventFormModel): ChildElement {
     const icon = model.event.ratingPercentage >= 50 ? "✔️": "❌"; 
 
     return Column(
