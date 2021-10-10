@@ -5,14 +5,14 @@ import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
     user: PotentialUser;
-	hasVotingPeriodNotBegun: boolean;
+	isVotingPeriod: boolean;
 	hasUserAlreadyRated: boolean;
 	event: GetEventDto;
 }
 
 export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel) => {
 
-	if (model.hasVotingPeriodNotBegun) {
+	if (!model.isVotingPeriod) {
 		return RowCentered(
             Text("You will be able to vote once the event voting period begins for this event.")
 		)

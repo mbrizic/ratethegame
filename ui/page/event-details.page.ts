@@ -10,7 +10,7 @@ import { Card } from "../component/card.component";
 interface EventDetailsModel extends PageModel {
     user: PotentialUser;
 	hasUserAlreadyRated: boolean;
-    hasVotingPeriodNotBegun: boolean;
+    isVotingPeriod: boolean;
 	event: GetEventDto;
 }
 
@@ -21,13 +21,13 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
             Column(
                 EventDetails({
                     event: model.event,
-                    hasVotingPeriodNotBegun: model.hasVotingPeriodNotBegun
+                    isVotingPeriod: model.isVotingPeriod
                 }),
                 EventRatingForm({ 
                     event: model.event,
                     user: model.user,
                     hasUserAlreadyRated: model.hasUserAlreadyRated,
-                    hasVotingPeriodNotBegun: model.hasVotingPeriodNotBegun
+                    isVotingPeriod: model.isVotingPeriod
                 })
             )
         )
