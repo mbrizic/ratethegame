@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { EventDetailsPage } from '../../ui/page/event-details.page';
 import { EventListPage } from '../../ui/page/event-list.page';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
+import { now } from '../core/date.service';
 import { CreateEventDto, RateEventDto } from './events.dto';
 import EventsService from './events.service';
 
@@ -30,13 +31,16 @@ class EventsController {
 		try {
 			const event = await this.eventsService.getById(eventId)
 
+			const hasVotingPeriodNotBegun = now().getTime() < event.date.getTime()
+
 			const hasUserAlreadyRated = req.user
 				? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
 				: false
 
 			res.send(EventDetailsPage({
 				event,
-				hasUserAlreadyRated,
+				hasUserAlreadyRated: hasUserAlreadyRated,
+				hasVotingPeriodNotBegun: hasVotingPeriodNotBegun,
 				user: req.user
 			}));
 		} catch (error) {

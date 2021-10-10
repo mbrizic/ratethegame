@@ -1,15 +1,22 @@
 import { GetEventDto, RateEventDto } from "../../server/events/events.dto"
 import { PotentialUser } from "../../server/users/users.dto"
-import { Form, HiddenInput, RowCentered, SubmitButton } from "../core/html.elements"
+import { Form, HiddenInput, RowCentered, SubmitButton, Text } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
     user: PotentialUser;
+	hasVotingPeriodNotBegun: boolean;
 	hasUserAlreadyRated: boolean;
 	event: GetEventDto;
 }
 
 export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel) => {
+
+	if (model.hasVotingPeriodNotBegun) {
+		return RowCentered(
+            Text("You will be able to vote once the event voting period begins for this event.")
+		)
+	}
 
 	if (model.hasUserAlreadyRated) {
 		return Form<RateEventDto>(`/events/${model.event.id}/unvote`, 
