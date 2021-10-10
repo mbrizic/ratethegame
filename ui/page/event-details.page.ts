@@ -9,7 +9,7 @@ import { Card } from "../component/card.component";
 
 interface EventDetailsModel extends PageModel {
     user: PotentialUser;
-	hasUserAlreadyRated: boolean;
+    hasUserAlreadyRated: boolean;
     isVotingPeriod: boolean;
 	event: GetEventDto;
 }
