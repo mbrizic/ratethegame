@@ -14,7 +14,7 @@ export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel
 
 	if (!model.isVotingAllowed) {
 		return RowCentered(
-			Text("You will be able to vote once the event voting period begins for this event.")
+			Text("You will be able to vote once the event has begun.")
 		)
 	}
 
