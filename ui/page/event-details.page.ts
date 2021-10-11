@@ -21,13 +21,13 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
             Column(
                 EventDetails({
                     event: model.event,
-                    isVotingPeriod: model.isVotingAllowed
+                    isVotingAllowed: model.isVotingAllowed
                 }),
                 EventRatingForm({ 
                     event: model.event,
                     user: model.user,
                     hasUserAlreadyRated: model.hasUserAlreadyRated,
-                    isVotingPeriod: model.isVotingAllowed
+                    isVotingAllowed: model.isVotingAllowed
                 })
             )
         )
