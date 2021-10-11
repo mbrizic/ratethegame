@@ -31,7 +31,7 @@ class EventsController {
 		try {
 			const event = await this.eventsService.getById(eventId)
 
-			const isVotingPeriod = now().getTime() > event.date.getTime()
+			const isVotingAllowed = now().getTime() > event.date.getTime()
 
 			const hasUserAlreadyRated = req.user
 				? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
@@ -39,8 +39,8 @@ class EventsController {
 
 			res.send(EventDetailsPage({
 				event,
-				hasUserAlreadyRated: hasUserAlreadyRated,
-				isVotingPeriod: isVotingPeriod,
+				hasUserAlreadyRated,
+				isVotingAllowed,
 				user: req.user
 			}));
 		} catch (error) {
