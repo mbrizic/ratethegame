@@ -9,7 +9,8 @@ import { Card } from "../component/card.component";
 
 interface EventDetailsModel extends PageModel {
     user: PotentialUser;
-	hasUserAlreadyRated: boolean;
+    hasUserAlreadyRated: boolean;
+    isVotingAllowed: boolean;
 	event: GetEventDto;
 }
 
@@ -18,11 +19,15 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
     return Layout(model,
         Card(
             Column(
-                EventDetails(model.event),
+                EventDetails({
+                    event: model.event,
+                    isVotingAllowed: model.isVotingAllowed
+                }),
                 EventRatingForm({ 
                     event: model.event,
                     user: model.user,
-                    hasUserAlreadyRated: model.hasUserAlreadyRated
+                    hasUserAlreadyRated: model.hasUserAlreadyRated,
+                    isVotingAllowed: model.isVotingAllowed
                 })
             )
         )

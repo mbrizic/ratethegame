@@ -1,14 +1,29 @@
 import { humanize } from "../../server/core/date.service"
 import { GetEventDto } from "../../server/events/events.dto"
-import { Column, Div, Heading2, Heading3, Link, Paragraph, Row } from "../core/html.elements"
+import { ChildElement, Column, Div, Heading2, Heading3, Link, Paragraph, Row } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { EventRating } from "./event-rating.component"
 
-export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
+interface EventFormModel {
+    isVotingAllowed: boolean;
+    event: GetEventDto
+}
 
-    const icon = event.ratingPercentage >= 50 ? "✔️": "❌"; 
-    const eventLink = Link({ text: event.name, href: `/events/${event.id}` })
-    const sportLink = Link({ text: event.sportName, href: `/sports/${event.sportId}` })
+function getRatings(model: EventFormModel): ChildElement {
+    const icon = model.event.ratingPercentage >= 50 ? "✔️": "❌"; 
+
+    return Column(
+        Heading3(`${model.event.ratingPercentage}% would recommend this ${icon}`, { class: "text-centered" }),
+        EventRating(model.event),
+        Paragraph(`As voted by ${model.event.totalRatings} users.`, { class: "text-centered" })
+    )
+}
+
+export const EventDetails: Component<EventFormModel> = (model: EventFormModel) => {
+
+    const eventLink = Link({ text: model.event.name, href: `/events/${model.event.id}` })
+    const sportLink = Link({ text: model.event.sportName, href: `/sports/${model.event.sportId}` })
+    const noRatingsMessage = `No ratings yet. ${model.isVotingAllowed ? ` Be the first one to vote:` : ``}` 
 
     return Column(
         Row(
@@ -17,20 +32,17 @@ export const EventDetails: Component<GetEventDto> = (event: GetEventDto) => {
                     eventLink
                 ),
                 Paragraph(
-                    `${humanize(event.date)} (${event.date.toUTCString()})`
+                    `${humanize(model.event.date)} (${model.event.date.toUTCString()})`
                 )
             ),
             Column(
                 Paragraph(`Sport: ${sportLink}`),
             )
         ),
-        event.totalRatings > 0 ? Column(
-            Heading3(`${event.ratingPercentage}% would recommend this ${icon}`, { class: "text-centered"}),
-            EventRating(event),
-            Paragraph(`As voted by ${event.totalRatings} users.`, { class: "text-centered" })
-        ) : Column(
-            Heading3(`No ratings yet. Be the first one to vote:`, { class: "text-centered" })
-        )
+        model.event.totalRatings > 0 
+            ? getRatings(model) 
+            : Column(
+                Heading3(noRatingsMessage, { class: "text-centered" })
+            )
     )
-
 }
