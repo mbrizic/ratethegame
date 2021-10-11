@@ -5,7 +5,7 @@ import { Component } from "../core/html.interfaces"
 import { EventRating } from "./event-rating.component"
 
 interface EventFormModel {
-    isVotingPeriod: boolean;
+    isVotingAllowed: boolean;
     event: GetEventDto
 }
 
@@ -23,7 +23,7 @@ export const EventDetails: Component<EventFormModel> = (model: EventFormModel) =
 
     const eventLink = Link({ text: model.event.name, href: `/events/${model.event.id}` })
     const sportLink = Link({ text: model.event.sportName, href: `/sports/${model.event.sportId}` })
-    const noRatingsMessage = `No ratings yet. ${model.isVotingPeriod ? ` Be the first one to vote:` : ``}` 
+    const noRatingsMessage = `No ratings yet. ${model.isVotingAllowed ? ` Be the first one to vote:` : ``}` 
 
     return Column(
         Row(
