@@ -21,6 +21,18 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 	}
 }
 
+export async function ensureUserAuthorized(req: RequestWithUser, res: Response, next: NextFunction) {
+	await getUserFromCookieIfExists(req)
+
+	if ("" + req.user.id == req.params.id) {
+		next()
+	} else {
+		res.status(401)
+		res.statusMessage = 'Not authenticated'
+		res.redirect(`${redirectUrl}?${returnUrlQueryParam}=${req.path}`)
+	}
+}
+
 export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, next: NextFunction) {
 	await getUserFromCookieIfExists(req)
 

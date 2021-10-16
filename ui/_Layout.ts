@@ -1,4 +1,5 @@
 import { getAppConfig } from "../server/core/app.config";
+import { UserSettings } from './component/user-settings.component'
 import { Logout } from "./component/logout.component";
 import { readCssFiles } from "./core/css.service";
 import { Body, Footer, Head, Header, Heading1, Html, Link, Style, Text, Title } from "./core/html.elements";
@@ -25,7 +26,8 @@ export const Layout = (model: PageModel, ...children: string[]) => {
         Link({ text: "Events", href: "/events" }),
         model.user
             ? Inline(
-                Text(model.user.email), 
+                Text(model.user.email),
+                UserSettings(model.user.id),
                 Logout()
             )
             : callToActionButton

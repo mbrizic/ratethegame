@@ -5,6 +5,7 @@ import PageRoute from './pages/page.route';
 import EventsRoute from './events/events.route';
 import SportsRoute from './sports/sports.route';
 import AdminRoute from './admin/admin.route';
+import UserSettingsRoute from './user-settings/user-settings.route';
 
 initializeServer()
 
@@ -16,7 +17,8 @@ function initializeServer() {
 		new EventsRoute(),
 		new SportsRoute(),
 		new AdminRoute(),
+		new UserSettingsRoute()
 	]);
-	
+
 	app.listen();
 }
