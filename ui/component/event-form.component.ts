@@ -6,10 +6,13 @@ import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
     user: PotentialUser;
-    sportId: number;
+    sportId: number | undefined;
 }
 
 export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
+    if (model.sportId == null) {
+        return null;
+    }
 
     const date = toDatePickerFormat(
         roundToNextHour(

@@ -10,9 +10,9 @@ export interface PageModel {
 }
 
 export interface SimpleComponent {
-    (): string;
+    (): string | null;
 };
 
 export interface Component<T> {
-    (model: T): string;
+    (model: T): string | null;
 };

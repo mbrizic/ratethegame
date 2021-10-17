@@ -5,22 +5,23 @@ import { now } from '../core/date.service';
 import HttpException from '../core/exceptions/http.exception';
 import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
-import { isEmptyObject, orderByAscending, orderByDescending } from '../core/util';
-import { CreateEventDto, GetEventDto, RateEventDto } from './events.dto';
-import { mapToDto } from './events.mapper';
+import { isEmptyObject, orderByDescending } from '../core/util';
+import { PotentialUser, UserDto } from '../users/users.dto';
+import { CreateEventDto, RateEventDto } from './events.dto';
+import { EventFactory } from './events.factory';
+import { EventModel } from './event.model';
 
-export const defaultEventRatingPercentage = 50
 const defaultPageSize = 10;
 
 class EventsService {
 	private entitiesToInclude = ["sport", "event_ratings"]
 
-	public async getAllEvents(): Promise<GetEventDto[]> {
-		return this.getAll({ })
+	public async getAllEvents(user: PotentialUser): Promise<EventModel[]> {
+		return this.getAll(user)
 	}
 
-	public async getUpcoming(): Promise<GetEventDto[]> {
-		return this.getAll({
+	public async getUpcoming(user: PotentialUser): Promise<EventModel[]> {
+		return this.getAll(user, {
 			where: {
 				datetime: afterDate(now())
 			},
@@ -28,8 +29,8 @@ class EventsService {
 		})
 	}
 
-	public async getBestRated(): Promise<GetEventDto[]> {
-		const events = await this.getAll({
+	public async getBestRated(user: PotentialUser): Promise<EventModel[]> {
+		const events = await this.getAll(user, {
 			where: {
 				datetime: beforeDate(now())
 			},
@@ -42,37 +43,30 @@ class EventsService {
 		return events;
 	}
 
-	public async getById(id: number) {
+	public async getById(id: number, user: PotentialUser) {
 		const event = await Events.findByPk(id, { include: this.entitiesToInclude });
 
 		if (event == null) {
 			throw new HttpException(400, "No event with that ID");
 		}
 
-		return mapToDto(event)
+		return EventFactory.FromDatabase(event, event.sport, user?.id);
 	}
 
-	public async hasUserRatedEvent(id: number, userId: number) {
-		const rating = await EventRating.findOne({ where: {
-			created_by: userId,
-			event_id: id
-		}})
-
-		return rating != null
-	}
-
-	public async addEvent(userId: number, dto: CreateEventDto) {
+	public async addEvent(user: UserDto, dto: CreateEventDto) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
 		ensureInputIsClean(dto.name)
 
+		const model = EventFactory.Create(dto.name, dto.date, dto.sportId, user.id)
+
 		const created = await Events.create({
-			name: dto.name,
-			sport_id: dto.sportId,
-			created_by: userId,
-			datetime: dto.date,
+			name: model.name,
+			sport_id: model.sportId,
+			created_by: user.id,
+			datetime: model.date,
 		});
 
 		return created.id
@@ -111,13 +105,13 @@ class EventsService {
 		return true
 	}
 
-	private async getAll(options: FindOptions<EventsAttributes> | null = null): Promise<GetEventDto[]> {
+	private async getAll(user: PotentialUser, options: FindOptions<EventsAttributes> | null = {}): Promise<EventModel[]> {
 		const events = await Events.findAll({ 
 			...options,
 			include: this.entitiesToInclude 
 		});
 
-		return events.map(mapToDto);
+		return events.map(event => EventFactory.FromDatabase(event, event.sport, user?.id));
 	}
 }
 

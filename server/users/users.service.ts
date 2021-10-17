@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, GetUserDto, UpdateUserDto } from './users.dto';
+import { CreateUserDto, UserDto, UpdateUserDto } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
@@ -8,13 +8,13 @@ import { ensureInputIsEmail, ensureLongerThan } from '../core/validation';
 
 class UserService {
 
-	public async getAll(): Promise<GetUserDto[]> {
+	public async getAll(): Promise<UserDto[]> {
 		const users = await Users.findAll();
 
 		return users.map(this.mapToDto);
 	}
 
-	public async getById(userId: number): Promise<GetUserDto> {
+	public async getById(userId: number): Promise<UserDto> {
 		const user = await Users.findByPk(userId);
 		if (!user) {
 			throw new HttpException(409, "User not found.");
@@ -23,7 +23,7 @@ class UserService {
 		return this.mapToDto(user);
 	}
 
-	public async createUser(dto: CreateUserDto): Promise<GetUserDto> {
+	public async createUser(dto: CreateUserDto): Promise<UserDto> {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -50,7 +50,7 @@ class UserService {
 		return this.mapToDto(createdUser);
 	}
 
-	public async updateUser(userId: number, userData: UpdateUserDto): Promise<GetUserDto> {
+	public async updateUser(userId: number, userData: UpdateUserDto): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -77,7 +77,7 @@ class UserService {
 		}
 	}
 
-	private mapToDto(model: Users): GetUserDto {
+	private mapToDto(model: Users): UserDto {
 		return {
 			id: model.id!,
 			email: model.email,

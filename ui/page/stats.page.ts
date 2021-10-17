@@ -1,14 +1,14 @@
 import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
-import { GetEventDto } from "../../server/events/events.dto";
-import { GetUserDto } from "../../server/users/users.dto";
+import { EventModel } from "../../server/events/event.model";
+import { UserDto } from "../../server/users/users.dto";
 import { Column, Form, Heading2, Heading3, Heading4, ListItem, Row, SubmitButton, UnorderedList } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
 interface StatsModel extends PageModel {
-    users: GetUserDto[];
-    events: GetEventDto[];
+    users: UserDto[];
+    events: EventModel[];
     pageviews: PageViewsForDate;
     recordedErrors: RecordedError[];
 }

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { GetUserDto, UpdateUserDto } from '../users/users.dto';
+import { UserDto, UpdateUserDto } from '../users/users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
@@ -13,11 +13,11 @@ import { ensureInputIsEmail } from '../core/validation';
 class AuthService {
 	private usersService = new UserService()
 
-	public async signup(dto: RegisterUserDto): Promise<GetUserDto> {
+	public async signup(dto: RegisterUserDto): Promise<UserDto> {
 		return await this.usersService.createUser(dto)
 	}
 
-	public async login(dto: LoginUserDto): Promise<{ cookie: string, user: GetUserDto }> {
+	public async login(dto: LoginUserDto): Promise<{ cookie: string, user: UserDto }> {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -40,7 +40,7 @@ class AuthService {
 		return { cookie, user: this.mapToDto(user) };
 	}
 
-	public async logout(userData: UpdateUserDto): Promise<GetUserDto> {
+	public async logout(userData: UpdateUserDto): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -66,7 +66,7 @@ class AuthService {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
 	}
 
-	private mapToDto(model: Users): GetUserDto {
+	private mapToDto(model: Users): UserDto {
 		return {
 			id: model.id!,
 			email: model.email,

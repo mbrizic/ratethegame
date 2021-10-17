@@ -1,11 +1,4 @@
-class ValidationException extends Error {
-	public message: string;
-
-	constructor(message: string) {
-		super(message);
-		this.message = message;
-	}
-}
+import ValidationException from "./exceptions/validation.exception"
 
 export function ensureInputIsEmail(input: string) {
 	if (!input.includes("@") || !input.includes(".")) {
