@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, UserDto, UpdateUserDto } from './users.dto';
+import { CreateUserCommand, UserDto, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
@@ -23,7 +23,7 @@ class UserService {
 		return this.mapToDto(user);
 	}
 
-	public async createUser(dto: CreateUserDto): Promise<UserDto> {
+	public async createUser(dto: CreateUserCommand): Promise<UserDto> {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -50,7 +50,7 @@ class UserService {
 		return this.mapToDto(createdUser);
 	}
 
-	public async updateUser(userId: number, userData: UpdateUserDto): Promise<UserDto> {
+	public async updateUser(userId: number, userData: UpdateUserCommand): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}

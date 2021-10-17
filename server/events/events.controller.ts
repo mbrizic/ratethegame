@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { EventDetailsPage } from '../../ui/page/event-details.page';
 import { EventListPage } from '../../ui/page/event-list.page';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
-import { CreateEventDto, RateEventDto } from './events.dto';
+import { CreateEventCommand, RateEventCommand } from './events.dto';
 import EventsService from './events.service';
 
 class EventsController {
@@ -39,7 +39,7 @@ class EventsController {
 		}
 	}
 
-	public addEvent = async (req: RequestWithUser<CreateEventDto>, res: Response, next: NextFunction) => {
+	public addEvent = async (req: RequestWithUser<CreateEventCommand>, res: Response, next: NextFunction) => {
 		const dto = req.body;
 
 		try {
@@ -51,7 +51,7 @@ class EventsController {
 	}
 
 	public addVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: RateEventDto = req.body;
+		const dto: RateEventCommand = req.body;
 
 		try {
 			const event = await this.eventsService.addRating(req.user.id, dto)
@@ -62,7 +62,7 @@ class EventsController {
 	}
 	
 	public removeVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: RateEventDto = req.body;
+		const dto: RateEventCommand = req.body;
 		
 		try {
 			const event = await this.eventsService.removeRating(req.user.id, dto)

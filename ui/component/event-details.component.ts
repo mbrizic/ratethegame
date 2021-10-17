@@ -9,7 +9,7 @@ interface EventFormModel {
 }
 
 function getRatings(model: EventFormModel): ChildElement {
-    const icon = model.event.ratingPercentage >= 50 ? "✔️": "❌"; 
+    const icon = model.event.isRatedFavourably() ? "✔️": "❌"; 
 
     return Column(
         Heading3(`${model.event.ratingPercentage}% would recommend this ${icon}`, { class: "text-centered" }),

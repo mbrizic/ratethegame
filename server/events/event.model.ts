@@ -1,12 +1,10 @@
-import { EventRating } from "../../database/models/event_rating"
-import { Events, Sports } from "../../database/models/init-models"
 import { now } from "../core/date.service"
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
-import { PotentialUser } from "../users/users.dto"
 import { EventRatingModel } from "./event-rating.model"
 
 export const defaultEventRatingPercentage = 50
+export const isRatedFavourablyPercentageThreshold = 50
 
 export class EventModel implements DomainModel {
 
@@ -47,6 +45,12 @@ export class EventModel implements DomainModel {
 
 	public isVotingAllowed = () =>
 		now().getTime() > this.date.getTime()
+
+	public isRatedFavourably = () => 
+		this.ratingPercentage >= isRatedFavourablyPercentageThreshold
+
+	public hasAnyRatings = () => 
+		this.totalRatings > 0
 
 	public ensureValid = () => {
 		if (this.name.length < 3) {

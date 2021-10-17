@@ -4,7 +4,7 @@ import { Component } from "../core/html.interfaces";
 
 export const EventInline: Component<EventModel> = (event: EventModel) => {
 
-    const icon = event.ratingPercentage >= 50 ? "✔️" : "❌";
+    const icon = event.isRatedFavourably() ? "✔️" : "❌";
 
     return RowSpaced(
         Text(
@@ -12,7 +12,7 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
             Text(` (${event.sportName})`),
         ),
         Text(
-            event.totalRatings > 0
+            event.hasAnyRatings()
                 ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings) ${icon}`
                 : `No ratings yet`
         )

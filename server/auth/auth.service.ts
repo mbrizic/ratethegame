@@ -1,23 +1,23 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { UserDto, UpdateUserDto } from '../users/users.dto';
+import { UserDto, UpdateUserCommand } from '../users/users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
 import UserService from '../users/users.service';
 import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
-import { RegisterUserDto, LoginUserDto } from './auth.dto';
+import { RegisterUserCommand, LoginUserCommand } from './auth.dto';
 import { ensureInputIsEmail } from '../core/validation';
  
 class AuthService {
 	private usersService = new UserService()
 
-	public async signup(dto: RegisterUserDto): Promise<UserDto> {
+	public async signup(dto: RegisterUserCommand): Promise<UserDto> {
 		return await this.usersService.createUser(dto)
 	}
 
-	public async login(dto: LoginUserDto): Promise<{ cookie: string, user: UserDto }> {
+	public async login(dto: LoginUserCommand): Promise<{ cookie: string, user: UserDto }> {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -40,7 +40,7 @@ class AuthService {
 		return { cookie, user: this.mapToDto(user) };
 	}
 
-	public async logout(userData: UpdateUserDto): Promise<UserDto> {
+	public async logout(userData: UpdateUserCommand): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}

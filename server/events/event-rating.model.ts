@@ -14,7 +14,7 @@ export class EventRatingModel implements DomainModel {
 		eventId: number,
 		createdByUserId: number,
 	) {
-		this.id = eventId
+		this.id = id
 		this.wouldRecommend = wouldRecommend
 		this.date = date
 		this.eventId = eventId

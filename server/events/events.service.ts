@@ -7,9 +7,10 @@ import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByDescending } from '../core/util';
 import { PotentialUser, UserDto } from '../users/users.dto';
-import { CreateEventDto, RateEventDto } from './events.dto';
+import { CreateEventCommand, RateEventCommand } from './events.dto';
 import { EventFactory } from './events.factory';
 import { EventModel } from './event.model';
+import { Sports } from '../../database/models/sports';
 
 const defaultPageSize = 10;
 
@@ -50,17 +51,21 @@ class EventsService {
 			throw new HttpException(400, "No event with that ID");
 		}
 
-		return EventFactory.FromDatabase(event, event.sport, user?.id);
+		const model = EventFactory.FromDatabase(event, event.sport, user?.id);
+
+		return model
 	}
 
-	public async addEvent(user: UserDto, dto: CreateEventDto) {
+	public async addEvent(user: UserDto, dto: CreateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
 		ensureInputIsClean(dto.name)
 
-		const model = EventFactory.Create(dto.name, dto.date, dto.sportId, user.id)
+		const sport = await Sports.findByPk(dto.sportId)
+
+		const model = EventFactory.Create(dto.name, dto.date, sport, user.id)
 
 		const created = await Events.create({
 			name: model.name,
@@ -72,7 +77,7 @@ class EventsService {
 		return created.id
 	}
 
-	public async addRating(userId: number, dto: RateEventDto) {
+	public async addRating(userId: number, dto: RateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
@@ -86,7 +91,7 @@ class EventsService {
 		return true
 	}
 
-	public async removeRating(userId: number, dto: RateEventDto) {
+	public async removeRating(userId: number, dto: RateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}

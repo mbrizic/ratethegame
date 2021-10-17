@@ -7,7 +7,7 @@ import SportsService from '../sports/sports.service';
 import { LoginPage } from '../../ui/page/login.page';
 import { RegisterPage } from '../../ui/page/register.page';
 import { returnUrlQueryParam } from '../core/constants';
-import { RegisterUserDto, LoginUserDto } from '../auth/auth.dto';
+import { RegisterUserCommand, LoginUserCommand } from '../auth/auth.dto';
 
 export default class PageController {
 	private authService = new AuthService();
@@ -42,7 +42,7 @@ export default class PageController {
 	}
 
 	public login = async (req: Request, res: Response, next: NextFunction) => {
-		const dto = req.body as LoginUserDto 
+		const dto = req.body as LoginUserCommand 
 
 		try {
 			const result = await this.authService.login({
@@ -75,7 +75,7 @@ export default class PageController {
 	}
 
 	public register = async (req: Request, res: Response, next: NextFunction) => {
-		const dto = req.body as RegisterUserDto 
+		const dto = req.body as RegisterUserCommand 
 
 		try {
 			await this.authService.signup({

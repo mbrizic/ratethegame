@@ -6,23 +6,28 @@ import { EventModel } from "./event.model"
 
 export class EventFactory {
 
-	public static Create(name: string, date: Date, userId: number, sportId: number) {
+	public static Create(name: string, date: Date, sport: Sports | null, userId: number) {
+
+		if (sport == null || sport.id == null) {
+			throw new ValidationException("Event needs to be associated with sport.")
+		}
+
 		return new EventModel(
 			undefined,
 			name,
 			date,
 			userId,
 			userId,
-			sportId,
-			"", // TODO: not correct, fix
+			sport.id,
+			sport.name,
 			[]
 		)
 	}
 
-	public static FromDatabase(event: Events,
+	public static FromDatabase(
+		event: Events,
 		sport: Sports,
 		userId: number | undefined
-		
 	) {
 		if (event == null) {
 			throw new ValidationException("No event with that ID")

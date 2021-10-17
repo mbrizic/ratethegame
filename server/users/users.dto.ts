@@ -5,12 +5,12 @@ export class UserDto {
 	public isAdmin: boolean;
 }
 
-export class CreateUserDto {
+export class CreateUserCommand {
 	email: string;
 	password: string;
 }
 
-export class UpdateUserDto {
+export class UpdateUserCommand {
 	email: string;
 	password: string;
 }
