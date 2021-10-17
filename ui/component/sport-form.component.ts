@@ -18,7 +18,7 @@ export const SportForm: Component<SportFormModel> = (model: SportFormModel) => {
         Form<CreateSportCommand>("/sports",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
-            SubmitButton("Add event")
+            SubmitButton("Add sport")
         )
     )
 }
