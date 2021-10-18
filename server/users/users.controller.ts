@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { UserSettingsPage } from '../../ui/page/user-settings.page';
 import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand } from './users.dto';
 import UserService from './users.service';
@@ -19,8 +20,12 @@ class UsersController {
 		const userId: number = Number(req.params.id);
 
 		try {
-			const findOneUserData = await this.userService.getById(userId);
-			res.status(200).json({ data: findOneUserData, message: 'findOne' });
+			const userData = await this.userService.getById(userId);
+			
+			res.send(UserSettingsPage({
+                email: userData.email,
+                user: req.user
+            }));
 		} catch (error) {
 			next(error);
 		}

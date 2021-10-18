@@ -5,19 +5,18 @@ import PageRoute from './pages/page.route';
 import EventsRoute from './events/events.route';
 import SportsRoute from './sports/sports.route';
 import AdminRoute from './admin/admin.route';
-import UserSettingsRoute from './user-settings/user-settings.route';
+import UsersRoute from './users/users.route';
 
 initializeServer()
 
 function initializeServer() {
 	const app = new App([
 		new PageRoute(),
-		// new UsersRoute(),
+		new UsersRoute(),
 		new AuthRoute(),
 		new EventsRoute(),
 		new SportsRoute(),
-		new AdminRoute(),
-		new UserSettingsRoute()
+		new AdminRoute()
 	]);
 
 	app.listen();

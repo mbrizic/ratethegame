@@ -4,7 +4,7 @@ import { Inline } from "../core/html.operator"
 
 export const UserSettings: Component<number> = (userId: number) => {
     return Inline(
-        Link({ text: 'Settings', href: `/user/${userId}` })
+        Link({ text: 'User', href: `/users/${userId}` })
     )
 
 }

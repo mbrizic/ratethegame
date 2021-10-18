@@ -15,4 +15,6 @@ export const UserSettingsPage: Page<UserSettingsModel> = (model: UserSettingsMod
         )
     )
 
+    // TODO public deleteUser
+
 }
