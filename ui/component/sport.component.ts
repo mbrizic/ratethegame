@@ -1,10 +1,10 @@
 import { Column, Heading2, Heading3, Link, Paragraph, Row, Text } from "../core/html.elements"
-import { GetSportDto } from "../../server/sports/sports.dto"
 import { Component } from "../core/html.interfaces"
 import { Card } from "./card.component"
 import { orderByDescending } from "../../server/core/util"
+import { SportModel } from "../../server/sports/sports.model"
 
-export const SportComponent: Component<GetSportDto> = (sport: GetSportDto) => {
+export const SportComponent: Component<SportModel> = (sport: SportModel) => {
 
     const totalEvents = sport.events.length
     const bestRatedEvent = orderByDescending(sport.events, e => e.ratingPercentage)[0]

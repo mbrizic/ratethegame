@@ -36,7 +36,7 @@ export async function ensureUserAuthorized(req: RequestWithUser, res: Response, 
 export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, next: NextFunction) {
 	await getUserFromCookieIfExists(req)
 
-	if (req.user && req.user.isAdmin) {
+	if (req.user?.isAdmin) {
 		next()
 	} else {
 		res.status(401)

@@ -2,11 +2,11 @@ import { getAppConfig } from "../server/core/app.config";
 import { UserSettings } from './component/user-settings.component'
 import { Logout } from "./component/logout.component";
 import { readCssFiles } from "./core/css.service";
-import { Body, Footer, Head, Header, Heading1, Html, Link, Style, Text, Title } from "./core/html.elements";
+import { Body, ChildElement, Footer, Head, Header, Heading1, Html, Link, Style, Text, Title } from "./core/html.elements";
 import { PageModel } from "./core/html.interfaces";
 import { Inline } from "./core/html.operator";
 
-export const Layout = (model: PageModel, ...children: string[]) => {
+export const Layout = (model: PageModel, ...children: ChildElement[]) => {
 
     const css = readCssFiles(
         "./ui/style/base.css",

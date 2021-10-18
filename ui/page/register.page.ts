@@ -3,7 +3,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Error } from '../component/error.component'
 import { Layout } from "../_Layout";
 import { ExecuteJs } from "../core/html.operator";
-import { RegisterUserDto } from "../../server/auth/auth.dto";
+import { RegisterUserCommand } from "../../server/auth/auth.dto";
 import { getAppConfig } from "../../server/core/app.config";
 
 interface RegisterModel extends PageModel { }
@@ -18,7 +18,7 @@ export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
     return Layout(model,
         ColumnCentered(
             Heading3("Join us, it should be quick:"),
-            Form<RegisterUserDto>("/register",
+            Form<RegisterUserCommand>("/register",
                 TextInput({ placeholder: "Username", name: "email", value: username }),
                 PasswordInput({ placeholder: "Password", name: "password", value: password }),
                 Error(model.errorMessage) as any,

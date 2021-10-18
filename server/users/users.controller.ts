@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { RequestWithUser } from '../auth/auth.interface';
-import { CreateUserDto } from './users.dto';
+import { CreateUserCommand } from './users.dto';
 import UserService from './users.service';
 
 class UsersController {
@@ -27,7 +27,7 @@ class UsersController {
 	}
 
 	public createUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const userData: CreateUserDto = req.body;
+		const userData: CreateUserCommand = req.body;
 
 		try {
 			const createUserData = await this.userService.createUser(userData);

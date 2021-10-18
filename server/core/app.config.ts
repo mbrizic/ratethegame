@@ -1,6 +1,8 @@
 export interface AppConfig {
     postgresURL: string;
     jwtSecret: string;
+    mailClientApiKey: string;
+    mailClientSenderEmail: string;
     dbLoggingEnabled: boolean;
     cssCachingEnabled: boolean;
     isDebugMode: boolean;
@@ -15,6 +17,8 @@ export function getAppConfig() {
 const appConfig: AppConfig = {
     postgresURL: ensureExists("POSTGRES_URL"),
     jwtSecret: ensureExists("JWT_SECRET"),
+    mailClientApiKey: ensureExists("MAIL_CLIENT_API_KEY"),
+    mailClientSenderEmail: ensureExists("MAIL_CLIENT_SENDER_EMAIL"),
     dbLoggingEnabled: ensureExists("DB_LOGGING_ENABLED") === "true",
     cssCachingEnabled: ensureExists("CSS_CACHING_ENABLED") === "true",
     isDebugMode: ensureExists("IS_DEBUG_MODE") === "true",

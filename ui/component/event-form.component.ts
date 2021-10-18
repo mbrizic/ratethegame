@@ -1,15 +1,18 @@
 import { roundToNextHour, toDatePickerFormat } from "../../server/core/date.service"
-import { CreateEventDto } from "../../server/events/events.dto"
+import { CreateEventCommand } from "../../server/events/events.dto"
 import { PotentialUser } from "../../server/users/users.dto"
 import { Column, DateInput, Form, Heading3, HiddenInput, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 
 interface EventFormModel {
     user: PotentialUser;
-    sportId: number;
+    sportId: number | undefined;
 }
 
 export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
+    if (model.sportId == null) {
+        return null;
+    }
 
     const date = toDatePickerFormat(
         roundToNextHour(
@@ -23,7 +26,7 @@ export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
 
     return Column(
         Heading3("Add new event: "),
-        Form<CreateEventDto>("/events",
+        Form<CreateEventCommand>("/events",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
             DateInput({ placeholder: "", name: "date", value: date }),
