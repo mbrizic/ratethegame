@@ -2,16 +2,15 @@ import { NextFunction, Response } from 'express';
 import { EventDetailsPage } from '../../ui/page/event-details.page';
 import { EventListPage } from '../../ui/page/event-list.page';
 import { RequestWithPotentialUser, RequestWithUser } from '../auth/auth.interface';
-import { now } from '../core/date.service';
-import { CreateEventDto, RateEventDto } from './events.dto';
+import { CreateEventCommand, RateEventCommand } from './events.dto';
 import EventsService from './events.service';
 
 class EventsController {
 	public eventsService = new EventsService();
 
 	public getEventsList = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const upcomingEvents = await this.eventsService.getUpcoming()
-		const bestRatedEvents = await this.eventsService.getBestRated()
+		const upcomingEvents = await this.eventsService.getUpcoming(req.user)
+		const bestRatedEvents = await this.eventsService.getBestRated(req.user)
 
 		try {
 			res.send(EventListPage({
@@ -29,18 +28,10 @@ class EventsController {
 		const eventId = Number(req.params.id)
 		
 		try {
-			const event = await this.eventsService.getById(eventId)
-
-			const isVotingAllowed = now().getTime() > event.date.getTime()
-
-			const hasUserAlreadyRated = req.user
-				? await this.eventsService.hasUserRatedEvent(eventId, req.user.id)
-				: false
+			const event = await this.eventsService.getById(eventId, req.user)
 
 			res.send(EventDetailsPage({
 				event,
-				hasUserAlreadyRated,
-				isVotingAllowed,
 				user: req.user
 			}));
 		} catch (error) {
@@ -48,11 +39,11 @@ class EventsController {
 		}
 	}
 
-	public addEvent = async (req: RequestWithUser<CreateEventDto>, res: Response, next: NextFunction) => {
+	public addEvent = async (req: RequestWithUser<CreateEventCommand>, res: Response, next: NextFunction) => {
 		const dto = req.body;
-		
+
 		try {
-			const createdEventId = await this.eventsService.addEvent(req.user.id, dto)
+			const createdEventId = await this.eventsService.addEvent(req.user, dto)
 			res.redirect(`/events/${createdEventId}`);
 		} catch (error) {
 			next(error);
@@ -60,7 +51,7 @@ class EventsController {
 	}
 
 	public addVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: RateEventDto = req.body;
+		const dto: RateEventCommand = req.body;
 
 		try {
 			const event = await this.eventsService.addRating(req.user.id, dto)
@@ -71,7 +62,7 @@ class EventsController {
 	}
 	
 	public removeVote = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: RateEventDto = req.body;
+		const dto: RateEventCommand = req.body;
 		
 		try {
 			const event = await this.eventsService.removeRating(req.user.id, dto)

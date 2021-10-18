@@ -1,4 +1,3 @@
-import { GetEventDto } from "../../server/events/events.dto";
 import { PotentialUser } from "../../server/users/users.dto";
 import { EventRatingForm } from "../component/event-rating-form.component";
 import { EventDetails } from "../component/event-details.component";
@@ -6,12 +5,11 @@ import { Column } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 import { Card } from "../component/card.component";
+import { EventModel } from "../../server/events/event.model";
 
 interface EventDetailsModel extends PageModel {
     user: PotentialUser;
-    hasUserAlreadyRated: boolean;
-    isVotingAllowed: boolean;
-	event: GetEventDto;
+	event: EventModel;
 }
 
 export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsModel) => {
@@ -20,14 +18,11 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
         Card(
             Column(
                 EventDetails({
-                    event: model.event,
-                    isVotingAllowed: model.isVotingAllowed
+                    event: model.event
                 }),
                 EventRatingForm({ 
                     event: model.event,
-                    user: model.user,
-                    hasUserAlreadyRated: model.hasUserAlreadyRated,
-                    isVotingAllowed: model.isVotingAllowed
+                    user: model.user
                 })
             )
         )

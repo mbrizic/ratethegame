@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 import { SportDetailsPage } from '../../ui/page/sport-details.page';
 import { SportListPage } from '../../ui/page/sport-list.page';
 import { RequestWithUser } from '../auth/auth.interface';
-import { CreateSportDto } from './sports.dto';
+import { CreateSportCommand } from './sports.dto';
 import SportsService from './sports.service';
 
 class SportsController {
 	public sportsService = new SportsService();
 
 	public getSportsList = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const sports = await this.sportsService.getAll()
+		const sports = await this.sportsService.getAll(req.user)
 
 		try {
 			res.send(SportListPage({
@@ -25,7 +25,7 @@ class SportsController {
 	public getSportsDetails = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const sportId = Number(req.params.id)
 		
-		const sport = await this.sportsService.getById(sportId)
+		const sport = await this.sportsService.getById(sportId, req.user)
 
 		try {
 			res.send(SportDetailsPage({
@@ -38,7 +38,7 @@ class SportsController {
 	}
 
 	public addSport = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const dto: CreateSportDto = req.body;
+		const dto: CreateSportCommand = req.body;
 		
 		try {
 			const createdSportId = await this.sportsService.addSport(req.user.id, dto)

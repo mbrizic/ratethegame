@@ -1,10 +1,10 @@
-import { GetEventDto } from "../../server/events/events.dto"
-import { Column, Heading2, Heading4, Link, Paragraph, Row, RowSpaced, Span, Text } from "../core/html.elements"
-import { Component } from "../core/html.interfaces"
+import { EventModel } from "../../server/events/event.model";
+import { Link, RowSpaced, Text } from "../core/html.elements";
+import { Component } from "../core/html.interfaces";
 
-export const EventInline: Component<GetEventDto> = (event: GetEventDto) => {
+export const EventInline: Component<EventModel> = (event: EventModel) => {
 
-    const icon = event.ratingPercentage >= 50 ? "✔️": "❌";
+    const icon = event.isRatedFavourably() ? "✔️" : "❌";
 
     return RowSpaced(
         Text(
@@ -12,10 +12,10 @@ export const EventInline: Component<GetEventDto> = (event: GetEventDto) => {
             Text(` (${event.sportName})`),
         ),
         Text(
-            event.totalRatings > 0 
+            event.hasAnyRatings()
                 ? `${event.ratingPercentage}% would recommend this (${event.totalRatings} ratings) ${icon}`
                 : `No ratings yet`
-        ),
+        )
     )
 
 }

@@ -1,7 +1,7 @@
 import { PotentialUser } from "../../server/users/users.dto"
-import { Column, Div, Paragraph } from "../core/html.elements"
+import { ChildElement, Column, Div, Paragraph } from "../core/html.elements"
 
-export const AdminOnlyArea = (user: PotentialUser, ...children: string[]) => {
+export const AdminOnlyArea = (user: PotentialUser, ...children: ChildElement[]) => {
 
     if (user?.isAdmin) {
         return Div(

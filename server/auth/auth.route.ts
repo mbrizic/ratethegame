@@ -2,7 +2,7 @@ import { Router } from 'express';
 import AuthController from './auth.controller';
 import Route from '../core/route.interface';
 import { ensureAuthenticated } from '../core/middleware/auth.middleware';
-import { LoginUserDto, RegisterUserDto } from './auth.dto';
+import { LoginUserCommand, RegisterUserCommand } from './auth.dto';
 
 class AuthRoute implements Route {
 	public path = '/auth';

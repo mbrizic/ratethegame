@@ -1,4 +1,4 @@
-import { CreateSportDto } from "../../server/sports/sports.dto"
+import { CreateSportCommand } from "../../server/sports/sports.dto"
 import { PotentialUser } from "../../server/users/users.dto"
 import { Column, Form, Heading3, Paragraph, SubmitButton, TextInput } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
@@ -15,7 +15,7 @@ export const SportForm: Component<SportFormModel> = (model: SportFormModel) => {
 
     return Column(
         Heading3("Add new sport: "),
-        Form<CreateSportDto>("/sports",
+        Form<CreateSportCommand>("/sports",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
             SubmitButton("Add sport")

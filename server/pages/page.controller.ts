@@ -7,7 +7,7 @@ import SportsService from '../sports/sports.service';
 import { LoginPage } from '../../ui/page/login.page';
 import { RegisterPage } from '../../ui/page/register.page';
 import { returnUrlQueryParam } from '../core/constants';
-import { RegisterUserDto, LoginUserDto } from '../auth/auth.dto';
+import { RegisterUserCommand, LoginUserCommand } from '../auth/auth.dto';
 
 export default class PageController {
 	private authService = new AuthService();
@@ -15,9 +15,9 @@ export default class PageController {
 	private sportsService = new SportsService();
 
 	public getIndexPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const bestRatedEvents = await this.eventsService.getBestRated();
-		const upcomingEvents = await this.eventsService.getUpcoming();
-		const sports = await this.sportsService.getAll();
+		const bestRatedEvents = await this.eventsService.getBestRated(req.user);
+		const upcomingEvents = await this.eventsService.getUpcoming(req.user);
+		const sports = await this.sportsService.getAll(req.user);
 
 		try {
 			res.send(
@@ -42,7 +42,7 @@ export default class PageController {
 	}
 
 	public login = async (req: Request, res: Response, next: NextFunction) => {
-		const dto = req.body as LoginUserDto 
+		const dto = req.body as LoginUserCommand 
 
 		try {
 			const result = await this.authService.login({
@@ -75,7 +75,7 @@ export default class PageController {
 	}
 
 	public register = async (req: Request, res: Response, next: NextFunction) => {
-		const dto = req.body as RegisterUserDto 
+		const dto = req.body as RegisterUserCommand 
 
 		try {
 			await this.authService.signup({

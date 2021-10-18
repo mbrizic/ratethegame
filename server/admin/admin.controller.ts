@@ -14,7 +14,7 @@ export class AdminController {
 	private eventsService = new EventsService();
 
 	public getStatsPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const events = await this.eventsService.getAllEvents();
+		const events = await this.eventsService.getAllEvents(req.user);
 		const users = await this.userService.getAll();
 		const pageviews = getPageViewsPerDate();
 		const recordedErrors = getRecordedErrors()

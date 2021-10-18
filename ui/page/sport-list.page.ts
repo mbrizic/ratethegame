@@ -1,4 +1,4 @@
-import { GetSportDto } from "../../server/sports/sports.dto";
+import { SportModel } from "../../server/sports/sports.model";
 import { AdminOnlyArea } from "../component/admin-area.component";
 import { SportForm } from "../component/sport-form.component";
 import { SportList } from "../component/sport-list.component";
@@ -7,7 +7,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
 interface SportListModel extends PageModel {
-    sports: GetSportDto[];
+    sports: SportModel[];
 }
 
 export const SportListPage: Page<SportListModel> = (model: SportListModel) => {

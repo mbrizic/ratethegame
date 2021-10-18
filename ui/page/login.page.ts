@@ -3,7 +3,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 import { Error } from '../component/error.component'
 import { ExecuteJs } from "../core/html.operator";
-import { LoginUserDto } from "../../server/auth/auth.dto";
+import { LoginUserCommand } from "../../server/auth/auth.dto";
 import { getAppConfig } from "../../server/core/app.config";
 
 interface LoginModel extends PageModel { }
@@ -18,7 +18,7 @@ export const LoginPage: Page<LoginModel> = (model: LoginModel) => {
     return Layout(model,
         ColumnCentered(
             Heading3("Already been here? Sign in:"),
-            Form<LoginUserDto>("/login",
+            Form<LoginUserCommand>("/login",
                 TextInput({ placeholder: "Username", name: "email", value: username }),
                 PasswordInput({ placeholder: "Password", name: "password", value: password }),
                 Error(model.errorMessage),

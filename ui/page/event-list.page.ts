@@ -1,12 +1,12 @@
-import { GetEventDto } from "../../server/events/events.dto";
+import { EventModel } from "../../server/events/event.model";
 import { EventList } from "../component/event-list.component";
 import { Column, Heading2 } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
 interface EventListModel extends PageModel {
-    upcomingEvents: GetEventDto[];
-    bestRatedEvents: GetEventDto[];
+    upcomingEvents: EventModel[];
+    bestRatedEvents: EventModel[];
 }
 
 export const EventListPage: Page<EventListModel> = (model: EventListModel) => {

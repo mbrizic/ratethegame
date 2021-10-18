@@ -1,18 +1,18 @@
-export class GetUserDto {
+export class UserDto {
 	public id: number;
 	public email: string;
 	public password: string;
 	public isAdmin: boolean;
 }
 
-export class CreateUserDto {
+export class CreateUserCommand {
 	email: string;
 	password: string;
 }
 
-export class UpdateUserDto {
+export class UpdateUserCommand {
 	email: string;
 	password: string;
 }
 
-export type PotentialUser = GetUserDto | null | undefined;
+export type PotentialUser = UserDto | null | undefined;

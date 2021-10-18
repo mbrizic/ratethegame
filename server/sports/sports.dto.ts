@@ -1,13 +1,4 @@
-import { GetEventDto } from "../events/events.dto";
-
-export interface GetSportDto {
-  id: number;
-  name: string;
-  description?: string;
-  events: GetEventDto[]
-}
-
-export interface CreateSportDto {
+export interface CreateSportCommand {
   name: string;
   description: string;
 }
