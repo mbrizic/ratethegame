@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserSettingsPage } from '../../ui/page/user-settings.page';
+import { UserPage } from '../../ui/page/user.page';
 import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand } from './users.dto';
 import UserService from './users.service';
@@ -21,8 +21,8 @@ class UsersController {
 
 		try {
 			const userData = await this.userService.getById(userId);
-			
-			res.send(UserSettingsPage({
+
+			res.send(UserPage({
                 email: userData.email,
                 user: req.user
             }));
