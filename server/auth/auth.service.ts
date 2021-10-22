@@ -22,7 +22,16 @@ class AuthService {
 			throw new HttpException(400, "Incorrect input data");
 		}
 
-		ensureInputIsEmail(dto.email)
+		const user = await this.authenticate(dto);
+
+		const tokenData = this.createToken(user.id!);
+		const cookie = this.createCookie(tokenData);
+
+		return { cookie, user: this.mapToDto(user) };
+	}
+
+	public async authenticate(dto: LoginUserCommand) {
+		ensureInputIsEmail(dto.email);
 
 		const user = await Users.findOne({ where: { email: dto.email } });
 		if (!user) {
@@ -33,11 +42,7 @@ class AuthService {
 		if (!isPasswordMatching) {
 			throw new HttpException(409, "Password not matching");
 		}
-
-		const tokenData = this.createToken(user.id!);
-		const cookie = this.createCookie(tokenData);
-
-		return { cookie, user: this.mapToDto(user) };
+		return user;
 	}
 
 	public async logout(userData: UpdateUserCommand): Promise<UserDto> {

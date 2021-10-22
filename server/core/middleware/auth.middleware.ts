@@ -63,10 +63,15 @@ export async function getUserFromCookieIfExists(req: RequestWithPotentialUser) {
 
 		const verificationResponse = jwt.verify(cookies.Authorization, secret) as DataStoredInToken;
 		const userId = verificationResponse.id;
-		const user = await userService.getById(userId)
+		
+		try {
+			const user = await userService.getById(userId)
 
-		if (user) {
-			req.user = user;
+			if (user) {
+				req.user = user;
+			}
+		} catch (error) {
+			return
 		}
 	}
 }
