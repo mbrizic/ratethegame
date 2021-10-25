@@ -15,9 +15,21 @@ test('test date humanizer works', () => {
 
     expect(humanize(threeHoursAgo)).toBe("Few hours ago");
 
-    const someTimeInFuture = addToDate(date, { hours: 100 })
+    const futureDate1 = addToDate(date, { hours: 4 })
 
-    expect(humanize(someTimeInFuture)).toBe("Upcoming");
+    expect(humanize(futureDate1)).toBe("In exactly 4 hours");
+
+    const futureDate2 = addToDate(date, { minutes: 240 })
+
+    expect(humanize(futureDate2)).toBe("In exactly 4 hours");
+
+    const futureDate3 = addToDate(date, { minutes: 241 })
+
+    expect(humanize(futureDate3)).toBe("In 4 hours and 1 minutes");
+
+    const futureDate4 = addToDate(date, { hours: 100 })
+
+    expect(humanize(futureDate4)).toBe("In few days")
 });
 
 

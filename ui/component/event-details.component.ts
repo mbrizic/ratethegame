@@ -32,7 +32,7 @@ export const EventDetails: Component<EventFormModel> = (model: EventFormModel) =
                 ),
                 Paragraph(
                     `${humanize(model.event.date)} (${model.event.date.toUTCString()})`
-                )
+                ),
             ),
             Column(
                 Paragraph(`Sport: ${sportLink}`),
