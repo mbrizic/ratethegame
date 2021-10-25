@@ -9,61 +9,66 @@ import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
 import { RegisterUserCommand, LoginUserCommand } from './auth.dto';
 import { ensureInputIsEmail } from '../core/validation';
+import { recordAnalyticsEvent } from '../core/analytics-event.service';
  
 class AuthService {
 	private usersService = new UserService()
 
 	public async signup(dto: RegisterUserCommand): Promise<UserDto> {
-		return await this.usersService.createUser(dto)
+		const created = await this.usersService.createUser(dto)
+
+		recordAnalyticsEvent("UserCreated", created.id)
+
+		return created
 	}
 
 	public async login(dto: LoginUserCommand): Promise<{ cookie: string, user: UserDto }> {
 		if (isEmptyObject(dto)) {
-			throw new HttpException(400, "Incorrect input data");
+			throw new HttpException(400, "Incorrect input data")
 		}
 
 		ensureInputIsEmail(dto.email)
 
-		const user = await Users.findOne({ where: { email: dto.email } });
+		const user = await Users.findOne({ where: { email: dto.email } })
 		if (!user) {
-			throw new HttpException(409, `Email ${dto.email} not found`);
+			throw new HttpException(409, `Email ${dto.email} not found`)
 		}
 
-		const isPasswordMatching: boolean = await bcrypt.compare(dto.password, user.password);
+		const isPasswordMatching: boolean = await bcrypt.compare(dto.password, user.password)
 		if (!isPasswordMatching) {
-			throw new HttpException(409, "Password not matching");
+			throw new HttpException(409, "Password not matching")
 		}
 
-		const tokenData = this.createToken(user.id!);
-		const cookie = this.createCookie(tokenData);
+		const tokenData = this.createToken(user.id!)
+		const cookie = this.createCookie(tokenData)
 
-		return { cookie, user: this.mapToDto(user) };
+		return { cookie, user: this.mapToDto(user) }
 	}
 
 	public async logout(userData: UpdateUserCommand): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
-			throw new HttpException(400, "Incorrect input data");
+			throw new HttpException(400, "Incorrect input data")
 		}
 
-		const user = await Users.findOne({ where: { password: userData.password } });
+		const user = await Users.findOne({ where: { password: userData.password } })
 		if (!user) {
-			throw new HttpException(409, "User not found");
+			throw new HttpException(409, "User not found")
 		}
 
-		return this.mapToDto(user);
+		return this.mapToDto(user)
 	}
 
 	public createToken(userId: number): TokenData {
-		const dataStoredInToken: DataStoredInToken = { id: userId };
+		const dataStoredInToken: DataStoredInToken = { id: userId }
 
 		const secret = getAppConfig().jwtSecret
-		const expiresIn = 60 * 60 * 24;
+		const expiresIn = 60 * 60 * 24
 
-		return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) };
+		return { expiresIn, token: jwt.sign(dataStoredInToken, secret, { expiresIn }) }
 	}
 
 	public createCookie(tokenData: TokenData): string {
-		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
 	}
 
 	private mapToDto(model: Users): UserDto {
@@ -76,4 +81,4 @@ class AuthService {
 	}
 }
 
-export default AuthService;
+export default AuthService

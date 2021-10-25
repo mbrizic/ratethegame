@@ -48,8 +48,13 @@ export const Heading4 = (children: string, options: BasicAttributes = {}) =>
 export const ListItem = (children: string, options: BasicAttributes = {}) => 
     `<li>${children}</li>`
 
-export const UnorderedList = (...children: ChildElement[]) => 
-    `<ul>${children.join("")}</ul>`
+export const UnorderedList = (...children: ChildElement[]) => {
+    if (children.length == 0) {
+        return ''
+    }
+    return `<ul>${children.join("")}</ul>`
+} 
+    
 
 export const Link = (required: { text: string, href: string }, options: BasicAttributes = {}) => 
     `<a href="${required.href}" ${addBasicAttributes(options)}>${required.text}</a>`
