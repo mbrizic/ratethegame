@@ -19,7 +19,10 @@ export class UserSettingsModel implements DomainModel {
 	}
 
 	public getReceiveTopRatedState = () => {
-		return `${this.receiveTopRatedDescr}: ${this.receiveTopRated ? "✔️": "❌"}`
+		return `${this.receiveTopRated ? "✔️": "❌"}`
+	}
+	public getReceiveTopRatedDescription = () => {
+		return this.receiveTopRatedDescr
 	}
 	public getReceiveTopRatedName = () => {
 		return "receive_top_rated"
