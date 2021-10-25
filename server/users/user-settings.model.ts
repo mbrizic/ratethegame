@@ -22,7 +22,7 @@ export class UserSettingsModel implements DomainModel {
 		return `${this.receiveTopRatedDescr}: ${this.receiveTopRated ? "✔️": "❌"}`
 	}
 	public getReceiveTopRatedName = () => {
-		return "receiveTopRated"
+		return "receive_top_rated"
 	}
 
 	public ensureValid = () => {

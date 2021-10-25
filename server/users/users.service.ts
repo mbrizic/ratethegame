@@ -124,8 +124,7 @@ class UserService {
 			throw new HttpException(400, "Incorrect input data");
 		}
 
-		const camelToSnakeCase = (str : string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-		let settingUpdate = {...{}, [camelToSnakeCase(settingData.setting)]: (settingData.value == "true")};
+		let settingUpdate = {...{}, [settingData.setting]: (settingData.value == "true")};
 
 		const updated = await UserSettings.update(
 			settingUpdate,
