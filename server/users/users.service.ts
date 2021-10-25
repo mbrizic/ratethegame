@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { CreateUserCommand, UpdateUserCommand } from './users.dto';
+import { CreateUserCommand, UpdateSettingCommand, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
@@ -114,6 +114,26 @@ class UserService {
 
 		if (!updated) {
 			throw new HttpException(409, "User not found");
+		}
+
+		return await this.getById(userId)
+	}
+
+	public async updateUserSetting(userId: number, settingData: UpdateSettingCommand): Promise<UserModel> {
+		if (isEmptyObject(settingData)) {
+			throw new HttpException(400, "Incorrect input data");
+		}
+
+		const camelToSnakeCase = (str : string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+		let settingUpdate = {...{}, [camelToSnakeCase(settingData.setting)]: (settingData.value == "true")};
+
+		const updated = await UserSettings.update(
+			settingUpdate,
+			{ where: { user_id: userId } }
+		);
+
+		if (!updated) {
+			throw new HttpException(409, "User settings not found");
 		}
 
 		return await this.getById(userId)

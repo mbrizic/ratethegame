@@ -16,3 +16,8 @@ export class RemoveUserCommand {
 }
 
 export type PotentialUser = UserModel | null | undefined;
+
+export class UpdateSettingCommand {
+	setting: string;
+	value: any;
+}

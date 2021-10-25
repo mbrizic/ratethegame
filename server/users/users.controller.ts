@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import AuthService from '../auth/auth.service';
 import { UserPage } from '../../ui/page/user.page';
 import { RequestWithUser } from '../auth/auth.interface';
-import { CreateUserCommand, RemoveUserCommand } from './users.dto';
+import { CreateUserCommand, RemoveUserCommand, UpdateSettingCommand } from './users.dto';
 import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
 import { UserModel } from './users.model';
@@ -28,7 +28,9 @@ class UsersController {
 
 			res.send(UserPage({
 				email: userData.email,
-				user: req.user
+				subscriptions: userData.subscriptions,
+				settings: userData.settings,
+				user: req.user,
 			}));
 		} catch (error) {
 			next(error);
@@ -70,6 +72,8 @@ class UsersController {
 
 			res.send(UserPage({
 				email: userData.email,
+				subscriptions: userData.subscriptions,
+				settings: userData.settings,
 				user: req.user,
 				errorMessage: "Incorrect password.",
 			}));
@@ -79,7 +83,7 @@ class UsersController {
 
 		try {
 			const settingsId = user.settings.id!
-			
+
 			await this.authService.logout(req.user);
 			await this.userService.deleteUser(userId, settingsId);
 
@@ -89,6 +93,18 @@ class UsersController {
 
 			res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
 			res.redirect(returnUrl)
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public updateUserSetting = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+		const userId: number = Number(req.params.id);
+		const settingData: UpdateSettingCommand = req.body;
+
+		try {
+			const updated = await this.userService.updateUserSetting(userId, settingData);
+			res.redirect(`/users/${userId}`)
 		} catch (error) {
 			next(error);
 		}
