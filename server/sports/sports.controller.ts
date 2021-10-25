@@ -41,7 +41,7 @@ class SportsController {
 		const dto: CreateSportCommand = req.body;
 		
 		try {
-			const createdSportId = await this.sportsService.addSport(req.user.id, dto)
+			const createdSportId = await this.sportsService.addSport(req.user.id!, dto)
 			res.redirect(`sports/${createdSportId}`);
 		} catch (error) {
 			next(error);

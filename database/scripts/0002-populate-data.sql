@@ -20,3 +20,11 @@ INSERT INTO public.event_rating(would_recommend, created_by, event_id) VALUES
     (false, 1, 2),
     (false, 2, 2),
     (true, 2, 5);
+
+INSERT INTO public.user_settings(id, receive_top_rated, user_id) VALUES
+    (1, true, 1),
+    (2, false, 2);
+
+INSERT INTO public.sport_subscriptions(id, user_id, sport_id) VALUES
+    (1, 1, 1),
+    (2, 1, 3);

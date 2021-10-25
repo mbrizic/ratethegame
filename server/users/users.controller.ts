@@ -5,6 +5,7 @@ import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand, RemoveUserCommand } from './users.dto';
 import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
+import { UserModel } from './users.model';
 
 class UsersController {
 	private authService = new AuthService();
@@ -59,9 +60,10 @@ class UsersController {
 	public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userId: number = Number(req.user.id);
 		const userData: RemoveUserCommand = req.body;
+		var user : UserModel;
 
 		try {
-			const user = await this.authService.authenticate({ email: req.user.email, password: userData.password })
+			user = await this.authService.authenticate({ email: req.user.email, password: userData.password })
 
 		} catch {
 			const userData = await this.userService.getById(userId);
@@ -76,8 +78,10 @@ class UsersController {
 		}
 
 		try {
+			const settingsId = user.settings.id!
+			
 			await this.authService.logout(req.user);
-			await this.userService.deleteUser(userId);
+			await this.userService.deleteUser(userId, settingsId);
 
 			const returnUrl = req.query[returnUrlQueryParam]
 				? req.query[returnUrlQueryParam] as string

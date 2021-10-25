@@ -24,7 +24,7 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 export async function ensureUserAuthorized(req: RequestWithUser, res: Response, next: NextFunction) {
 	await getUserFromCookieIfExists(req)
 
-	if ("" + req.user.id == req.params.id) {
+	if (req.user.id?.toString() == req.params.id) {
 		next()
 	} else {
 		res.status(401)

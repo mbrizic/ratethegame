@@ -1,5 +1,6 @@
 import { Request } from 'express';
-import { UserDto, PotentialUser } from '../users/users.dto';
+import { PotentialUser } from '../users/users.dto';
+import { UserModel } from '../users/users.model';
 
 export interface DataStoredInToken {
 	id: number;
@@ -16,6 +17,6 @@ export interface RequestWithPotentialUser<T = any> extends Request {
 }
 
 export interface RequestWithUser<T = any> extends Request {
-	user: UserDto;
+	user: UserModel;
 	body: T;
 }

@@ -6,11 +6,12 @@ import HttpException from '../core/exceptions/http.exception';
 import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByDescending } from '../core/util';
-import { PotentialUser, UserDto } from '../users/users.dto';
+import { PotentialUser } from '../users/users.dto';
 import { CreateEventCommand, RateEventCommand } from './events.dto';
 import { EventFactory } from './events.factory';
 import { EventModel } from './event.model';
 import { Sports } from '../../database/models/sports';
+import { UserModel } from '../users/users.model';
 
 const defaultPageSize = 10;
 
@@ -38,7 +39,7 @@ class EventsService {
 			order: [ [ 'name', 'DESC'] ],
 			limit: defaultPageSize
 		})
-		
+
 		orderByDescending(events, a => a.ratingPercentage)
 
 		return events;
@@ -56,7 +57,7 @@ class EventsService {
 		return model
 	}
 
-	public async addEvent(user: UserDto, dto: CreateEventCommand) {
+	public async addEvent(user: UserModel, dto: CreateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}
@@ -65,12 +66,12 @@ class EventsService {
 
 		const sport = await Sports.findByPk(dto.sportId)
 
-		const model = EventFactory.Create(dto.name, dto.date, sport, user.id)
+		const model = EventFactory.Create(dto.name, dto.date, sport, user.id!)
 
 		const created = await Events.create({
 			name: model.name,
 			sport_id: model.sportId,
-			created_by: user.id,
+			created_by: user.id!,
 			datetime: model.date,
 		});
 
@@ -96,8 +97,8 @@ class EventsService {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
-		const deleted = await EventRating.destroy({ 
-			where: { 
+		const deleted = await EventRating.destroy({
+			where: {
 				created_by: userId,
 				event_id: dto.eventId
 			}
@@ -111,9 +112,9 @@ class EventsService {
 	}
 
 	private async getAll(user: PotentialUser, options: FindOptions<EventsAttributes> | null = {}): Promise<EventModel[]> {
-		const events = await Events.findAll({ 
+		const events = await Events.findAll({
 			...options,
-			include: this.entitiesToInclude 
+			include: this.entitiesToInclude
 		});
 
 		return events.map(event => EventFactory.FromDatabase(event, event.sport, user?.id));
