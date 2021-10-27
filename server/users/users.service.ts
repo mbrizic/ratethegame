@@ -10,6 +10,7 @@ import SportsService from '../sports/sports.service';
 import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
+import { SportSubscriptions } from '../../database/models/sport_subscriptions';
 
 class UserService {
 	private entitiesToInclude = ["user_setting", "sport_subscriptions"]
@@ -54,7 +55,7 @@ class UserService {
 		return model;
 	}
 
-	private async FromDatabaseWithSports(user: Users) {	
+	private async FromDatabaseWithSports(user: Users) {
 		const sports = await Promise.all(user.sport_subscriptions.map(
 			async (sport_subscription) => await this.sportsService.getById(sport_subscription.sport_id, UserFactory.FromDatabase(user))
 		));
@@ -125,7 +126,7 @@ class UserService {
 			throw new HttpException(400, "Incorrect input data");
 		}
 
-		let settingUpdate = {...{}, [settingData.setting]: (settingData.value == "true")};
+		let settingUpdate = { ...{}, [settingData.setting]: (settingData.value == "true") };
 
 		const updated = await UserSettings.update(
 			settingUpdate,
@@ -145,7 +146,8 @@ class UserService {
 			throw new HttpException(409, "User settings not found");
 		}
 
-		const deletedRatings = await EventRating.destroy({where: {created_by: userId } });
+		const deletedRatings = await EventRating.destroy({ where: { created_by: userId } });
+		const deletedSubscriptions = await SportSubscriptions.destroy({ where: { user_id: userId } })
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {
