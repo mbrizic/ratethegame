@@ -9,6 +9,7 @@ import { UserFactory } from './users.factory';
 import SportsService from '../sports/sports.service';
 import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
+import { EventRating } from '../../database/models/event_rating';
 
 class UserService {
 	private entitiesToInclude = ["user_setting", "sport_subscriptions"]
@@ -139,10 +140,12 @@ class UserService {
 	}
 
 	public async deleteUser(userId: number, settingsId: number) {
-		const deletedSettings = await UserSettings.destroy({ where: { id: settingsId } })
+		const deletedSettings = await UserSettings.destroy({ where: { id: settingsId } });
 		if (!deletedSettings) {
 			throw new HttpException(409, "User settings not found");
 		}
+
+		const deletedRatings = await EventRating.destroy({where: {created_by: userId } });
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {
