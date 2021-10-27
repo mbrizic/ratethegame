@@ -147,7 +147,7 @@ class UserService {
 		}
 
 		const deletedRatings = await EventRating.destroy({ where: { created_by: userId } });
-		const deletedSubscriptions = await SportSubscriptions.destroy({ where: { user_id: userId } })
+		const deletedSubscriptions = await SportSubscriptions.destroy({ where: { user_id: userId } });
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {
