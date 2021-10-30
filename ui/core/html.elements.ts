@@ -89,6 +89,9 @@ export const Strong = (text: string) =>
 export const Italic = (text: string) =>
     `<em>${text}</em>`
 
+export const Small = (text: string) =>
+    `<small>${text}</small>`
+
 // semantic tags
 
 export const Header = (...children: ChildElement[]) =>

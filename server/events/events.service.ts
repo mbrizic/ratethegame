@@ -129,7 +129,7 @@ class EventsService {
 	private async getAll(user: PotentialUser, options: FindOptions<EventsAttributes> | null = {}): Promise<EventModel[]> {
 		const events = await Events.findAll({ 
 			...options,
-			include: this.entitiesToInclude 
+			include: this.entitiesToInclude
 		});
 
 		return events.map(event => EventFactory.FromDatabase(event, event.sport, user?.id));
