@@ -56,10 +56,10 @@ class UserService {
 	}
 
 	private async FromDatabaseWithSports(user: Users) {
-		const sports = await Promise.all(user.sport_subscriptions.map(
-			async (sport_subscription) => await this.sportsService.getById(sport_subscription.sport_id, UserFactory.FromDatabase(user))
-		));
-		const model = UserFactory.FromDatabase(user, sports);
+		const sports = await this.sportsService.getAll(UserFactory.FromDatabase(user));
+		const userSports = sports.filter(sport => user.sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
+
+		const model = UserFactory.FromDatabase(user, userSports);
 		return model;
 	}
 
