@@ -4,21 +4,22 @@ import type { Events, EventsId } from './events';
 import type { Users, UsersId } from './users';
 
 export interface EventRatingAttributes {
-  id?: number;
+  id: number;
   would_recommend: boolean;
-  created_at?: Date;
+  created_at: Date;
   created_by: number;
   event_id: number;
 }
 
 export type EventRatingPk = "id";
 export type EventRatingId = EventRating[EventRatingPk];
-export type EventRatingCreationAttributes = Optional<EventRatingAttributes, EventRatingPk>;
+export type EventRatingOptionalAttributes = "id" | "created_at";
+export type EventRatingCreationAttributes = Optional<EventRatingAttributes, EventRatingOptionalAttributes>;
 
 export class EventRating extends Model<EventRatingAttributes, EventRatingCreationAttributes> implements EventRatingAttributes {
-  id?: number;
+  id!: number;
   would_recommend!: boolean;
-  created_at?: Date;
+  created_at!: Date;
   created_by!: number;
   event_id!: number;
 

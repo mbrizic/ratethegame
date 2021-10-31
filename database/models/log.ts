@@ -2,21 +2,22 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface LogAttributes {
-  id?: number;
+  id: number;
   name: string;
   hash: string;
-  created_at?: Date;
+  created_at: Date;
 }
 
 export type LogPk = "id";
 export type LogId = Log[LogPk];
-export type LogCreationAttributes = Optional<LogAttributes, LogPk>;
+export type LogOptionalAttributes = "id" | "created_at";
+export type LogCreationAttributes = Optional<LogAttributes, LogOptionalAttributes>;
 
 export class Log extends Model<LogAttributes, LogCreationAttributes> implements LogAttributes {
-  id?: number;
+  id!: number;
   name!: string;
   hash!: string;
-  created_at?: Date;
+  created_at!: Date;
 
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Log {
