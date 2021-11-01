@@ -11,6 +11,7 @@ import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
 import { SportSubscriptions } from '../../database/models/sport_subscriptions';
+import { recordAnalyticsEvent } from '../core/analytics-event.service';
 
 class UserService {
 	private entitiesToInclude = ["user_setting", "sport_subscriptions"]
@@ -153,6 +154,8 @@ class UserService {
 		if (!deleted) {
 			throw new HttpException(409, "User not found");
 		}
+
+		recordAnalyticsEvent("UserDeleted", userId)
 	}
 }
 
