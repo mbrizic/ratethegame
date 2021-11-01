@@ -5,23 +5,24 @@ import type { Sports, SportsId } from './sports';
 import type { Users, UsersId } from './users';
 
 export interface EventsAttributes {
-  id?: number;
+  id: number;
   name: string;
   datetime: Date;
-  created_at?: Date;
+  created_at: Date;
   created_by: number;
   sport_id: number;
 }
 
 export type EventsPk = "id";
 export type EventsId = Events[EventsPk];
-export type EventsCreationAttributes = Optional<EventsAttributes, EventsPk>;
+export type EventsOptionalAttributes = "id" | "created_at";
+export type EventsCreationAttributes = Optional<EventsAttributes, EventsOptionalAttributes>;
 
 export class Events extends Model<EventsAttributes, EventsCreationAttributes> implements EventsAttributes {
-  id?: number;
+  id!: number;
   name!: string;
   datetime!: Date;
-  created_at?: Date;
+  created_at!: Date;
   created_by!: number;
   sport_id!: number;
 

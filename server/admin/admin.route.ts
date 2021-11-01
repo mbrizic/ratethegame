@@ -14,6 +14,7 @@ export default class AdminRoute implements Route {
 
 	private initializeRoutes() {
 		this.router.get(`${this.path}`, ensureAdmin, this.controller.getStatsPage);
+		this.router.post(`${this.path}/analytics/clear`, ensureAdmin, this.controller.clearAnalyticsEvents);
 		this.router.post(`${this.path}/errors/clear`, ensureAdmin, this.controller.clearRecordedErrors);
 		this.router.post(`${this.path}/pageviews/clear`, ensureAdmin, this.controller.clearPageviews);
 		this.router.post(`${this.path}/css-cache/clear`, ensureAdmin, this.controller.clearCssCache);

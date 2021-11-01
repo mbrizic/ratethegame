@@ -20,3 +20,8 @@ INSERT INTO public.event_rating(would_recommend, created_by, event_id) VALUES
     (false, 1, 2),
     (false, 2, 2),
     (true, 2, 5);
+
+-- Postgres requires us to reset autoincrement counters manually if we're inserting data by explicitly setting IDs
+SELECT setval('users_id_seq', (SELECT MAX(id) from public.users));
+SELECT setval('sports_id_seq', (SELECT MAX(id) from public.sports));
+SELECT setval('events_id_seq', (SELECT MAX(id) from public.events));

@@ -1,6 +1,6 @@
 import { ChildElement } from "./html.elements"
 
-export function Inline(...elements: ChildElement[]) {
+export function Inline(...elements: ChildElement[]): ChildElement {
     return elements.join("")
 }
 
