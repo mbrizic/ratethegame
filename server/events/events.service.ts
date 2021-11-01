@@ -12,6 +12,8 @@ import { EventFactory } from './events.factory';
 import { EventModel } from './event.model';
 import { Sports } from '../../database/models/sports';
 import { UserModel } from '../users/users.model';
+import { recordAnalyticsEvent } from '../core/analytics-event.service';
+import { EventRatingModel } from './event-rating.model';
 
 const defaultPageSize = 10;
 
@@ -89,6 +91,8 @@ class EventsService {
 			would_recommend: dto.wouldRecommend,
 		})
 
+		recordAnalyticsEvent("UserVoted", userId, dto.eventId, dto.wouldRecommend.toString())
+
 		return true
 	}
 
@@ -108,7 +112,19 @@ class EventsService {
 			throw new HttpException(409, "Rating not found");
 		}
 
+		recordAnalyticsEvent("UserRemovedVote", userId, dto.eventId)
+
 		return true
+	}
+
+	public async getEventRatingsCount(options: {
+		votedPositively: boolean
+	}): Promise<number> {
+		return await EventRating.count({
+			where: {
+				would_recommend: options.votedPositively
+			}
+		})
 	}
 
 	private async getAll(user: PotentialUser, options: FindOptions<EventsAttributes> | null = {}): Promise<EventModel[]> {

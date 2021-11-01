@@ -1,18 +1,18 @@
 import { getAppConfig } from "../server/core/app.config";
 import { Logout } from "./component/logout.component";
 import { readCssFiles } from "./core/css.service";
-import { Body, ChildElement, Footer, Head, Header, Heading1, Html, Link, Style, Text, Title } from "./core/html.elements";
+import { Body, ChildElement, Footer, Head, Header, Heading1, Html, Link, Paragraph, Style, Text, Title } from "./core/html.elements";
 import { PageModel } from "./core/html.interfaces";
 import { Inline } from "./core/html.operator";
 
+const css = readCssFiles(
+    "./ui/style/base.css",
+    "./ui/style/framework.css",
+    "./ui/style/app.css"
+);
+
 export const Layout = (model: PageModel, ...children: ChildElement[]) => {
-
-    const css = readCssFiles(
-        "./ui/style/base.css",
-        "./ui/style/framework.css",
-        "./ui/style/app.css"
-    );
-
+ 
     const callToActionButton = getAppConfig().isDebugMode
         ? Link({ text: "Log in", href: "/login" })
         : Link({ text: "Sign up", href: "/register" })
@@ -39,7 +39,11 @@ export const Layout = (model: PageModel, ...children: ChildElement[]) => {
         Body(
             headerWithNavigation,
             ...children,
-            Footer("This is footer.")
+            Footer(
+                Paragraph("This site doesn't use client side JS,"),
+                Paragraph("so it's unable to track you"),
+                Paragraph("and saves your network bandwidth."),
+            )
         )
     )
 
