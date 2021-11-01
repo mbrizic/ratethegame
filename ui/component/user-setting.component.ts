@@ -18,17 +18,15 @@ export const UserSettingComponent: Component<UserSettingComponentModel> = (model
     const icon = model.userSettings.value ? "✔️": "❌";
 
     return Card(
-        Inline(
+        Column(
             RowSpaced(
-                Text(model.userSettings.description),
-                Column(
-                    RowCentered(Text(icon)),
-                    Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,
-                        HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.userSettings.column_name }),
-                        HiddenInput<UpdateSettingCommand>({ name: "value", value: !model.userSettings.value }),
-                        SubmitButton("Change")
-                    ),
-                )
+                Paragraph(model.userSettings.description), 
+                Paragraph(icon)
+            ),
+            Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,
+                HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.userSettings.column_name }),
+                HiddenInput<UpdateSettingCommand>({ name: "value", value: !model.userSettings.value }),
+                SubmitButton("Change")
             ),
         ),
     )
