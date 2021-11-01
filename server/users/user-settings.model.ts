@@ -1,10 +1,11 @@
 import { DomainModel } from "../core/domain.model"
+import { UserSettingModel } from "./user-setting-model"
 export class UserSettingsModel implements DomainModel {
 
 	public readonly id: number | undefined
 	public readonly userId: number | undefined
 	public readonly receiveTopRated: boolean
-	public readonly receiveTopRatedDescr: string
+	public readonly receiveTopRatedSetting: UserSettingModel
 
 	constructor(
 		id: number | undefined,
@@ -14,18 +15,16 @@ export class UserSettingsModel implements DomainModel {
 		this.id = id
 		this.userId = userId
 
-		this.receiveTopRatedDescr = "Receive notifications about top-rated sport events"
 		this.receiveTopRated = receiveTopRated
+		this.receiveTopRatedSetting = new UserSettingModel("Receive notifications about top-rated sport events", receiveTopRated, "receive_top_rated")
 	}
 
-	public getReceiveTopRatedState = () => {
-		return `${this.receiveTopRated ? "✔️": "❌"}`
+	private getReceiveTopRatedSettings = () => {
+		return this.receiveTopRatedSetting
 	}
-	public getReceiveTopRatedDescription = () => {
-		return this.receiveTopRatedDescr
-	}
-	public getReceiveTopRatedName = () => {
-		return "receive_top_rated"
+
+	public getSettings = () => {
+		return [this.getReceiveTopRatedSettings()]
 	}
 
 	public ensureValid = () => {

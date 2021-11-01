@@ -8,8 +8,9 @@ import { SportSubscriptionsModel } from "../../server/users/user-sport-subscript
 import { UserSettingsModel } from "../../server/users/user-settings.model";
 import { Card } from "../component/card.component";
 import { Inline } from "../core/html.operator";
+import { UserSettingsList } from "../component/user-settings-list.component";
 
-interface UserModel extends PageModel {
+export interface UserModel extends PageModel {
     email: string;
     subscriptions: SportSubscriptionsModel[];
     settings: UserSettingsModel;
@@ -35,21 +36,7 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
             ),
 
             Heading2("Settings:"),
-            Card(
-                Inline(
-                    RowSpaced(
-                        Text(model.settings.getReceiveTopRatedDescription()),
-                        Column(
-                            RowCentered(Text(model.settings.getReceiveTopRatedState())),
-                            Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,
-                                HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.settings.getReceiveTopRatedName() }),
-                                HiddenInput<UpdateSettingCommand>({ name: "value", value: !model.settings.receiveTopRated }),
-                                SubmitButton("Change")
-                            ),
-                        )
-                    ),
-                ),
-            ),
+            UserSettingsList(model),
             
             Heading2("Want to delete your account?"),
             Inline(
