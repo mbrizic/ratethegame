@@ -8,7 +8,7 @@ import { SportSubscriptionsModel } from "../../server/users/user-sport-subscript
 import { UserSettingsModel } from "../../server/users/user-settings.model";
 import { Card } from "../component/card.component";
 import { Inline } from "../core/html.operator";
-import { UserSettingsList } from "../component/user-settings-list.component";
+import { UserSettingComponent } from "../component/user-setting.component";
 
 export interface UserModel extends PageModel {
     email: string;
@@ -36,7 +36,9 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
             ),
 
             Heading2("Settings:"),
-            UserSettingsList(model),
+            RowSpaced(
+                ...model.settings.getSettings().map(setting => UserSettingComponent({user: model.user, userSettings: setting}))
+            ),
             
             Heading2("Want to delete your account?"),
             Inline(
