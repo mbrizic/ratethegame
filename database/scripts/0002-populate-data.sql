@@ -34,3 +34,4 @@ SELECT setval('users_id_seq', (SELECT MAX(id) from public.users));
 SELECT setval('sports_id_seq', (SELECT MAX(id) from public.sports));
 SELECT setval('events_id_seq', (SELECT MAX(id) from public.events));
 SELECT setval('user_settings_id_seq', (SELECT MAX(id) from public.user_settings));
+SELECT setval('sport_subscriptions_id_seq', (SELECT MAX(id) from public.sport_subscriptions));
