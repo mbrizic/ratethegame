@@ -6,7 +6,7 @@ import HttpException from '../core/exceptions/http.exception';
 import { ensureInputIsClean } from '../core/input-sanitizer';
 import { afterDate, beforeDate } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByDescending } from '../core/util';
-import { PotentialUser } from '../users/users.dto';
+import { PotentialUser, UserDto } from '../users/users.dto';
 import { CreateEventCommand, RateEventCommand } from './events.dto';
 import { EventFactory } from './events.factory';
 import { EventModel } from './event.model';
@@ -59,7 +59,7 @@ class EventsService {
 		return model
 	}
 
-	public async addEvent(user: UserModel, dto: CreateEventCommand) {
+	public async addEvent(user: UserDto, dto: CreateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
 		}

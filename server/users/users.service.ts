@@ -57,7 +57,7 @@ class UserService {
 	}
 
 	private async FromDatabaseWithSports(user: Users) {
-		const sports = await this.sportsService.getAll(UserFactory.FromDatabase(user));
+		const sports = await this.sportsService.getAll(user.id);
 		const userSports = sports.filter(sport => user.sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
 
 		const model = UserFactory.FromDatabase(user, userSports);
@@ -141,8 +141,8 @@ class UserService {
 		return await this.getById(userId)
 	}
 
-	public async deleteUser(userId: number, settingsId: number) {
-		const deletedSettings = await UserSettings.destroy({ where: { id: settingsId } });
+	public async deleteUser(userId: number) {
+		const deletedSettings = await UserSettings.destroy({ where: { user_id: userId } });
 		if (!deletedSettings) {
 			throw new HttpException(409, "User settings not found");
 		}

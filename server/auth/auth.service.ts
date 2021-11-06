@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { UpdateUserCommand } from '../users/users.dto';
+import { UserDto, UpdateUserCommand } from '../users/users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { DataStoredInToken, TokenData } from '../auth/auth.interface';
 import { isEmptyObject } from '../core/util';
 import UserService from '../users/users.service';
+import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
 import { RegisterUserCommand, LoginUserCommand } from './auth.dto';
 import { ensureInputIsEmail } from '../core/validation';
@@ -22,7 +23,7 @@ class AuthService {
 		return created
 	}
 
-	public async login(dto: LoginUserCommand): Promise<{ cookie: string, user: UserModel }> {
+	public async login(dto: LoginUserCommand): Promise<{ cookie: string, user: UserDto }> {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data")
 		}
@@ -32,13 +33,13 @@ class AuthService {
 		const tokenData = this.createToken(user.id!);
 		const cookie = this.createCookie(tokenData);
 
-		return { cookie, user };
+		return { cookie, user: this.mapToDto(user) };
 	}
 
 	public async authenticate(dto: LoginUserCommand) {
 		ensureInputIsEmail(dto.email);
 
-		const user = await this.usersService.getByEmail(dto.email);
+		const user = await Users.findOne({ where: { email: dto.email } })
 		if (!user) {
 			throw new HttpException(409, `Email ${dto.email} not found`)
 		}
@@ -74,6 +75,15 @@ class AuthService {
 
 	public createCookie(tokenData: TokenData): string {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
+	}
+
+	public mapToDto(model: Users): UserDto {
+		return {
+			id: model.id!,
+			email: model.email,
+			password: model.password,
+			isAdmin: model.is_admin,
+		}
 	}
 }
 

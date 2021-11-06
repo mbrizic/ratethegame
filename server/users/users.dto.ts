@@ -1,4 +1,9 @@
-import { UserModel } from "./users.model";
+export class UserDto {
+	public id: number;
+	public email: string;
+	public password: string;
+	public isAdmin: boolean;
+}
 
 export class CreateUserCommand {
 	email: string;
@@ -15,7 +20,7 @@ export class RemoveUserCommand {
 	password: string;
 }
 
-export type PotentialUser = UserModel | null | undefined;
+export type PotentialUser = UserDto | null | undefined;
 
 export class UpdateSettingCommand {
 	setting: string;
