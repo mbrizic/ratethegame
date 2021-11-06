@@ -22,14 +22,14 @@ export async function ensureAuthenticated(req: RequestWithUser, res: Response, n
 	}
 }
 
-export async function ensureUserAuthorized(req: RequestWithUser, res: Response, next: NextFunction) {
+export async function ensureIsCurrentUser(req: RequestWithUser, res: Response, next: NextFunction) {
 	await getUserFromCookieIfExists(req)
 
 	if (req.user.id?.toString() == req.params.id) {
 		next()
 	} else {
-		res.status(401)
-		res.statusMessage = 'Not authenticated'
+		res.status(403)
+		res.statusMessage = 'Forbidden'
 		res.redirect(`${redirectUrl}?${returnUrlQueryParam}=${req.path}`)
 	}
 }
