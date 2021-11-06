@@ -1,6 +1,6 @@
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
-import { SportSubscriptionsModel } from "../users/user-sport-subscriptions.model"
+import { UserSportSubscriptionsModel } from "../users/user-sport-subscriptions.model"
 import { UserSettingsModel } from "../users/user-settings.model"
 import { ensureLongerThan } from "../core/validation"
 
@@ -9,7 +9,7 @@ export class UserModel implements DomainModel {
 	public readonly email: string
 	public readonly password: string;
 	public readonly isAdmin: boolean
-	public readonly subscriptions: SportSubscriptionsModel[]
+	public readonly subscriptions: UserSportSubscriptionsModel[]
 	public readonly settings: UserSettingsModel
 	
 	public readonly totalSubscriptions: number
@@ -19,7 +19,7 @@ export class UserModel implements DomainModel {
 		email: string,
 		password: string,
 		isAdmin: boolean,
-		subscriptions: SportSubscriptionsModel[],
+		subscriptions: UserSportSubscriptionsModel[],
 		settings: UserSettingsModel
 	) {
 		this.id = id

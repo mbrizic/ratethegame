@@ -3,35 +3,35 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { Sports, SportsId } from './sports';
 import type { Users, UsersId } from './users';
 
-export interface SportSubscriptionsAttributes {
+export interface UserSportSubscriptionsAttributes {
   id: number;
   user_id: number;
   sport_id: number;
 }
 
-export type SportSubscriptionsPk = "id";
-export type SportSubscriptionsId = SportSubscriptions[SportSubscriptionsPk];
-export type SportSubscriptionsOptionalAttributes = "id";
-export type SportSubscriptionsCreationAttributes = Optional<SportSubscriptionsAttributes, SportSubscriptionsOptionalAttributes>;
+export type UserSportSubscriptionsPk = "id";
+export type UserSportSubscriptionsId = UserSportSubscriptions[UserSportSubscriptionsPk];
+export type UserSportSubscriptionsOptionalAttributes = "id";
+export type UserSportSubscriptionsCreationAttributes = Optional<UserSportSubscriptionsAttributes, UserSportSubscriptionsOptionalAttributes>;
 
-export class SportSubscriptions extends Model<SportSubscriptionsAttributes, SportSubscriptionsCreationAttributes> implements SportSubscriptionsAttributes {
+export class UserSportSubscriptions extends Model<UserSportSubscriptionsAttributes, UserSportSubscriptionsCreationAttributes> implements UserSportSubscriptionsAttributes {
   id!: number;
   user_id!: number;
   sport_id!: number;
 
-  // SportSubscriptions belongsTo Sports via sport_id
+  // UserSportSubscriptions belongsTo Sports via sport_id
   sport!: Sports;
   getSport!: Sequelize.BelongsToGetAssociationMixin<Sports>;
   setSport!: Sequelize.BelongsToSetAssociationMixin<Sports, SportsId>;
   createSport!: Sequelize.BelongsToCreateAssociationMixin<Sports>;
-  // SportSubscriptions belongsTo Users via user_id
+  // UserSportSubscriptions belongsTo Users via user_id
   user!: Users;
   getUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
   setUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
   createUser!: Sequelize.BelongsToCreateAssociationMixin<Users>;
 
-  static initModel(sequelize: Sequelize.Sequelize): typeof SportSubscriptions {
-    SportSubscriptions.init({
+  static initModel(sequelize: Sequelize.Sequelize): typeof UserSportSubscriptions {
+    UserSportSubscriptions.init({
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -58,17 +58,10 @@ export class SportSubscriptions extends Model<SportSubscriptionsAttributes, Spor
     }
   }, {
     sequelize,
-    tableName: 'sport_subscriptions',
+    tableName: 'user_sport_subscriptions',
     schema: 'public',
     timestamps: false,
     indexes: [
-      {
-        name: "sport_subscriptions_pkey",
-        unique: true,
-        fields: [
-          { name: "id" },
-        ]
-      },
       {
         name: "unique_user_per_sport",
         unique: true,
@@ -77,8 +70,15 @@ export class SportSubscriptions extends Model<SportSubscriptionsAttributes, Spor
           { name: "sport_id" },
         ]
       },
+      {
+        name: "user_sport_subscriptions_pkey",
+        unique: true,
+        fields: [
+          { name: "id" },
+        ]
+      },
     ]
   });
-  return SportSubscriptions;
+  return UserSportSubscriptions;
   }
 }

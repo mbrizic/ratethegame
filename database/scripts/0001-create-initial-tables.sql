@@ -63,7 +63,7 @@ CREATE TABLE public.user_settings
     CONSTRAINT unique_user UNIQUE (user_id)
 );
 
-CREATE TABLE public.sport_subscriptions
+CREATE TABLE public.user_sport_subscriptions
 (
     id SERIAL PRIMARY KEY,
 

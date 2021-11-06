@@ -10,11 +10,11 @@ import SportsService from '../sports/sports.service';
 import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
-import { SportSubscriptions } from '../../database/models/sport_subscriptions';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
+import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 
 class UserService {
-	private entitiesToInclude = ["user_setting", "sport_subscriptions"]
+	private entitiesToInclude = ["user_setting", "user_sport_subscriptions"]
 	private sportsService = new SportsService()
 
 	public async getAll(): Promise<UserModel[]> {
@@ -58,7 +58,7 @@ class UserService {
 
 	private async FromDatabaseWithSports(user: Users) {
 		const sports = await this.sportsService.getAll(user.id);
-		const userSports = sports.filter(sport => user.sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
+		const userSports = sports.filter(sport => user.user_sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
 
 		const model = UserFactory.FromDatabase(user, userSports);
 		return model;
@@ -148,7 +148,7 @@ class UserService {
 		}
 
 		const deletedRatings = await EventRating.destroy({ where: { created_by: userId } });
-		const deletedSubscriptions = await SportSubscriptions.destroy({ where: { user_id: userId } });
+		const deletedSubscriptions = await UserSportSubscriptions.destroy({ where: { user_id: userId } });
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {

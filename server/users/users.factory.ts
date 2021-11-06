@@ -3,7 +3,7 @@ import { Users } from "../../database/models/users"
 import ValidationException from "../core/exceptions/validation.exception"
 import { SportModel } from "../sports/sports.model"
 import { UserSettingsModel } from "./user-settings.model"
-import { SportSubscriptionsModel } from "./user-sport-subscriptions.model"
+import { UserSportSubscriptionsModel } from "./user-sport-subscriptions.model"
 import { UserModel } from "./users.model"
 
 export class UserFactory {
@@ -45,9 +45,9 @@ export class UserFactory {
             user.user_setting.receive_top_rated,
         )
 
-        const subscriptions = user.sport_subscriptions.map(
+        const subscriptions = user.user_sport_subscriptions.map(
             user_subscription =>
-            new SportSubscriptionsModel(
+            new UserSportSubscriptionsModel(
                 user_subscription.id,
                 user_subscription.sport_id,
                 sports ? getSportName(user_subscription.sport_id, sports) : undefined,

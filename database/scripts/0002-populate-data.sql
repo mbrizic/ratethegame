@@ -25,7 +25,7 @@ INSERT INTO public.user_settings(id, receive_top_rated, user_id) VALUES
     (1, true, 1),
     (2, false, 2);
 
-INSERT INTO public.sport_subscriptions(id, user_id, sport_id) VALUES
+INSERT INTO public.user_sport_subscriptions(id, user_id, sport_id) VALUES
     (1, 1, 1),
     (2, 1, 3);
 
@@ -34,4 +34,4 @@ SELECT setval('users_id_seq', (SELECT MAX(id) from public.users));
 SELECT setval('sports_id_seq', (SELECT MAX(id) from public.sports));
 SELECT setval('events_id_seq', (SELECT MAX(id) from public.events));
 SELECT setval('user_settings_id_seq', (SELECT MAX(id) from public.user_settings));
-SELECT setval('sport_subscriptions_id_seq', (SELECT MAX(id) from public.sport_subscriptions));
+SELECT setval('user_sport_subscriptions_id_seq', (SELECT MAX(id) from public.user_sport_subscriptions));

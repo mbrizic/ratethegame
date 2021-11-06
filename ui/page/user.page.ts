@@ -4,7 +4,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Layout } from "../_Layout";
 import { Error } from '../component/error.component'
-import { SportSubscriptionsModel } from "../../server/users/user-sport-subscriptions.model";
+import { UserSportSubscriptionsModel } from "../../server/users/user-sport-subscriptions.model";
 import { UserSettingsModel } from "../../server/users/user-settings.model";
 import { Card } from "../component/card.component";
 import { Inline } from "../core/html.operator";
@@ -12,7 +12,7 @@ import { UserSettingComponent } from "../component/user-setting.component";
 
 export interface UserModel extends PageModel {
     email: string;
-    subscriptions: SportSubscriptionsModel[];
+    subscriptions: UserSportSubscriptionsModel[];
     settings: UserSettingsModel;
 }
 

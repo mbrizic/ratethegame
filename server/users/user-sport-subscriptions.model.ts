@@ -1,6 +1,6 @@
 import { DomainModel } from "../core/domain.model"
 
-export class SportSubscriptionsModel implements DomainModel {
+export class UserSportSubscriptionsModel implements DomainModel {
 	public readonly id: number | undefined
 	public readonly sportId: number
 	public readonly sportName: string | undefined
