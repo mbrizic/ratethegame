@@ -42,7 +42,7 @@ export class UserFactory {
         const settings = new UserSettingsModel(
             user.user_setting.id,
             user.user_setting.user_id,
-            user.user_setting.receive_top_rated,
+            user.user_setting.receive_top_rated_notifications,
         )
 
         const subscriptions = user.user_sport_subscriptions.map(

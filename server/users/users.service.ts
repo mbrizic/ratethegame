@@ -92,7 +92,7 @@ class UserService {
 		});
 
 		const createdSettings = await UserSettings.create({
-			receive_top_rated: userModel.settings.receiveTopRated,
+			receive_top_rated_notifications: userModel.settings.receiveTopRatedNotifications,
 			user_id: createdUser.id
 		})
 

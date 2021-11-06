@@ -4,27 +4,27 @@ export class UserSettingsModel implements DomainModel {
 
 	public readonly id: number | undefined
 	public readonly userId: number | undefined
-	public readonly receiveTopRated: boolean
-	public readonly receiveTopRatedSetting: UserSettingModel
+	public readonly receiveTopRatedNotifications: boolean
+	public readonly receiveTopRatedNotificationsSetting: UserSettingModel
 
 	constructor(
 		id: number | undefined,
 		userId: number | undefined,
-        receiveTopRated: boolean = false
+        receiveTopRatedNotifications: boolean = false
 	) {
 		this.id = id
 		this.userId = userId
 
-		this.receiveTopRated = receiveTopRated
-		this.receiveTopRatedSetting = new UserSettingModel("Receive notifications about top-rated sport events", receiveTopRated, "receive_top_rated")
+		this.receiveTopRatedNotifications = receiveTopRatedNotifications
+		this.receiveTopRatedNotificationsSetting = new UserSettingModel("Receive notifications about top-rated sport events", receiveTopRatedNotifications, "receive_top_rated_notifications")
 	}
 
-	private getReceiveTopRatedSettings = () => {
-		return this.receiveTopRatedSetting
+	private getReceiveTopRatedNotificationsSetting = () => {
+		return this.receiveTopRatedNotificationsSetting
 	}
 
 	public getSettings = () => {
-		return [this.getReceiveTopRatedSettings()]
+		return [this.getReceiveTopRatedNotificationsSetting()]
 	}
 
 	public ensureValid = () => {

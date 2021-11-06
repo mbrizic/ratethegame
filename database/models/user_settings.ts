@@ -4,7 +4,7 @@ import type { Users, UsersId } from './users';
 
 export interface UserSettingsAttributes {
   id: number;
-  receive_top_rated: boolean;
+  receive_top_rated_notifications: boolean;
   user_id: number;
 }
 
@@ -15,7 +15,7 @@ export type UserSettingsCreationAttributes = Optional<UserSettingsAttributes, Us
 
 export class UserSettings extends Model<UserSettingsAttributes, UserSettingsCreationAttributes> implements UserSettingsAttributes {
   id!: number;
-  receive_top_rated!: boolean;
+  receive_top_rated_notifications!: boolean;
   user_id!: number;
 
   // UserSettings belongsTo Users via user_id
@@ -32,7 +32,7 @@ export class UserSettings extends Model<UserSettingsAttributes, UserSettingsCrea
       allowNull: false,
       primaryKey: true
     },
-    receive_top_rated: {
+    receive_top_rated_notifications: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false

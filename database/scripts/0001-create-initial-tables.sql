@@ -56,7 +56,7 @@ CREATE TABLE public.event_rating
 CREATE TABLE public.user_settings
 (
     id SERIAL PRIMARY KEY,
-    receive_top_rated BOOLEAN NOT NULL DEFAULT false,
+    receive_top_rated_notifications BOOLEAN NOT NULL DEFAULT false,
 
     user_id INTEGER NOT NULL REFERENCES public.users (id),
 
