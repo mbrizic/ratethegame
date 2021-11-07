@@ -39,11 +39,14 @@ export class EventModel implements DomainModel {
 		this.ensureValid()
 
 		this.totalRatings = ratings.length
-		this.ratingPercentage = this.getRatingPercentage(ratings)
+		this.ratingPercentage = this.calculateRatingPercentage(ratings)
 		this.isRatedByCurrentlyLoggedInUser = this.isRatedByUser(ratings, currentlyLoggedInUserId)
 	}
 
 	public isVotingAllowed = () =>
+		this.hasEventStarted()
+
+	public hasEventStarted = () =>
 		now().getTime() > this.date.getTime()
 
 	public isRatedFavourably = () => 
@@ -61,13 +64,13 @@ export class EventModel implements DomainModel {
 		}
 	}
 
-	private getRatingPercentage = (votes: EventRatingModel[]) => {
+	private calculateRatingPercentage = (votes: EventRatingModel[]) => {
 		const positiveVotes = votes.filter(r => r.wouldRecommend).length
 		const ratingPercentage = votes.length > 0
 			? positiveVotes / votes.length * 100
 			: defaultEventRatingPercentage
 
-		return ratingPercentage
+		return Math.round(ratingPercentage)
 	}
 
 	private isRatedByUser = (votes: EventRatingModel[], userId: number | undefined) => {

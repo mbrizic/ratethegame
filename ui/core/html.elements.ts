@@ -25,22 +25,22 @@ export const Title = (text: string) =>
 
 // visual tags
 
-export const Heading1 = (children: string, options: BasicAttributes = {}) => 
+export const Heading1 = (children: ChildElement, options: BasicAttributes = {}) => 
     `<h1 ${addBasicAttributes(options)}>
         ${children}
     </h1>`
 
-export const Heading2 = (children: string, options: BasicAttributes = {}) => 
+export const Heading2 = (children: ChildElement, options: BasicAttributes = {}) => 
     `<h2 ${addBasicAttributes(options)}>
         ${children}
     </h2>`
 
-export const Heading3 = (children: string, options: BasicAttributes = {}) => 
+export const Heading3 = (children: ChildElement, options: BasicAttributes = {}) => 
     `<h3 ${addBasicAttributes(options)}>
         ${children}
     </h3>`
 
-export const Heading4 = (children: string, options: BasicAttributes = {}) => 
+export const Heading4 = (children: ChildElement, options: BasicAttributes = {}) => 
     `<h4 ${addBasicAttributes(options)}>
         ${children}
     </h4>`
@@ -55,7 +55,6 @@ export const UnorderedList = (...children: ChildElement[]) => {
     return `<ul>${children.join("")}</ul>`
 } 
     
-
 export const Link = (required: { text: string, href: string }, options: BasicAttributes = {}) => 
     `<a href="${required.href}" ${addBasicAttributes(options)}>${required.text}</a>`
 
@@ -70,6 +69,9 @@ export const Div = (children: ChildElement, options: BasicAttributes = {}) =>
 
 export const Text = (...text: ChildElement[]) =>
     `<span>${text.join("")}</span>`
+
+export const Styled = (options: BasicAttributes = {}, ...text: ChildElement[]) =>
+    `<span ${addBasicAttributes(options)}>${text.join("")}</span>`
 
 export const Image = (options: { src: string, text: string, class?: string }) =>
     `<img src="${options.src}" alt="${options.text}" loading="lazy"/>`
@@ -97,6 +99,9 @@ export const Small = (text: string) =>
 export const Header = (...children: ChildElement[]) =>
     `<header>${children.join("")}</header>`
 
+export const Navigation = (...children: ChildElement[]) =>
+    `<nav>${children.join("")}</nav>`
+
 export const Footer = (...children: ChildElement[]) =>
     `<footer>${children.join("")}</footer>`
 
@@ -122,6 +127,12 @@ export const Form = <T> (action: string, ...children: FormInputElement<T>[]) =>
 
 export const SubmitButton = (text: ChildElement, options: BasicAttributes = {}) =>
     `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
+
+export const SubmitLink = (text: ChildElement, options: BasicAttributes = {}) => {
+    options.class = options.class += " btn-link"
+
+    return `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
+}
 
 export const TextInput: FormInputFunction = <T> (options: FormInputAttributes<T>) =>
     `<input placeholder="${options.placeholder}" name="${options.name}" value="${options.value || ''}" type="text"></input>`

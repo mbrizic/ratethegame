@@ -1,7 +1,7 @@
 import { ChildElement } from "./html.elements"
 
 export function Inline(...elements: ChildElement[]): ChildElement {
-    return elements.join("")
+    return elements.join(" ")
 }
 
 // Takes some JS, executes it and puts execution result into span element
