@@ -127,7 +127,13 @@ class UserService {
 			throw new HttpException(400, "Incorrect input data");
 		}
 
-		let settingUpdate = { ...{}, [settingData.setting]: (settingData.value == "true") };
+		let settingUpdate = {}
+		if (settingData.setting == 'receive_top_rated_notifications') {
+			settingUpdate = {...settingUpdate, [settingData.setting]: (settingData.value == "true")} 
+		}
+		else {
+			throw new HttpException(409, "Setting not found");
+		}
 
 		const updated = await UserSettings.update(
 			settingUpdate,

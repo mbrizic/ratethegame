@@ -1,18 +1,18 @@
 import { DomainModel } from "../core/domain.model"
 export class UserSettingModel implements DomainModel {
 	
-	public readonly description: string
+	public readonly description: string | undefined
 	public readonly value: boolean
-	public readonly column_name: string
+	public readonly columnName: string | undefined
 
 	constructor(
-		description: string,
+		description: string | undefined,
 		value: boolean,
-        column_name: string
+        columnName: string | undefined
 	) {
 		this.description = description
 		this.value = value
-        this.column_name = column_name
+        this.columnName = columnName
 	}
 
     public ensureValid = () => {

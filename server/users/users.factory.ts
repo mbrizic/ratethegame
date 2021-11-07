@@ -2,6 +2,7 @@ import { Sports } from "../../database/models/sports"
 import { Users } from "../../database/models/users"
 import ValidationException from "../core/exceptions/validation.exception"
 import { SportModel } from "../sports/sports.model"
+import { UserSettingModel } from "./user-setting-model"
 import { UserSettingsModel } from "./user-settings.model"
 import { UserSportSubscriptionsModel } from "./user-sport-subscriptions.model"
 import { UserModel } from "./users.model"
@@ -10,7 +11,7 @@ export class UserFactory {
 
 	public static Create(email: string, password: string, isAdmin: boolean = false) {
 
-        const defaultUserSettings = new UserSettingsModel(undefined, undefined)
+        const defaultUserSettings = new UserSettingsModel(undefined, undefined, new UserSettingModel(undefined, false, undefined))
 
 		return new UserModel(
 			undefined,
@@ -42,7 +43,7 @@ export class UserFactory {
         const settings = new UserSettingsModel(
             user.user_setting.id,
             user.user_setting.user_id,
-            user.user_setting.receive_top_rated_notifications,
+            new UserSettingModel("Receive notifications about top-rated sport events", user.user_setting.receive_top_rated_notifications, "receive_top_rated_notifications")
         )
 
         const subscriptions = user.user_sport_subscriptions.map(

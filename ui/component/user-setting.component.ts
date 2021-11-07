@@ -19,11 +19,11 @@ export const UserSettingComponent: Component<UserSettingComponentModel> = (model
     return Card(
         Column(
             RowSpaced(
-                Paragraph(model.userSettings.description), 
+                Paragraph(model.userSettings.description!), 
                 Paragraph(icon)
             ),
             Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,
-                HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.userSettings.column_name }),
+                HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.userSettings.columnName }),
                 HiddenInput<UpdateSettingCommand>({ name: "value", value: !model.userSettings.value }),
                 SubmitButton("Change")
             ),

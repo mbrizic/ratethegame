@@ -10,13 +10,13 @@ export class UserSettingsModel implements DomainModel {
 	constructor(
 		id: number | undefined,
 		userId: number | undefined,
-        receiveTopRatedNotifications: boolean = false
+		receiveTopRatedNotificationsSetting: UserSettingModel
 	) {
 		this.id = id
 		this.userId = userId
 
-		this.receiveTopRatedNotifications = receiveTopRatedNotifications
-		this.receiveTopRatedNotificationsSetting = new UserSettingModel("Receive notifications about top-rated sport events", receiveTopRatedNotifications, "receive_top_rated_notifications")
+		this.receiveTopRatedNotifications = receiveTopRatedNotificationsSetting.value
+		this.receiveTopRatedNotificationsSetting = receiveTopRatedNotificationsSetting
 	}
 
 	private getReceiveTopRatedNotificationsSetting = () => {
