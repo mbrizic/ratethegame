@@ -77,7 +77,19 @@ class AuthService {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
 	}
 
-	public mapToDto(model: Users): UserDto {
+	public async getUserByID(userId: number): Promise<UserDto> {
+		const user = await Users.findByPk(userId);
+
+		if (!user) {
+			throw new HttpException(409, "User not found")
+		}
+
+		const userDto = this.mapToDto(user);
+		
+		return userDto
+	}
+
+	private mapToDto(model: Users): UserDto {
 		return {
 			id: model.id!,
 			email: model.email,

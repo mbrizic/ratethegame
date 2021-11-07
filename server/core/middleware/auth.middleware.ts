@@ -1,6 +1,5 @@
 import { NextFunction, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { Users } from '../../../database/models/users';
 import { DataStoredInToken, RequestWithPotentialUser, RequestWithUser } from '../../auth/auth.interface';
 import AuthService from '../../auth/auth.service';
 import { getAppConfig } from '../app.config';
@@ -66,14 +65,8 @@ export async function getUserFromCookieIfExists(req: RequestWithPotentialUser) {
 		const userId = verificationResponse.id;
 		
 		try {
-			const user = await Users.findByPk(userId);
-
-			if (!user) {
-				return
-			}
-
-			const userDto = authService.mapToDto(user);
-			req.user = userDto;
+			const user = await authService.getUserByID(userId)
+			req.user = user;
 			
 		} catch (error) {
 			return
