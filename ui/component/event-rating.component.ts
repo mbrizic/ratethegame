@@ -4,7 +4,7 @@ import { Component } from "../core/html.interfaces"
 
 export const EventRating: Component<EventModel> = (event: EventModel) => {
 
-    const icon = event.isRatedFavourably() ? "✔️" : "❌";
+    const icon = event.isRatedFavourably() ? "✔️" : "😒";
 
     const progressBar = Div("", {
         style: `width: ${event.ratingPercentage}%`,

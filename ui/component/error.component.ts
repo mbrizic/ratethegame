@@ -8,7 +8,7 @@ export const Error = (error: string | null | undefined) => {
 
     return Div(
         error,
-        { class: "text-danger text-centered" }
+        { class: "bad text-centered" }
     )
 
 }

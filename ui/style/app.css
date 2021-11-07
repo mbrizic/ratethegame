@@ -1,10 +1,14 @@
 .card {
-    border: 2px solid blue;
+    border: 2px solid silver;
     background-color: white;
     border-radius: 5px;
     padding: 10px 20px;
     width: 100%;
-    margin: 5px;
+    margin: 5px 0;
+}
+
+a, a:visited, a:hover {
+    color: black
 }
 
 .admin {
@@ -14,10 +18,22 @@
 .progress-bar-background {
     height: 20px;
     width: 100%;
-    background-color: red;
+    background-color: orange;
 }
 
 .progress-bar {
     height: 100%;
     background-color: green;
+}
+
+.bad {
+    color: red;
+}
+
+.meh {
+    color: orange;
+}
+
+.good {
+    color: green;
 }
