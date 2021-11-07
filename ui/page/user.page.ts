@@ -31,7 +31,7 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
             Card(
                 RowSpaced(
                     Text("Subscriptions:"),
-                    Text(`${model.subscriptions.map(subscription => subscription.sportName)}`)
+                    Text(`${model.subscriptions.map(subscription => ` ${subscription.sportName}`)}`)
                 )
             ),
 
