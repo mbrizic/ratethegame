@@ -1,11 +1,15 @@
 import { Sports } from "../../database/models/sports"
 import { Users } from "../../database/models/users"
+import { UserSettingsAttributes } from "../../database/models/user_settings"
 import ValidationException from "../core/exceptions/validation.exception"
 import { SportModel } from "../sports/sports.model"
 import { UserSettingModel } from "./user-setting-model"
 import { UserSettingsModel } from "./user-settings.model"
 import { UserSportSubscriptionsModel } from "./user-sport-subscriptions.model"
 import { UserModel } from "./users.model"
+
+export type ValidSettingColumNames = Pick<UserSettingsAttributes, "receive_top_rated_notifications">
+export type ValidSettingColumName = keyof ValidSettingColumNames
 
 export class UserFactory {
 
