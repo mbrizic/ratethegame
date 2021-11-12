@@ -4,11 +4,12 @@ import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../
 import { Card } from "../component/card.component";
 import { UserSettingModel } from "../../server/users/user-setting-model";
 import { PotentialUser, UpdateSettingCommand } from "../../server/users/users.dto";
-
+import { SettingName } from "../../server/users/user-settings.model";
 
 interface UserSettingComponentModel {
     user: PotentialUser;
     userSettings: UserSettingModel;
+    settingName: SettingName;
 }
 
 
@@ -23,8 +24,7 @@ export const UserSettingComponent: Component<UserSettingComponentModel> = (model
                 Paragraph(icon)
             ),
             Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,
-                HiddenInput<UpdateSettingCommand>({ name: "setting", value: model.userSettings.columnName }),
-                HiddenInput<UpdateSettingCommand>({ name: "value", value: !model.userSettings.value }),
+                HiddenInput<UpdateSettingCommand>({ name: model.settingName, value: true }),
                 SubmitButton("Change")
             ),
         ),

@@ -23,6 +23,5 @@ export class RemoveUserCommand {
 export type PotentialUser = UserDto | null | undefined;
 
 export class UpdateSettingCommand {
-	setting: string;
-	value: any;
+	receiveTopRatedNotifications: boolean;
 }

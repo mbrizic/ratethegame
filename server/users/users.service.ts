@@ -127,12 +127,13 @@ class UserService {
 			throw new HttpException(400, "Incorrect input data");
 		}
 
+		const currentSettings = await UserSettings.findOne(
+			{ where: { user_id: userId } }
+		);
+
 		let settingUpdate = {}
-		if (settingData.setting == 'receive_top_rated_notifications') {
-			settingUpdate = {...settingUpdate, [settingData.setting]: (settingData.value == "true")} 
-		}
-		else {
-			throw new HttpException(409, "Setting not found");
+		if (settingData.receiveTopRatedNotifications) {
+			settingUpdate = {...settingUpdate, ["receive_top_rated_notifications"]: (!currentSettings?.receive_top_rated_notifications)} 
 		}
 
 		const updated = await UserSettings.update(

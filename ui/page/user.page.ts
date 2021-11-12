@@ -37,7 +37,10 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
 
             Heading2("Settings:"),
             RowSpaced(
-                ...model.settings.getSettings().map(setting => UserSettingComponent({user: model.user, userSettings: setting}))
+                UserSettingComponent({
+                    user: model.user, 
+                    userSettings: model.settings.getReceiveTopRatedNotificationsSetting(), 
+                    settingName: "receiveTopRatedNotifications"})
             ),
             
             Heading2("Want to delete your account?"),

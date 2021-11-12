@@ -1,5 +1,8 @@
 import { DomainModel } from "../core/domain.model"
 import { UserSettingModel } from "./user-setting-model"
+
+export type SettingName = "receiveTopRatedNotifications"
+
 export class UserSettingsModel implements DomainModel {
 
 	public readonly id: number | undefined
@@ -19,7 +22,7 @@ export class UserSettingsModel implements DomainModel {
 		this.receiveTopRatedNotificationsSetting = receiveTopRatedNotificationsSetting
 	}
 
-	private getReceiveTopRatedNotificationsSetting = () => {
+	public getReceiveTopRatedNotificationsSetting = () => {
 		return this.receiveTopRatedNotificationsSetting
 	}
 
