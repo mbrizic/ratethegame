@@ -46,7 +46,7 @@ export const UserPage: Page<UserPageModel> = (model: UserPageModel) => {
                     HiddenInput<RemoveUserCommand>({ name: "id", value: model.user?.id }),
                     PasswordInput({ placeholder: "Password", name: "password" }),
                     Error(model.errorMessage),
-                    SubmitButton("Delete your user account")
+                    SubmitButton("Delete my user account")
                 )
             )
         )
