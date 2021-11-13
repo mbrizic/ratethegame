@@ -41,12 +41,17 @@ export const UserPage: Page<UserPageModel> = (model: UserPageModel) => {
             ),
             
             Heading2("Want to delete your account?"),
-            Inline(
-                Form<RemoveUserCommand>(`/users/${model.user?.id}/remove`,
-                    HiddenInput<RemoveUserCommand>({ name: "id", value: model.user?.id }),
-                    PasswordInput({ placeholder: "Password", name: "password" }),
-                    Error(model.errorMessage),
-                    SubmitButton("Delete my user account")
+            Card(
+                Column(
+                    Paragraph("This will permanently delete **all** of your user data, including your settings, all of your ratings and subscriptions. You won't be able to login anymore using your credentials."),
+                    Inline(
+                        Form<RemoveUserCommand>(`/users/${model.user?.id}/remove`,
+                            HiddenInput<RemoveUserCommand>({ name: "id", value: model.user?.id }),
+                            PasswordInput({ placeholder: "Password", name: "password" }),
+                            Error(model.errorMessage),
+                            SubmitButton("Delete my user account")
+                        )
+                    )
                 )
             )
         )
