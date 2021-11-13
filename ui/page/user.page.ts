@@ -4,19 +4,16 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Layout } from "../_Layout";
 import { Error } from '../component/error.component'
-import { UserSportSubscriptionsModel } from "../../server/users/user-sport-subscriptions.model";
-import { UserSettingsModel } from "../../server/users/user-settings.model";
 import { Card } from "../component/card.component";
 import { Inline } from "../core/html.operator";
 import { UserSettingComponent } from "../component/user-setting.component";
+import { UserModel } from "../../server/users/users.model";
 
-export interface UserModel extends PageModel {
-    email: string;
-    subscriptions: UserSportSubscriptionsModel[];
-    settings: UserSettingsModel;
+export interface UserPageModel extends PageModel {
+    userData: UserModel;
 }
 
-export const UserPage: Page<UserModel> = (model: UserModel) => {
+export const UserPage: Page<UserPageModel> = (model: UserPageModel) => {
 
     return Layout(model,
         Column(
@@ -24,14 +21,14 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
             Card(
                 RowSpaced(
                     Text("Email address:"),
-                    Text(model.email)
+                    Text(model.userData.email)
                 )
             ),
 
             Card(
                 RowSpaced(
                     Text("Subscriptions:"),
-                    Text(`${model.subscriptions.map(subscription => ` ${subscription.sportName}`)}`)
+                    Text(`${model.userData.subscriptions.map(subscription => ` ${subscription.sportName}`)}`)
                 )
             ),
 
@@ -39,7 +36,7 @@ export const UserPage: Page<UserModel> = (model: UserModel) => {
             RowSpaced(
                 UserSettingComponent({
                     user: model.user, 
-                    userSettings: model.settings.getReceiveTopRatedNotificationsSetting(), 
+                    userSettings: model.userData.settings.getReceiveTopRatedNotificationsSetting(), 
                     settingName: "receiveTopRatedNotifications"})
             ),
             

@@ -5,7 +5,6 @@ import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand, RemoveUserCommand, UpdateSettingCommand, UserDto } from './users.dto';
 import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
-import { UserModel } from './users.model';
 
 class UsersController {
 	private authService = new AuthService();
@@ -27,9 +26,7 @@ class UsersController {
 			const userData = await this.userService.getById(userId);
 
 			res.send(UserPage({
-				email: userData.email,
-				subscriptions: userData.subscriptions,
-				settings: userData.settings,
+				userData: userData,
 				user: req.user,
 			}));
 		} catch (error) {
@@ -71,9 +68,7 @@ class UsersController {
 			const userData = await this.userService.getById(userId);
 
 			res.send(UserPage({
-				email: userData.email,
-				subscriptions: userData.subscriptions,
-				settings: userData.settings,
+				userData: userData,
 				user: req.user,
 				errorMessage: "Incorrect password.",
 			}));
