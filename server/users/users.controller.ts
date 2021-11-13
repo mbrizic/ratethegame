@@ -80,12 +80,8 @@ class UsersController {
 			await this.authService.logout(req.user);
 			await this.userService.deleteUser(userId);
 
-			const returnUrl = req.query[returnUrlQueryParam]
-				? req.query[returnUrlQueryParam] as string
-				: "/"
-
 			res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-			res.redirect(returnUrl)
+			res.redirect("/")
 		} catch (error) {
 			next(error);
 		}
