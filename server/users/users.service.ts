@@ -5,7 +5,7 @@ import { isEmptyObject } from '../core/util';
 import { Users } from '../../database/models/users';
 import { ensureInputIsClean } from '../core/input-sanitizer';
 import { ensureInputIsEmail, ensureLongerThan } from '../core/validation';
-import { UserFactory } from './users.factory';
+import { UserFactory, ValidSettingColumName } from './users.factory';
 import SportsService from '../sports/sports.service';
 import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
@@ -132,8 +132,11 @@ class UserService {
 		);
 
 		let settingUpdate = {}
+		var settingColumnName : ValidSettingColumName;
+
 		if (settingData.receiveTopRatedNotifications) {
-			settingUpdate = {...settingUpdate, ["receive_top_rated_notifications"]: (!currentSettings?.receive_top_rated_notifications)} 
+			settingColumnName = "receive_top_rated_notifications";
+			settingUpdate = {...settingUpdate, [settingColumnName]: (!currentSettings?.receive_top_rated_notifications)} 
 		}
 
 		const updated = await UserSettings.update(
