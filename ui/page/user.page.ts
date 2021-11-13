@@ -1,5 +1,5 @@
 import { RemoveUserCommand, UpdateSettingCommand } from "../../server/users/users.dto"
-import { Column, Heading2, Paragraph, RowSpaced, Text } from "../core/html.elements";
+import { Column, Heading2, Paragraph, RowSpaced, Strong, Text } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Layout } from "../_Layout";
@@ -43,7 +43,7 @@ export const UserPage: Page<UserPageModel> = (model: UserPageModel) => {
             Heading2("Want to delete your account?"),
             Card(
                 Column(
-                    Paragraph("This will permanently delete **all** of your user data, including your settings, all of your ratings and subscriptions. You won't be able to login anymore using your credentials."),
+                    Paragraph(`This will permanently delete ${Strong("all")} of your user data, including your settings, all of your ratings and subscriptions. You won't be able to login anymore using your credentials.`, { class: "text-centered" }),
                     Inline(
                         Form<RemoveUserCommand>(`/users/${model.user?.id}/remove`,
                             HiddenInput<RemoveUserCommand>({ name: "id", value: model.user?.id }),
