@@ -55,7 +55,7 @@ export class UserFactory {
             new UserSportSubscriptionsModel(
                 user_subscription.id,
                 user_subscription.sport_id,
-                sports ? getSportName(user_subscription.sport_id, sports) : undefined,
+                getSportName(user_subscription.sport_id, sports),
                 user_subscription.user_id
             )
         )

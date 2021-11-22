@@ -3,13 +3,13 @@ import { DomainModel } from "../core/domain.model"
 export class UserSportSubscriptionsModel implements DomainModel {
 	public readonly id: number | undefined
 	public readonly sportId: number
-	public readonly sportName: string | undefined
+	public readonly sportName: string
 	public readonly userId: number
 
 	constructor(
 		id: number | undefined,
 		sportId: number,
-		sportName: string | undefined,
+		sportName: string,
 		userId: number,
 	) {
 		this.id = id
