@@ -15,4 +15,13 @@ export class UpdateUserCommand {
 	password: string;
 }
 
+export class RemoveUserCommand {
+	id: number;
+	password: string;
+}
+
 export type PotentialUser = UserDto | null | undefined;
+
+export class UpdateSettingCommand {
+	receiveTopRatedNotifications: boolean;
+}

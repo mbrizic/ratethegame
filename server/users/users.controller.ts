@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
+import AuthService from '../auth/auth.service';
+import { UserPage } from '../../ui/page/user.page';
 import { RequestWithUser } from '../auth/auth.interface';
-import { CreateUserCommand } from './users.dto';
+import { CreateUserCommand, RemoveUserCommand, UpdateSettingCommand, UserDto } from './users.dto';
+import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
 
 class UsersController {
+	private authService = new AuthService();
 	public userService = new UserService();
 
 	public getUsers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
@@ -19,8 +23,12 @@ class UsersController {
 		const userId: number = Number(req.params.id);
 
 		try {
-			const findOneUserData = await this.userService.getById(userId);
-			res.status(200).json({ data: findOneUserData, message: 'findOne' });
+			const userData = await this.userService.getById(userId);
+
+			res.send(UserPage({
+				userData: userData,
+				user: req.user,
+			}));
 		} catch (error) {
 			next(error);
 		}
@@ -49,11 +57,43 @@ class UsersController {
 	}
 
 	public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const userId: number = Number(req.params.id);
+		const userId: number = Number(req.user.id);
+		const userData: RemoveUserCommand = req.body;
+		var user;
 
 		try {
+			user = await this.authService.authenticate({ email: req.user.email, password: userData.password })
+
+		} catch {
+			const userData = await this.userService.getById(userId);
+
+			res.send(UserPage({
+				userData: userData,
+				user: req.user,
+				errorMessage: "Incorrect password.",
+			}));
+			
+			return
+		}
+
+		try {
+			await this.authService.logout(req.user);
 			await this.userService.deleteUser(userId);
-			res.status(200).json({ message: 'deleted' });
+
+			res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
+			res.redirect("/")
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public updateUserSetting = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+		const userId: number = Number(req.params.id);
+		const settingData: UpdateSettingCommand = req.body;
+
+		try {
+			const updated = await this.userService.updateUserSetting(userId, settingData);
+			res.redirect(`/users/${userId}`)
 		} catch (error) {
 			next(error);
 		}

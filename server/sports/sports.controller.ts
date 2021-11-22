@@ -9,7 +9,7 @@ class SportsController {
 	public sportsService = new SportsService();
 
 	public getSportsList = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const sports = await this.sportsService.getAll(req.user)
+		const sports = await this.sportsService.getAll(req.user?.id)
 
 		try {
 			res.send(SportListPage({
@@ -41,7 +41,7 @@ class SportsController {
 		const dto: CreateSportCommand = req.body;
 		
 		try {
-			const createdSportId = await this.sportsService.addSport(req.user.id, dto)
+			const createdSportId = await this.sportsService.addSport(req.user.id!, dto)
 			res.redirect(`sports/${createdSportId}`);
 		} catch (error) {
 			next(error);

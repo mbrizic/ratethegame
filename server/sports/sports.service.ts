@@ -16,11 +16,11 @@ export default class SportsService {
 		]
 	}]
 
-	public async getAll(user: PotentialUser): Promise<SportModel[]> {
+	public async getAll(userId?: number): Promise<SportModel[]> {
 		const sports = await Sports.findAll({ include: this.entitiesToInclude })
 
 		return sports.map(
-			sport => SportFactory.FromDatabase(sport, sport.events, user?.id)
+			sport => SportFactory.FromDatabase(sport, sport.events, userId)
 		)
 	}
 

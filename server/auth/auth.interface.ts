@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserDto, PotentialUser } from '../users/users.dto';
+import { PotentialUser, UserDto } from '../users/users.dto';
 
 export interface DataStoredInToken {
 	id: number;

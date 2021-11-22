@@ -26,7 +26,7 @@ export const Layout = (model: PageModel, ...children: ChildElement[]) => {
             Link({ text: "Events", href: "/events" }),
             model.user
                 ? Inline(
-                    Text(model.user.email),
+                    Link({ text: `${model.user.email}`, href: `/users/${model.user.id}` }),
                     Logout()
                 )
                 : callToActionButton

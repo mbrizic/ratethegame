@@ -3,13 +3,13 @@ import { AnalyticsEvent } from "../../server/core/analytics-event.service";
 import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
 import { EventModel } from "../../server/events/event.model";
-import { UserDto } from "../../server/users/users.dto";
+import { UserModel } from "../../server/users/users.model";
 import { Column, Form, Heading2, Heading3, Heading4, ListItem, Row, RowSpaced, SubmitButton, UnorderedList } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
 interface StatsModel extends PageModel {
-    users: UserDto[]
+    users: UserModel[]
     events: EventModel[]
     totalNumberOfVotes: number
     percentageOfPositiveVotes: number
@@ -36,6 +36,26 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                     Heading3(`Events (${model.events.length}):`),
                     UnorderedList(
                         ...model.events.map(event => ListItem(event.name)),
+                    ),
+                )
+            ),
+            RowSpaced(
+                Column(
+                    Heading3(`Users' subscriptions:`),
+                    UnorderedList(
+                        ...model.users.map(user => ListItem(
+                            `${user.email} (${user.totalSubscriptions}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
+                        )),
+                    ),
+                )
+            ),
+            RowSpaced(
+                Column(
+                    Heading3(`Users' settings:`),
+                    UnorderedList(
+                        ...model.users.map(user => ListItem(
+                            `${user.email} > ${user.settings.getSettings().map(setting => ` ${setting.columnName}=${setting.value}`)}`
+                        )),
                     ),
                 )
             ),
