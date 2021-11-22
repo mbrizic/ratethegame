@@ -94,6 +94,12 @@ export const Italic = (text: string) =>
 export const Small = (text: string) =>
     `<small>${text}</small>`
 
+export const Big = (text: string) =>
+    `<big>${text}</big>`
+
+export const Spacing = () =>
+    `<div class="spacing"></div>`
+
 // semantic tags
 
 export const Header = (...children: ChildElement[]) =>

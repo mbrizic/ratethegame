@@ -6,7 +6,7 @@ import { ExecuteJs, Inline } from "../core/html.operator"
 export const Logout: SimpleComponent = () => {
     return Inline(
         Form(`/logout`,
-            SubmitLink("Log out")
+            SubmitLink("Logout")
         ),
         ExecuteJs(`
             let form = document.querySelectorAll("form[action*='/logout']")[0]
