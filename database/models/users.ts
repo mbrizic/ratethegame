@@ -3,6 +3,8 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import type { EventRating, EventRatingId } from './event_rating';
 import type { Events, EventsId } from './events';
 import type { Sports, SportsId } from './sports';
+import type { UserSettings, UserSettingsCreationAttributes, UserSettingsId } from './user_settings';
+import type { UserSportSubscriptions, UserSportSubscriptionsId } from './user_sport_subscriptions';
 
 export interface UsersAttributes {
   id: number;
@@ -60,6 +62,23 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
   hasSport!: Sequelize.HasManyHasAssociationMixin<Sports, SportsId>;
   hasSports!: Sequelize.HasManyHasAssociationsMixin<Sports, SportsId>;
   countSports!: Sequelize.HasManyCountAssociationsMixin;
+  // Users hasOne UserSettings via user_id
+  user_setting!: UserSettings;
+  getUser_setting!: Sequelize.HasOneGetAssociationMixin<UserSettings>;
+  setUser_setting!: Sequelize.HasOneSetAssociationMixin<UserSettings, UserSettingsId>;
+  createUser_setting!: Sequelize.HasOneCreateAssociationMixin<UserSettingsCreationAttributes>;
+  // Users hasMany UserSportSubscriptions via user_id
+  user_sport_subscriptions!: UserSportSubscriptions[];
+  getUser_sport_subscriptions!: Sequelize.HasManyGetAssociationsMixin<UserSportSubscriptions>;
+  setUser_sport_subscriptions!: Sequelize.HasManySetAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  addUser_sport_subscription!: Sequelize.HasManyAddAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  addUser_sport_subscriptions!: Sequelize.HasManyAddAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  createUser_sport_subscription!: Sequelize.HasManyCreateAssociationMixin<UserSportSubscriptions>;
+  removeUser_sport_subscription!: Sequelize.HasManyRemoveAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  removeUser_sport_subscriptions!: Sequelize.HasManyRemoveAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  hasUser_sport_subscription!: Sequelize.HasManyHasAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  hasUser_sport_subscriptions!: Sequelize.HasManyHasAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  countUser_sport_subscriptions!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Users {
     Users.init({

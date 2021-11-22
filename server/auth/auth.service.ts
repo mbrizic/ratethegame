@@ -9,15 +9,16 @@ import { Users } from '../../database/models/users';
 import { getAppConfig } from '../core/app.config'
 import { RegisterUserCommand, LoginUserCommand } from './auth.dto';
 import { ensureInputIsEmail } from '../core/validation';
+import { UserModel } from '../users/users.model';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
  
 class AuthService {
 	private usersService = new UserService()
 
-	public async signup(dto: RegisterUserCommand): Promise<UserDto> {
+	public async signup(dto: RegisterUserCommand): Promise<UserModel> {
 		const created = await this.usersService.createUser(dto)
 
-		recordAnalyticsEvent("UserCreated", created.id)
+		recordAnalyticsEvent("UserCreated", created.id!)
 
 		return created
 	}
@@ -27,7 +28,16 @@ class AuthService {
 			throw new HttpException(400, "Incorrect input data")
 		}
 
-		ensureInputIsEmail(dto.email)
+		const user = await this.authenticate(dto);
+
+		const tokenData = this.createToken(user.id!);
+		const cookie = this.createCookie(tokenData);
+
+		return { cookie, user: this.mapToDto(user) };
+	}
+
+	public async authenticate(dto: LoginUserCommand) {
+		ensureInputIsEmail(dto.email);
 
 		const user = await Users.findOne({ where: { email: dto.email } })
 		if (!user) {
@@ -38,11 +48,7 @@ class AuthService {
 		if (!isPasswordMatching) {
 			throw new HttpException(409, "Password not matching")
 		}
-
-		const tokenData = this.createToken(user.id!)
-		const cookie = this.createCookie(tokenData)
-
-		return { cookie, user: this.mapToDto(user) }
+		return user;
 	}
 
 	public async logout(userData: UpdateUserCommand): Promise<UserDto> {
@@ -55,7 +61,7 @@ class AuthService {
 			throw new HttpException(409, "User not found")
 		}
 
-		return this.mapToDto(user)
+		return this.mapToDto(user);
 	}
 
 	public createToken(userId: number): TokenData {
@@ -69,6 +75,18 @@ class AuthService {
 
 	public createCookie(tokenData: TokenData): string {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
+	}
+
+	public async getUserByID(userId: number): Promise<UserDto> {
+		const user = await Users.findByPk(userId);
+
+		if (!user) {
+			throw new HttpException(409, "User not found")
+		}
+
+		const userDto = this.mapToDto(user);
+		
+		return userDto
 	}
 
 	private mapToDto(model: Users): UserDto {

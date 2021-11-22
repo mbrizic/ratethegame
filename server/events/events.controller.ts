@@ -54,7 +54,7 @@ class EventsController {
 		const dto: RateEventCommand = req.body;
 
 		try {
-			const event = await this.eventsService.addRating(req.user.id, dto)
+			const event = await this.eventsService.addRating(req.user.id!, dto)
 			res.redirect(`/events/${dto.eventId}`);
 		} catch (error) {
 			next(error);
@@ -65,7 +65,7 @@ class EventsController {
 		const dto: RateEventCommand = req.body;
 		
 		try {
-			const event = await this.eventsService.removeRating(req.user.id, dto)
+			const event = await this.eventsService.removeRating(req.user.id!, dto)
 			res.redirect(`/events/${dto.eventId}`);
 		} catch (error) {
 			next(error);

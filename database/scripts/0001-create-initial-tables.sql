@@ -52,3 +52,23 @@ CREATE TABLE public.event_rating
 
     CONSTRAINT unique_user_per_event UNIQUE (created_by, event_id)
 );
+
+CREATE TABLE public.user_settings
+(
+    id SERIAL PRIMARY KEY,
+    receive_top_rated_notifications BOOLEAN NOT NULL DEFAULT false,
+
+    user_id INTEGER NOT NULL REFERENCES public.users (id),
+
+    CONSTRAINT unique_user UNIQUE (user_id)
+);
+
+CREATE TABLE public.user_sport_subscriptions
+(
+    id SERIAL PRIMARY KEY,
+
+    user_id INTEGER NOT NULL REFERENCES public.users (id),
+    sport_id INTEGER NOT NULL REFERENCES public.sports (id),
+
+    CONSTRAINT unique_user_per_sport UNIQUE (user_id, sport_id)    
+);
