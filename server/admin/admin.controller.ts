@@ -1,13 +1,15 @@
-import { NextFunction, Response } from 'express';
-import AuthService from '../auth/auth.service';
-import { RequestWithPotentialUser } from '../auth/auth.interface';
-import EventsService from '../events/events.service';
-import { StatsPage } from '../../ui/page/stats.page';
-import UserService from '../users/users.service';
-import { clearPageViews, getPageViewsPerDate } from '../core/pageview.service';
-import { clearRecordedErrors, getRecordedErrors } from '../core/error.service';
-import { clearCssCache } from '../../ui/core/css.service';
-import { clearAnalyticsEvents, getAnalyticsEvents } from '../core/analytics-event.service';
+import { NextFunction, Response } from 'express'
+import AuthService from '../auth/auth.service'
+import { RequestWithPotentialUser } from '../auth/auth.interface'
+import EventsService from '../events/events.service'
+import { StatsPage } from '../../ui/page/stats.page'
+import UserService from '../users/users.service'
+import { clearPageViews, getPageViewsPerDate } from '../core/pageview.service'
+import { clearRecordedErrors, getRecordedErrors } from '../core/error.service'
+import { clearCssCache } from '../../ui/core/css.service'
+import { clearAnalyticsEvents, getAnalyticsEvents } from '../core/analytics-event.service'
+import { getCacheStats } from '../core/cache.service'
+import { AppSettings, getAppSettings, updateAppSettings } from '../core/app.settings'
 
 export class AdminController {
 	
@@ -25,6 +27,8 @@ export class AdminController {
 		const pageviews = getPageViewsPerDate()
 		const recordedErrors = getRecordedErrors()
 		const analyticsEvents = getAnalyticsEvents()
+		const cacheStats = getCacheStats()
+		const appSettings = getAppSettings()
 
 		try {
 			res.send(
@@ -36,7 +40,9 @@ export class AdminController {
 					analyticsEvents,
 					recordedErrors,
 					totalNumberOfVotes,
-					percentageOfPositiveVotes
+					percentageOfPositiveVotes,
+					cacheStats,
+					appSettings
 				})
 			)	
 		} catch (error) {
@@ -61,6 +67,11 @@ export class AdminController {
 
 	public clearCssCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		clearCssCache()
+		res.redirect("/admin")
+	}
+
+	public setAppSettings = async (req: RequestWithPotentialUser<AppSettings>, res: Response, next: NextFunction) => {
+		updateAppSettings(req.body)
 		res.redirect("/admin")
 	}
 
