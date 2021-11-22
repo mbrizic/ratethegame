@@ -41,6 +41,26 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
             ),
             RowSpaced(
                 Column(
+                    Heading3(`Users' subscriptions:`),
+                    UnorderedList(
+                        ...model.users.map(user => ListItem(
+                            `${user.email} (${user.totalSubscriptions}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
+                        )),
+                    ),
+                )
+            ),
+            RowSpaced(
+                Column(
+                    Heading3(`Users' settings:`),
+                    UnorderedList(
+                        ...model.users.map(user => ListItem(
+                            `${user.email} > ${user.settings.getSettings().map(setting => ` ${setting.columnName}=${setting.value}`)}`
+                        )),
+                    ),
+                )
+            ),
+            RowSpaced(
+                Column(
                     Heading3(`Errors (${model.recordedErrors.length}): `),
                     Form("/admin/errors/clear",
                         SubmitButton("Clear all errors")
