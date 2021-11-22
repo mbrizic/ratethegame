@@ -51,17 +51,17 @@ class AuthService {
 		return user;
 	}
 
-	public async logout(userData: UpdateUserCommand): Promise<UserModel> {
+	public async logout(userData: UpdateUserCommand): Promise<UserDto> {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data")
 		}
 
-		const user = await this.usersService.getByPassword(userData.password);
+		const user = await Users.findOne({ where: { password: userData.password } })
 		if (!user) {
 			throw new HttpException(409, "User not found")
 		}
 
-		return user;
+		return this.mapToDto(user);
 	}
 
 	public createToken(userId: number): TokenData {

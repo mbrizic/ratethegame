@@ -29,7 +29,7 @@ export class UserFactory {
 
 	public static FromDatabase(
 		user: Users,
-        sports: SportModel[] | undefined = undefined,
+        sports: SportModel[],
 	) {
 		if (user == null) {
 			throw new ValidationException("No user with that ID")

@@ -34,28 +34,6 @@ class UserService {
 		return model;
 	}
 
-	public async getByEmail(email: string): Promise<UserModel> {
-		const user = await Users.findOne({ where: { email: email }, include: this.entitiesToInclude });
-		if (!user) {
-			throw new HttpException(409, `Email ${email} not found.`);
-		}
-
-		const model = UserFactory.FromDatabase(user);
-
-		return model;
-	}
-
-	public async getByPassword(password: string): Promise<UserModel> {
-		const user = await Users.findOne({ where: { password: password }, include: this.entitiesToInclude });
-		if (!user) {
-			throw new HttpException(409, `Password ${password} not found.`);
-		}
-
-		const model = UserFactory.FromDatabase(user);
-
-		return model;
-	}
-
 	private async FromDatabaseWithSports(user: Users) {
 		const sports = await this.sportsService.getAll(user.id);
 		const userSports = sports.filter(sport => user.user_sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
