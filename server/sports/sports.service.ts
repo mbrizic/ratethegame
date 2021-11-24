@@ -9,10 +9,11 @@ import { PotentialUser } from '../users/users.dto'
 import { SportModel } from './sports.model'
 import ValidationException from '../core/exceptions/validation.exception'
 import { SportFactory } from './sports.factory'
+
 export default class SportsService {
 	private entitiesToInclude = [{
 		model: Events, as: "events", include: [
-			{ model: EventRating, as: "event_ratings" }
+			{ model: EventRating, as: "eventRatings" }
 		]
 	}]
 
@@ -51,7 +52,7 @@ export default class SportsService {
 		const created = await Sports.create({
 			name: sport.name,
 			description: sport.description,
-			created_by: sport.createdByUserId
+			createdBy: sport.createdByUserId
 		})
 
 		return created.id

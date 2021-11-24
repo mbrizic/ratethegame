@@ -29,7 +29,7 @@ export class SportFactory {
 			sport.id,
 			sport.name,
 			sport.description,
-			sport.created_by,
+			sport.createdBy,
 			eventModels
 		)
 	}

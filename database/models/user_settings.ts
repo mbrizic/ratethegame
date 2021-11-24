@@ -4,8 +4,8 @@ import type { Users, UsersId } from './users';
 
 export interface UserSettingsAttributes {
   id: number;
-  receive_top_rated_notifications: boolean;
-  user_id: number;
+  receiveTopRatedNotifications: boolean;
+  userId: number;
 }
 
 export type UserSettingsPk = "id";
@@ -15,10 +15,10 @@ export type UserSettingsCreationAttributes = Optional<UserSettingsAttributes, Us
 
 export class UserSettings extends Model<UserSettingsAttributes, UserSettingsCreationAttributes> implements UserSettingsAttributes {
   id!: number;
-  receive_top_rated_notifications!: boolean;
-  user_id!: number;
+  receiveTopRatedNotifications!: boolean;
+  userId!: number;
 
-  // UserSettings belongsTo Users via user_id
+  // UserSettings belongsTo Users via userId
   user!: Users;
   getUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
   setUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
@@ -32,19 +32,21 @@ export class UserSettings extends Model<UserSettingsAttributes, UserSettingsCrea
       allowNull: false,
       primaryKey: true
     },
-    receive_top_rated_notifications: {
+    receiveTopRatedNotifications: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
+      field: 'receive_top_rated_notifications'
     },
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
       },
-      unique: "unique_user"
+      unique: "unique_user",
+      field: 'user_id'
     }
   }, {
     sequelize,

@@ -65,7 +65,7 @@ export async function getUserFromCookieIfExists(req: RequestWithPotentialUser) {
 		const userId = verificationResponse.id;
 		
 		try {
-			const user = await authService.getUserByID(userId)
+			const user = await authService.getUserById(userId)
 			req.user = user;
 			
 		} catch (error) {

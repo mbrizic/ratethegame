@@ -134,9 +134,11 @@ export const Form = <T> (action: string, ...children: FormInputElement<T>[]) =>
 export const SubmitButton = (text: ChildElement, options: BasicAttributes = {}) =>
     `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
 
+export const Label = (text: ChildElement, options: BasicAttributes = {}) =>
+`<label ${addBasicAttributes(options)}>${text}</label>`
+
 export const SubmitLink = (text: ChildElement, options: BasicAttributes = {}) => {
     options.class = options.class += " btn-link"
-
     return `<button type="submit" ${addBasicAttributes(options)}>${text}</button>`
 }
 

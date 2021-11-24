@@ -1,8 +1,8 @@
 import { Component } from "../core/html.interfaces"
-import { Column, Heading2, Paragraph, RowSpaced, Text } from "../core/html.elements";
-import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../core/html.elements"
+import { Column, Paragraph, RowSpaced } from "../core/html.elements";
+import { Form, HiddenInput, SubmitButton } from "../core/html.elements"
 import { Card } from "../component/card.component";
-import { UserSettingModel } from "../../server/users/user-setting-model";
+import { UserSettingModel } from "../../server/users/user-setting.model";
 import { PotentialUser, UpdateSettingCommand } from "../../server/users/users.dto";
 import { SettingName } from "../../server/users/user-settings.model";
 

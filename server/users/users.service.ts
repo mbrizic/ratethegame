@@ -12,34 +12,39 @@ import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
+import { SportModel } from '../sports/sports.model';
 
 class UserService {
-	private entitiesToInclude = ["user_setting", "user_sport_subscriptions"]
+	private entitiesToInclude = ["userSetting", "userSportSubscriptions"]
+
+	// TODO: consider not using sports service here, but sports queries instead
 	private sportsService = new SportsService()
 
-	public async getAll(): Promise<UserModel[]> {
+	public async getAll(userId: number | undefined) {
+		const sports = await this.sportsService.getAll(userId);
 		const users = await Users.findAll({ include: this.entitiesToInclude });
 
-		return Promise.all(users.map(user => this.FromDatabaseWithSports(user)));
+		return users.map(user => this.FromDatabaseWithSports(user, sports));
 	}
 
 	public async getById(userId: number): Promise<UserModel> {
+		const sports = await this.sportsService.getAll(userId);
 		const user = await Users.findByPk(userId, { include: this.entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
 		}
 
-		const model = await this.FromDatabaseWithSports(user);
+		const model = await this.FromDatabaseWithSports(user, sports);
 
 		return model;
 	}
 
-	private async FromDatabaseWithSports(user: Users) {
-		const sports = await this.sportsService.getAll(user.id);
-		const userSports = sports.filter(sport => user.user_sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
+	private FromDatabaseWithSports(user: Users, sports: SportModel[]) {
+		const userSports = sports.filter(sport => 
+			user.userSportSubscriptions.some(subscription => subscription.sportId == sport.id)
+		);
 
-		const model = UserFactory.FromDatabase(user, userSports);
-		return model;
+		return UserFactory.FromDatabase(user, userSports);
 	}
 
 	public async createUser(dto: CreateUserCommand): Promise<UserModel> {
@@ -64,14 +69,14 @@ class UserService {
 		const userModel = UserFactory.Create(dto.email, hashedPassword, false)
 
 		const createdUser = await Users.create({
-			email: userModel.email,
-			password: userModel.password,
-			is_admin: userModel.isAdmin
+			email: dto.email,
+			password: hashedPassword,
+			isAdmin: false
 		});
 
 		const createdSettings = await UserSettings.create({
-			receive_top_rated_notifications: userModel.settings.receiveTopRatedNotifications,
-			user_id: createdUser.id
+			receiveTopRatedNotifications: userModel.settings.receiveTopRatedNotifications,
+			userId: createdUser.id
 		})
 
 		if (!createdSettings) {
@@ -106,20 +111,20 @@ class UserService {
 		}
 
 		const currentSettings = await UserSettings.findOne(
-			{ where: { user_id: userId } }
+			{ where: { userId: userId } }
 		);
 
 		let settingUpdate = {}
 		var settingColumnName : ValidSettingColumName;
 
 		if (settingData.receiveTopRatedNotifications) {
-			settingColumnName = "receive_top_rated_notifications";
-			settingUpdate = {...settingUpdate, [settingColumnName]: (!currentSettings?.receive_top_rated_notifications)} 
+			settingColumnName = "receiveTopRatedNotifications";
+			settingUpdate = {...settingUpdate, [settingColumnName]: (!currentSettings?.receiveTopRatedNotifications)} 
 		}
 
 		const updated = await UserSettings.update(
 			settingUpdate,
-			{ where: { user_id: userId } }
+			{ where: { userId: userId } }
 		);
 
 		if (!updated) {
@@ -130,13 +135,13 @@ class UserService {
 	}
 
 	public async deleteUser(userId: number) {
-		const deletedSettings = await UserSettings.destroy({ where: { user_id: userId } });
+		const deletedSettings = await UserSettings.destroy({ where: { userId: userId } });
 		if (!deletedSettings) {
 			throw new HttpException(409, "User settings not found");
 		}
 
-		const deletedRatings = await EventRating.destroy({ where: { created_by: userId } });
-		const deletedSubscriptions = await UserSportSubscriptions.destroy({ where: { user_id: userId } });
+		const deletedRatings = await EventRating.destroy({ where: { createdBy: userId } });
+		const deletedSubscriptions = await UserSportSubscriptions.destroy({ where: { userId: userId } });
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {

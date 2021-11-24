@@ -33,13 +33,13 @@ export class EventFactory {
 			throw new ValidationException("No event with that ID")
 		}
 
-		const ratings = event.event_ratings.map(rating =>
+		const ratings = event.eventRatings.map(rating =>
 			new EventRatingModel(
 				rating.id,
-				rating.would_recommend,
-				rating.created_at,
-				rating.event_id,
-				rating.created_by
+				rating.wouldRecommend,
+				rating.createdAt,
+				rating.eventId,
+				rating.createdBy
 			)
 		)
 
@@ -47,9 +47,9 @@ export class EventFactory {
 			event.id,
 			event.name,
 			event.datetime,
-			event.created_by,
+			event.createdBy,
 			userId,
-			event.sport_id,
+			event.sportId,
 			sport.name,
 			ratings
 		)

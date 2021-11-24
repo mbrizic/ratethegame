@@ -22,6 +22,7 @@ async function runMigrations() {
 		dialect: "postgres",
 		lang: "ts",
 		caseModel: "p",
+		caseProp: "c",
 		singularize: false,
 	});
 

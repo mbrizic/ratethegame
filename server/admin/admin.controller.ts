@@ -23,7 +23,7 @@ export class AdminController {
 		const numberOfNegativeVotes = await this.eventsService.getEventRatingsCount({ votedPositively: false })
 		const totalNumberOfVotes = numberOfNegativeVotes + numberOfPositiveVotes
 		const percentageOfPositiveVotes = Math.round(numberOfPositiveVotes / totalNumberOfVotes * 100)
-		const users = await this.userService.getAll()
+		const users = await this.userService.getAll(req.user?.id)
 		const pageviews = getPageViewsPerDate()
 		const recordedErrors = getRecordedErrors()
 		const analyticsEvents = getAnalyticsEvents()

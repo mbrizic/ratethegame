@@ -5,6 +5,8 @@ import { Component } from "../core/html.interfaces";
 import { Inline } from "../core/html.operator";
 
 export const EventInline: Component<EventModel> = (event: EventModel) => {
+    
+    const shouldDisplayRatingSummary = event.hasEventStarted() && event.hasAnyRatings()
 
     return RowSpaced(
         Text(
@@ -12,7 +14,7 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
             Small(` (${event.sportName})`),
         ),
         Text(
-            event.hasEventStarted()
+            shouldDisplayRatingSummary
                 ? eventRatingSummary(event)
                 : eventTimeSummary(event)
         )

@@ -5,34 +5,34 @@ import type { Users, UsersId } from './users';
 
 export interface EventRatingAttributes {
   id: number;
-  would_recommend: boolean;
-  created_at: Date;
-  created_by: number;
-  event_id: number;
+  wouldRecommend: boolean;
+  createdAt: Date;
+  createdBy: number;
+  eventId: number;
 }
 
 export type EventRatingPk = "id";
 export type EventRatingId = EventRating[EventRatingPk];
-export type EventRatingOptionalAttributes = "id" | "created_at";
+export type EventRatingOptionalAttributes = "id" | "createdAt";
 export type EventRatingCreationAttributes = Optional<EventRatingAttributes, EventRatingOptionalAttributes>;
 
 export class EventRating extends Model<EventRatingAttributes, EventRatingCreationAttributes> implements EventRatingAttributes {
   id!: number;
-  would_recommend!: boolean;
-  created_at!: Date;
-  created_by!: number;
-  event_id!: number;
+  wouldRecommend!: boolean;
+  createdAt!: Date;
+  createdBy!: number;
+  eventId!: number;
 
-  // EventRating belongsTo Events via event_id
+  // EventRating belongsTo Events via eventId
   event!: Events;
   getEvent!: Sequelize.BelongsToGetAssociationMixin<Events>;
   setEvent!: Sequelize.BelongsToSetAssociationMixin<Events, EventsId>;
   createEvent!: Sequelize.BelongsToCreateAssociationMixin<Events>;
-  // EventRating belongsTo Users via created_by
-  created_by_user!: Users;
-  getCreated_by_user!: Sequelize.BelongsToGetAssociationMixin<Users>;
-  setCreated_by_user!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
-  createCreated_by_user!: Sequelize.BelongsToCreateAssociationMixin<Users>;
+  // EventRating belongsTo Users via createdBy
+  createdByUser!: Users;
+  getCreatedByUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
+  setCreatedByUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
+  createCreatedByUser!: Sequelize.BelongsToCreateAssociationMixin<Users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof EventRating {
     EventRating.init({
@@ -42,32 +42,36 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
       allowNull: false,
       primaryKey: true
     },
-    would_recommend: {
+    wouldRecommend: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+      field: 'would_recommend'
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      field: 'created_at'
     },
-    created_by: {
+    createdBy: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
       },
-      unique: "unique_user_per_event"
+      unique: "unique_user_per_event",
+      field: 'created_by'
     },
-    event_id: {
+    eventId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'events',
         key: 'id'
       },
-      unique: "unique_user_per_event"
+      unique: "unique_user_per_event",
+      field: 'event_id'
     }
   }, {
     sequelize,

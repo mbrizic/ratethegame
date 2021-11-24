@@ -18,7 +18,7 @@ import { EventRatingModel } from './event-rating.model';
 const defaultPageSize = 10;
 
 class EventsService {
-	private entitiesToInclude = ["sport", "event_ratings"]
+	private defaultEntitiesToInclude = [sportsEntity, ratingsEntity]
 
 	public async getAllEvents(user: PotentialUser): Promise<EventModel[]> {
 		return this.getAll(user)
@@ -36,7 +36,7 @@ class EventsService {
 	public async getBestRated(user: PotentialUser): Promise<EventModel[]> {
 		const events = await this.getAll(user, {
 			where: {
-				datetime: beforeDate(now())
+				datetime: beforeDate(now()),
 			},
 			order: [ [ 'name', 'DESC'] ],
 			limit: defaultPageSize
@@ -68,12 +68,12 @@ class EventsService {
 
 		const sport = await Sports.findByPk(dto.sportId)
 
-		const model = EventFactory.Create(dto.name, dto.date, sport, user.id!)
+		const model = EventFactory.Create(dto.name, dto.date, sport, user.id)
 
 		const created = await Events.create({
 			name: model.name,
-			sport_id: model.sportId,
-			created_by: user.id!,
+			sportId: model.sportId,
+			createdBy: user.id,
 			datetime: model.date,
 		});
 
@@ -86,9 +86,9 @@ class EventsService {
 		}
 
 		await EventRating.create({
-			event_id: dto.eventId,
-			created_by: userId,
-			would_recommend: dto.wouldRecommend,
+			eventId: dto.eventId,
+			createdBy: userId,
+			wouldRecommend: dto.wouldRecommend,
 		})
 
 		recordAnalyticsEvent("UserVoted", userId, dto.eventId, dto.wouldRecommend.toString())
@@ -103,8 +103,8 @@ class EventsService {
 
 		const deleted = await EventRating.destroy({
 			where: {
-				created_by: userId,
-				event_id: dto.eventId
+				createdBy: userId,
+				eventId: dto.eventId
 			}
 		});
 
@@ -122,7 +122,7 @@ class EventsService {
 	}): Promise<number> {
 		return await EventRating.count({
 			where: {
-				would_recommend: options.votedPositively
+				wouldRecommend: options.votedPositively
 			}
 		})
 	}

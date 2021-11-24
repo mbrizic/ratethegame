@@ -1,14 +1,13 @@
-import { Sports } from "../../database/models/sports"
 import { Users } from "../../database/models/users"
 import { UserSettingsAttributes } from "../../database/models/user_settings"
 import ValidationException from "../core/exceptions/validation.exception"
 import { SportModel } from "../sports/sports.model"
-import { UserSettingModel } from "./user-setting-model"
+import { UserSettingModel } from "./user-setting.model"
 import { UserSettingsModel } from "./user-settings.model"
 import { UserSportSubscriptionsModel } from "./user-sport-subscriptions.model"
 import { UserModel } from "./users.model"
 
-export type ValidSettingColumNames = Pick<UserSettingsAttributes, "receive_top_rated_notifications">
+export type ValidSettingColumNames = Pick<UserSettingsAttributes, "receiveTopRatedNotifications">
 export type ValidSettingColumName = keyof ValidSettingColumNames
 
 export class UserFactory {
@@ -35,8 +34,8 @@ export class UserFactory {
 			throw new ValidationException("No user with that ID")
 		}
 
-        function getSportName(sport_id: number, sports: SportModel[]) {
-            const sport = sports.find(sport => sport.id == sport_id )
+        function getSportName(sportId: number, sports: SportModel[]) {
+            const sport = sports.find(sport => sport.id == sportId )
             if (!sport) {
                 throw new ValidationException("No sport with that ID")
             }
@@ -45,18 +44,18 @@ export class UserFactory {
         }
 
         const settings = new UserSettingsModel(
-            user.user_setting.id,
-            user.user_setting.user_id,
-            new UserSettingModel("Receive notifications about top-rated sport events", user.user_setting.receive_top_rated_notifications, "receive_top_rated_notifications")
+            user.userSetting.id,
+            user.userSetting.userId,
+            new UserSettingModel("Receive notifications about top-rated sport events", user.userSetting.receiveTopRatedNotifications, "receiveTopRatedNotifications")
         )
 
-        const subscriptions = user.user_sport_subscriptions.map(
-            user_subscription =>
+        const subscriptions = user.userSportSubscriptions.map(
+            userSubscription =>
             new UserSportSubscriptionsModel(
-                user_subscription.id,
-                user_subscription.sport_id,
-                getSportName(user_subscription.sport_id, sports),
-                user_subscription.user_id
+                userSubscription.id,
+                userSubscription.sportId,
+                getSportName(userSubscription.sportId, sports),
+                userSubscription.userId
             )
         )
 
@@ -64,7 +63,7 @@ export class UserFactory {
 			user.id,
 			user.email,
 			user.password,
-			user.is_admin,
+			user.isAdmin,
             subscriptions,
             settings
 		)

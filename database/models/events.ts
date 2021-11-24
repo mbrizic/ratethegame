@@ -8,46 +8,46 @@ export interface EventsAttributes {
   id: number;
   name: string;
   datetime: Date;
-  created_at: Date;
-  created_by: number;
-  sport_id: number;
+  createdAt: Date;
+  createdBy: number;
+  sportId: number;
 }
 
 export type EventsPk = "id";
 export type EventsId = Events[EventsPk];
-export type EventsOptionalAttributes = "id" | "created_at";
+export type EventsOptionalAttributes = "id" | "createdAt";
 export type EventsCreationAttributes = Optional<EventsAttributes, EventsOptionalAttributes>;
 
 export class Events extends Model<EventsAttributes, EventsCreationAttributes> implements EventsAttributes {
   id!: number;
   name!: string;
   datetime!: Date;
-  created_at!: Date;
-  created_by!: number;
-  sport_id!: number;
+  createdAt!: Date;
+  createdBy!: number;
+  sportId!: number;
 
-  // Events hasMany EventRating via event_id
-  event_ratings!: EventRating[];
-  getEvent_ratings!: Sequelize.HasManyGetAssociationsMixin<EventRating>;
-  setEvent_ratings!: Sequelize.HasManySetAssociationsMixin<EventRating, EventRatingId>;
-  addEvent_rating!: Sequelize.HasManyAddAssociationMixin<EventRating, EventRatingId>;
-  addEvent_ratings!: Sequelize.HasManyAddAssociationsMixin<EventRating, EventRatingId>;
-  createEvent_rating!: Sequelize.HasManyCreateAssociationMixin<EventRating>;
-  removeEvent_rating!: Sequelize.HasManyRemoveAssociationMixin<EventRating, EventRatingId>;
-  removeEvent_ratings!: Sequelize.HasManyRemoveAssociationsMixin<EventRating, EventRatingId>;
-  hasEvent_rating!: Sequelize.HasManyHasAssociationMixin<EventRating, EventRatingId>;
-  hasEvent_ratings!: Sequelize.HasManyHasAssociationsMixin<EventRating, EventRatingId>;
-  countEvent_ratings!: Sequelize.HasManyCountAssociationsMixin;
-  // Events belongsTo Sports via sport_id
+  // Events hasMany EventRating via eventId
+  eventRatings!: EventRating[];
+  getEventRatings!: Sequelize.HasManyGetAssociationsMixin<EventRating>;
+  setEventRatings!: Sequelize.HasManySetAssociationsMixin<EventRating, EventRatingId>;
+  addEventRating!: Sequelize.HasManyAddAssociationMixin<EventRating, EventRatingId>;
+  addEventRatings!: Sequelize.HasManyAddAssociationsMixin<EventRating, EventRatingId>;
+  createEventRating!: Sequelize.HasManyCreateAssociationMixin<EventRating>;
+  removeEventRating!: Sequelize.HasManyRemoveAssociationMixin<EventRating, EventRatingId>;
+  removeEventRatings!: Sequelize.HasManyRemoveAssociationsMixin<EventRating, EventRatingId>;
+  hasEventRating!: Sequelize.HasManyHasAssociationMixin<EventRating, EventRatingId>;
+  hasEventRatings!: Sequelize.HasManyHasAssociationsMixin<EventRating, EventRatingId>;
+  countEventRatings!: Sequelize.HasManyCountAssociationsMixin;
+  // Events belongsTo Sports via sportId
   sport!: Sports;
   getSport!: Sequelize.BelongsToGetAssociationMixin<Sports>;
   setSport!: Sequelize.BelongsToSetAssociationMixin<Sports, SportsId>;
   createSport!: Sequelize.BelongsToCreateAssociationMixin<Sports>;
-  // Events belongsTo Users via created_by
-  created_by_user!: Users;
-  getCreated_by_user!: Sequelize.BelongsToGetAssociationMixin<Users>;
-  setCreated_by_user!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
-  createCreated_by_user!: Sequelize.BelongsToCreateAssociationMixin<Users>;
+  // Events belongsTo Users via createdBy
+  createdByUser!: Users;
+  getCreatedByUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
+  setCreatedByUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
+  createCreatedByUser!: Sequelize.BelongsToCreateAssociationMixin<Users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Events {
     Events.init({
@@ -65,26 +65,29 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
       type: DataTypes.DATE,
       allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      field: 'created_at'
     },
-    created_by: {
+    createdBy: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
-      }
+      },
+      field: 'created_by'
     },
-    sport_id: {
+    sportId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'sports',
         key: 'id'
-      }
+      },
+      field: 'sport_id'
     }
   }, {
     sequelize,

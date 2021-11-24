@@ -8,23 +8,23 @@ export interface SportsAttributes {
   id: number;
   name: string;
   description?: string;
-  created_at: Date;
-  created_by: number;
+  createdAt: Date;
+  createdBy: number;
 }
 
 export type SportsPk = "id";
 export type SportsId = Sports[SportsPk];
-export type SportsOptionalAttributes = "id" | "description" | "created_at";
+export type SportsOptionalAttributes = "id" | "description" | "createdAt";
 export type SportsCreationAttributes = Optional<SportsAttributes, SportsOptionalAttributes>;
 
 export class Sports extends Model<SportsAttributes, SportsCreationAttributes> implements SportsAttributes {
   id!: number;
   name!: string;
   description?: string;
-  created_at!: Date;
-  created_by!: number;
+  createdAt!: Date;
+  createdBy!: number;
 
-  // Sports hasMany Events via sport_id
+  // Sports hasMany Events via sportId
   events!: Events[];
   getEvents!: Sequelize.HasManyGetAssociationsMixin<Events>;
   setEvents!: Sequelize.HasManySetAssociationsMixin<Events, EventsId>;
@@ -36,23 +36,23 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
   hasEvent!: Sequelize.HasManyHasAssociationMixin<Events, EventsId>;
   hasEvents!: Sequelize.HasManyHasAssociationsMixin<Events, EventsId>;
   countEvents!: Sequelize.HasManyCountAssociationsMixin;
-  // Sports hasMany UserSportSubscriptions via sport_id
-  user_sport_subscriptions!: UserSportSubscriptions[];
-  getUser_sport_subscriptions!: Sequelize.HasManyGetAssociationsMixin<UserSportSubscriptions>;
-  setUser_sport_subscriptions!: Sequelize.HasManySetAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  addUser_sport_subscription!: Sequelize.HasManyAddAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  addUser_sport_subscriptions!: Sequelize.HasManyAddAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  createUser_sport_subscription!: Sequelize.HasManyCreateAssociationMixin<UserSportSubscriptions>;
-  removeUser_sport_subscription!: Sequelize.HasManyRemoveAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  removeUser_sport_subscriptions!: Sequelize.HasManyRemoveAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  hasUser_sport_subscription!: Sequelize.HasManyHasAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  hasUser_sport_subscriptions!: Sequelize.HasManyHasAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
-  countUser_sport_subscriptions!: Sequelize.HasManyCountAssociationsMixin;
-  // Sports belongsTo Users via created_by
-  created_by_user!: Users;
-  getCreated_by_user!: Sequelize.BelongsToGetAssociationMixin<Users>;
-  setCreated_by_user!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
-  createCreated_by_user!: Sequelize.BelongsToCreateAssociationMixin<Users>;
+  // Sports hasMany UserSportSubscriptions via sportId
+  userSportSubscriptions!: UserSportSubscriptions[];
+  getUserSportSubscriptions!: Sequelize.HasManyGetAssociationsMixin<UserSportSubscriptions>;
+  setUserSportSubscriptions!: Sequelize.HasManySetAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  addUserSportSubscription!: Sequelize.HasManyAddAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  addUserSportSubscriptions!: Sequelize.HasManyAddAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  createUserSportSubscription!: Sequelize.HasManyCreateAssociationMixin<UserSportSubscriptions>;
+  removeUserSportSubscription!: Sequelize.HasManyRemoveAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  removeUserSportSubscriptions!: Sequelize.HasManyRemoveAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  hasUserSportSubscription!: Sequelize.HasManyHasAssociationMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  hasUserSportSubscriptions!: Sequelize.HasManyHasAssociationsMixin<UserSportSubscriptions, UserSportSubscriptionsId>;
+  countUserSportSubscriptions!: Sequelize.HasManyCountAssociationsMixin;
+  // Sports belongsTo Users via createdBy
+  createdByUser!: Users;
+  getCreatedByUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
+  setCreatedByUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
+  createCreatedByUser!: Sequelize.BelongsToCreateAssociationMixin<Users>;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Sports {
     Sports.init({
@@ -71,18 +71,20 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
       type: DataTypes.TEXT,
       allowNull: true
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      field: 'created_at'
     },
-    created_by: {
+    createdBy: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
-      }
+      },
+      field: 'created_by'
     }
   }, {
     sequelize,

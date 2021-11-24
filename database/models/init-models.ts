@@ -50,22 +50,22 @@ export function initModels(sequelize: Sequelize) {
   UserSportSubscriptions.initModel(sequelize);
   Users.initModel(sequelize);
 
-  EventRating.belongsTo(Events, { as: "event", foreignKey: "event_id"});
-  Events.hasMany(EventRating, { as: "event_ratings", foreignKey: "event_id"});
-  Events.belongsTo(Sports, { as: "sport", foreignKey: "sport_id"});
-  Sports.hasMany(Events, { as: "events", foreignKey: "sport_id"});
-  UserSportSubscriptions.belongsTo(Sports, { as: "sport", foreignKey: "sport_id"});
-  Sports.hasMany(UserSportSubscriptions, { as: "user_sport_subscriptions", foreignKey: "sport_id"});
-  EventRating.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
-  Users.hasMany(EventRating, { as: "event_ratings", foreignKey: "created_by"});
-  Events.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
-  Users.hasMany(Events, { as: "events", foreignKey: "created_by"});
-  Sports.belongsTo(Users, { as: "created_by_user", foreignKey: "created_by"});
-  Users.hasMany(Sports, { as: "sports", foreignKey: "created_by"});
-  UserSettings.belongsTo(Users, { as: "user", foreignKey: "user_id"});
-  Users.hasOne(UserSettings, { as: "user_setting", foreignKey: "user_id"});
-  UserSportSubscriptions.belongsTo(Users, { as: "user", foreignKey: "user_id"});
-  Users.hasMany(UserSportSubscriptions, { as: "user_sport_subscriptions", foreignKey: "user_id"});
+  EventRating.belongsTo(Events, { as: "event", foreignKey: "eventId"});
+  Events.hasMany(EventRating, { as: "eventRatings", foreignKey: "eventId"});
+  Events.belongsTo(Sports, { as: "sport", foreignKey: "sportId"});
+  Sports.hasMany(Events, { as: "events", foreignKey: "sportId"});
+  UserSportSubscriptions.belongsTo(Sports, { as: "sport", foreignKey: "sportId"});
+  Sports.hasMany(UserSportSubscriptions, { as: "userSportSubscriptions", foreignKey: "sportId"});
+  EventRating.belongsTo(Users, { as: "createdByUser", foreignKey: "createdBy"});
+  Users.hasMany(EventRating, { as: "eventRatings", foreignKey: "createdBy"});
+  Events.belongsTo(Users, { as: "createdByUser", foreignKey: "createdBy"});
+  Users.hasMany(Events, { as: "events", foreignKey: "createdBy"});
+  Sports.belongsTo(Users, { as: "createdByUser", foreignKey: "createdBy"});
+  Users.hasMany(Sports, { as: "sports", foreignKey: "createdBy"});
+  UserSettings.belongsTo(Users, { as: "user", foreignKey: "userId"});
+  Users.hasOne(UserSettings, { as: "userSetting", foreignKey: "userId"});
+  UserSportSubscriptions.belongsTo(Users, { as: "user", foreignKey: "userId"});
+  Users.hasMany(UserSportSubscriptions, { as: "userSportSubscriptions", foreignKey: "userId"});
 
   return {
     EventRating: EventRating,

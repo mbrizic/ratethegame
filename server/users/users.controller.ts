@@ -10,15 +10,6 @@ class UsersController {
 	private authService = new AuthService();
 	public userService = new UserService();
 
-	public getUsers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		try {
-			const findAllUsersData = await this.userService.getAll();
-			res.status(200).json({ data: findAllUsersData, message: 'findAll' });
-		} catch (error) {
-			next(error);
-		}
-	}
-
 	public getUserById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userId: number = Number(req.params.id);
 
