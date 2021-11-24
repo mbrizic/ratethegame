@@ -4,7 +4,7 @@ import { CacheStats } from "../../server/core/cache.service";
 import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
 import { EventModel } from "../../server/events/event.model";
-import { Column, Form, Heading2, Heading3, Heading4, HiddenInput, ListItem, Row, RowSpaced, SubmitButton, UnorderedList } from "../core/html.elements";
+import { Column, Form, Heading2, Heading3, Heading4, HiddenInput, ListItem, Paragraph, Row, RowSpaced, SubmitButton, UnorderedList } from "../core/html.elements";
 import { UserModel } from "../../server/users/users.model";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
@@ -127,22 +127,28 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
             Heading3("App settings: "),
             Row(
                 UnorderedList(
-                    ...Object.keys(model.appSettings).map((appSetting: keyof AppSettings) => 
+                    ...Object.keys(model.appSettings).map((appSetting: keyof AppSettings) =>
                         ListItem(
-                            Form<AppSettings>("/admin/app-settings",
-                                HiddenInput({ 
-                                    name: "areOptimizationHacksEnabled",
-                                    value: appSetting === "areOptimizationHacksEnabled" 
-                                        ? !model.appSettings.areOptimizationHacksEnabled
-                                        : model.appSettings.areOptimizationHacksEnabled
-                                }),
-                                HiddenInput({ 
-                                    name: "isCacheEnabled",
-                                    value: appSetting === "isCacheEnabled" 
-                                        ? !model.appSettings.isCacheEnabled
-                                        : model.appSettings.isCacheEnabled
-                                }),
-                                SubmitButton(`${appSetting} - ${model.appSettings[appSetting]}`)
+                            Row(
+                                Form<AppSettings>("/admin/app-settings",
+                                    HiddenInput({
+                                        name: "areOptimizationHacksEnabled",
+                                        value: appSetting === "areOptimizationHacksEnabled"
+                                            ? !model.appSettings.areOptimizationHacksEnabled
+                                            : model.appSettings.areOptimizationHacksEnabled
+                                    }),
+                                    HiddenInput({
+                                        name: "isCacheEnabled",
+                                        value: appSetting === "isCacheEnabled"
+                                            ? !model.appSettings.isCacheEnabled
+                                            : model.appSettings.isCacheEnabled
+                                    }),
+                                    SubmitButton(model.appSettings[appSetting]
+                                        ? 'Disable'
+                                        : 'Enable'
+                                    )
+                                ),
+                                Paragraph(`${appSetting} - ${model.appSettings[appSetting]}`),
                             ),
                         )
                     )
