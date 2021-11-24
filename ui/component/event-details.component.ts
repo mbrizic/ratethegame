@@ -1,21 +1,29 @@
 import { humanize } from "../../server/core/date.service"
 import { EventModel } from "../../server/events/event.model"
-import { ChildElement, Column, Div, Heading2, Heading3, Link, Paragraph, Row, Small } from "../core/html.elements"
+import { Big, ChildElement, Column, ColumnCentered, Heading2, Link, Paragraph, Row, RowSpaced, Small, Spacing, Strong, Styled } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { Inline } from "../core/html.operator"
-import { EventRating } from "./event-rating.component"
 
 interface EventFormModel {
     event: EventModel
 }
 
-function getRatings(model: EventFormModel): ChildElement {
+function getRatingsSummary(model: EventFormModel): ChildElement {
+    if (model.event.totalRatings <= 0) {
+        const noRatingsMessage = `No ratings yet. ${model.event.isVotingAllowed() ? ` Be the first one to vote.` : ``}`
+        return Strong(noRatingsMessage)
+    }
+
     const icon = model.event.isRatedFavourably() ? "✔️" : "😒";
 
-    return Column(
-        Heading3(`${model.event.ratingPercentage}% would recommend this ${icon}`, { class: "text-centered" }),
-        EventRating(model.event),
-        Paragraph(`As voted by ${model.event.totalRatings} users.`, { class: "text-centered" })
+    return ColumnCentered(
+        Spacing(),
+        Row(
+            Big(`${model.event.ratingPercentage}% ${icon}`),
+        ),
+        Styled({class: 'text-centered'},
+            Small(`${model.event.totalRatings} votes.`)
+        )
     )
 }
 
@@ -23,7 +31,6 @@ export const EventDetails: Component<EventFormModel> = (model: EventFormModel) =
 
     const eventLink = Link({ text: model.event.name, href: `/events/${model.event.id}` })
     const sportLink = Link({ text: model.event.sportName, href: `/sports/${model.event.sportId}` })
-    const noRatingsMessage = `No ratings yet. ${model.event.isVotingAllowed() ? ` Be the first one to vote:` : ``}`
 
     return Column(
         Heading2(
@@ -32,14 +39,16 @@ export const EventDetails: Component<EventFormModel> = (model: EventFormModel) =
                 Small(`(${sportLink})`)
             )
         ),
-        Paragraph(
-            `${humanize(model.event.date)}`
-        ),
-        Small(`(${model.event.date.toUTCString()})`),
-        model.event.totalRatings > 0
-            ? getRatings(model)
-            : Column(
-                Heading3(noRatingsMessage, { class: "text-centered" })
+        RowSpaced(
+            Column(
+                Paragraph(
+                    `${humanize(model.event.date)}`
+                ),
+                Small(`(${model.event.date.toUTCString()})`),
+            ),
+            Column(
+                getRatingsSummary(model)
             )
+        ),
     )
 }

@@ -1,10 +1,11 @@
-import { Col } from "sequelize/types/lib/utils";
 import { AnalyticsEvent } from "../../server/core/analytics-event.service";
+import { AppSettings } from "../../server/core/app.settings";
+import { CacheStats } from "../../server/core/cache.service";
 import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
 import { EventModel } from "../../server/events/event.model";
+import { Column, Form, Heading2, Heading3, Heading4, HiddenInput, ListItem, Paragraph, Row, RowSpaced, SubmitButton, UnorderedList } from "../core/html.elements";
 import { UserModel } from "../../server/users/users.model";
-import { Column, Form, Heading2, Heading3, Heading4, ListItem, Row, RowSpaced, SubmitButton, UnorderedList } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
@@ -15,7 +16,9 @@ interface StatsModel extends PageModel {
     percentageOfPositiveVotes: number
     pageviews: PageViewsForDate
     recordedErrors: RecordedError[]
-    analyticsEvents: AnalyticsEvent[]
+    analyticsEvents: AnalyticsEvent[],
+    cacheStats: CacheStats
+    appSettings: AppSettings
 }
 
 export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
@@ -109,16 +112,47 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                         ListItem(`${model.totalNumberOfVotes} votes in total`),
                         ListItem(`${model.percentageOfPositiveVotes}% positive`),
                     ),
+                    Heading3(`Cache stats:`),
+                    UnorderedList(
+                        ListItem(`${model.cacheStats.cacheHits} hits, ${model.cacheStats.cacheMisses} misses`),
+                    ),
                 ),
             ),
             Heading3("Actions: "),
             Row(
-
-
                 Form("/admin/css-cache/clear",
                     SubmitButton("Clear css cache")
                 ),
-
+            ),
+            Heading3("App settings: "),
+            Row(
+                UnorderedList(
+                    ...Object.keys(model.appSettings).map((appSetting: keyof AppSettings) =>
+                        ListItem(
+                            Row(
+                                Form<AppSettings>("/admin/app-settings",
+                                    HiddenInput({
+                                        name: "areOptimizationHacksEnabled",
+                                        value: appSetting === "areOptimizationHacksEnabled"
+                                            ? !model.appSettings.areOptimizationHacksEnabled
+                                            : model.appSettings.areOptimizationHacksEnabled
+                                    }),
+                                    HiddenInput({
+                                        name: "isCacheEnabled",
+                                        value: appSetting === "isCacheEnabled"
+                                            ? !model.appSettings.isCacheEnabled
+                                            : model.appSettings.isCacheEnabled
+                                    }),
+                                    SubmitButton(model.appSettings[appSetting]
+                                        ? 'Disable'
+                                        : 'Enable'
+                                    )
+                                ),
+                                Paragraph(`${appSetting} - ${model.appSettings[appSetting]}`),
+                            ),
+                        )
+                    )
+                )
             )
 
         )

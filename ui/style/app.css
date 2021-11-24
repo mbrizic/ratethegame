@@ -15,17 +15,6 @@ a, a:visited, a:hover {
     background-color: pink;
 }
 
-.progress-bar-background {
-    height: 20px;
-    width: 100%;
-    background-color: orange;
-}
-
-.progress-bar {
-    height: 100%;
-    background-color: green;
-}
-
 .bad {
     color: red;
 }
@@ -36,4 +25,15 @@ a, a:visited, a:hover {
 
 .good {
     color: green;
+}
+
+button {
+    color: #fffcfc;
+    background: #292626;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 0 20px;
+    cursor: pointer;
+    min-width: 250px;
 }

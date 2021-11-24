@@ -1,7 +1,7 @@
 import { PotentialUser } from "../../server/users/users.dto";
 import { EventRatingForm } from "../component/event-rating-form.component";
 import { EventDetails } from "../component/event-details.component";
-import { Column } from "../core/html.elements";
+import { Column, Spacing } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 import { Card } from "../component/card.component";
@@ -20,6 +20,7 @@ export const EventDetailsPage: Page<EventDetailsModel> = (model: EventDetailsMod
                 EventDetails({
                     event: model.event
                 }),
+                Spacing(),
                 EventRatingForm({ 
                     event: model.event,
                     user: model.user
