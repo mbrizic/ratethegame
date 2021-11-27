@@ -18,7 +18,7 @@ export const SportSubscribeComponent: Component<SportSubscribeComponentModel> = 
                     Small("Subscribed to this sport.")
                 ),
                 Form(`/sports/${model.sportId}/unsubscribe`,
-                    SubmitButton("Unsubscribe", { class: "deemphasized" })
+                    SubmitButton("Unsubscribe", { class: "dimmed" })
                 )
             )
             : Form(`/sports/${model.sportId}/subscribe`,

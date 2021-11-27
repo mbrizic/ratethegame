@@ -27,7 +27,7 @@ a, a:visited, a:hover {
     color: green;
 }
 
-.deemphasized {
+.dimmed {
     color: black;
     background: #29262625;
 }
