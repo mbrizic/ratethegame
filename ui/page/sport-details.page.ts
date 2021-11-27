@@ -2,7 +2,6 @@ import { SportModel } from "../../server/sports/sports.model";
 import { UserModel } from "../../server/users/users.model";
 import { EventForm } from "../component/event-form.component";
 import { EventList } from "../component/event-list.component";
-import { SportSubscribeComponent } from "../component/sport-subscribe.component";
 import { SportComponent } from "../component/sport.component";
 import { Column, RowSpaced } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
@@ -17,13 +16,10 @@ export const SportDetailsPage: Page<SportDetailsModel> = (model: SportDetailsMod
 
     return Layout(model,
         Column(
-            RowSpaced(
-                SportComponent(model.sport),
-                SportSubscribeComponent({
-                    user: model.userData,
-                    sportId: model.sport.id!,
-                })
-            ),
+            SportComponent({
+                sport: model.sport, 
+                userData: model.userData
+            }),
             EventList(model.sport.events),
             EventForm({
                 sportId: model.sport.id,

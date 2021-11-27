@@ -6,7 +6,7 @@ import { SportComponent } from "./sport.component"
 export const SportList: Component<SportModel[]> = (sports: SportModel[]) => {
 
     return RowSpaced(
-        ...sports.map(SportComponent)
+        ...sports.map(sport => SportComponent({sport: sport}))
     )
 
 }
