@@ -17,6 +17,11 @@ class SportsRoute implements Route {
 		this.router.get(`${this.path}/:id(\\d+)`, readUserCredentials, this.controller.getSportsDetails)
 
 		this.router.post(`${this.path}`, ensureAuthenticated, this.controller.addSport)
+		this.router.post(`${this.path}/:id(\\d+)/subscribe`, ensureAuthenticated, this.controller.addUserSportSubscription)
+		this.router.post(`${this.path}/:id(\\d+)/unsubscribe`, ensureAuthenticated, this.controller.removeUserSportSubscription)
+
+		// redirects after user logs in
+		this.router.get(`${this.path}/:id(\\d+)/subscribe`, ensureAuthenticated, this.controller.getSportsDetails)
 	}
 }
 
