@@ -31,6 +31,7 @@ We have simple in-memory caching setup with our custom `cache.service.ts` class.
 - as cache is shared between all users, we should never store any references to currently logged in user in domain model. Search `getVoteBelongingToUser` for example how to handle such cases.
 - since domain models are aggregates of many database models, we will need to invalidate the caches more often than usual. For example, if some `event.model.ts` changes, we should invalidate it, but also its parent entities which can contain it (like `sport.model.ts` in this case). This might get complicated in the future (for example, if sport name changes, we should also invalidate all cached events belonging to it). For now our setup is pretty simple so it's not a problem, but if it proves to be, we should revert to caching of only database calls
 - as we're not sure if this will work fine, we've added `AppSettings.isCacheEnabled` to be able to turn it off in runtime if needed
+- if it turns out to be fine, we should implement some more automatic way to do it (middleware or function annotations)
 
 ## How to run the app
 
