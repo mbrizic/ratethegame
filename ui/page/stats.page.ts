@@ -123,6 +123,12 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                 Form("/admin/css-cache/clear",
                     SubmitButton("Clear css cache")
                 ),
+                Form("/admin/event-cache/clear",
+                    SubmitButton("Clear events cache")
+                ),
+                Form("/admin/sport-cache/clear",
+                    SubmitButton("Clear sports cache")
+                ),
             ),
             Heading3("App settings: "),
             Row(

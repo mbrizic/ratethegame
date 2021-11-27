@@ -17,7 +17,6 @@ export class EventFactory {
 			name,
 			date,
 			userId,
-			userId,
 			sport.id,
 			sport.name,
 			[]
@@ -27,7 +26,6 @@ export class EventFactory {
 	public static FromDatabase(
 		event: Events,
 		sport: Sports,
-		userId: number | undefined
 	) {
 		if (event == null) {
 			throw new ValidationException("No event with that ID")
@@ -48,7 +46,6 @@ export class EventFactory {
 			event.name,
 			event.datetime,
 			event.createdBy,
-			userId,
 			event.sportId,
 			sport.name,
 			ratings

@@ -5,34 +5,52 @@ import { CreateSportCommand } from './sports.dto'
 import { Events } from '../../database/models/events'
 import { EventRating } from '../../database/models/event_rating'
 import { ensureInputIsClean } from '../core/input-sanitizer'
-import { PotentialUser } from '../users/users.dto'
-import { SportModel } from './sports.model'
 import ValidationException from '../core/exceptions/validation.exception'
 import { SportFactory } from './sports.factory'
+import { cacheSportsList, sportsCache, getCachedSportsList } from './sports.cache'
+
+const entitiesToInclude = [{
+	model: Events, as: "events", include: [
+		{ model: EventRating, as: "eventRatings" }
+	]
+}]
 
 export default class SportsService {
-	private entitiesToInclude = [{
-		model: Events, as: "events", include: [
-			{ model: EventRating, as: "eventRatings" }
-		]
-	}]
+	
+	public async getAll() {
+		const retrieved = getCachedSportsList('ALL-SPORTS')
+		if (retrieved != null) {
+			return retrieved
+		}
 
-	public async getAll(userId?: number): Promise<SportModel[]> {
-		const sports = await Sports.findAll({ include: this.entitiesToInclude })
+		const results = await Sports.findAll({ include: entitiesToInclude })
 
-		return sports.map(
-			sport => SportFactory.FromDatabase(sport, sport.events, userId)
+		const sports = results.map(
+			sport => SportFactory.FromDatabase(sport, sport.events)
 		)
+		
+		cacheSportsList('ALL-SPORTS', sports)
+
+		return sports
 	}
 
-	public async getById(id: number, user: PotentialUser) {
-		const sport = await Sports.findByPk(id, { include: this.entitiesToInclude })
+	public async getById(id: number) {
+		const retrieved = sportsCache.get(id)
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const sport = await Sports.findByPk(id, { include: entitiesToInclude })
 
 		if (sport == null) {
 			throw new ValidationException("No sport with that ID")
 		}
 
-		return SportFactory.FromDatabase(sport, sport.events, user?.id)
+		const model = SportFactory.FromDatabase(sport, sport.events)
+
+		sportsCache.set(id, model)
+
+		return model
 	}
 
 	public async addSport(userId: number, dto: CreateSportCommand) {

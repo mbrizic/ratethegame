@@ -10,6 +10,8 @@ import { clearCssCache } from '../../ui/core/css.service'
 import { clearAnalyticsEvents, getAnalyticsEvents } from '../core/analytics-event.service'
 import { getCacheStats } from '../core/cache.service'
 import { AppSettings, getAppSettings, updateAppSettings } from '../core/app.settings'
+import { clearEventsCaches } from '../events/events.cache'
+import { clearSportsCaches } from '../sports/sports.cache'
 
 export class AdminController {
 	
@@ -18,12 +20,12 @@ export class AdminController {
 	private eventsService = new EventsService()
 
 	public getStatsPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const events = await this.eventsService.getAllEvents(req.user)
+		const events = await this.eventsService.getAllEvents()
 		const numberOfPositiveVotes = await this.eventsService.getEventRatingsCount({ votedPositively: true })
 		const numberOfNegativeVotes = await this.eventsService.getEventRatingsCount({ votedPositively: false })
 		const totalNumberOfVotes = numberOfNegativeVotes + numberOfPositiveVotes
 		const percentageOfPositiveVotes = Math.round(numberOfPositiveVotes / totalNumberOfVotes * 100)
-		const users = await this.userService.getAll(req.user?.id)
+		const users = await this.userService.getAll()
 		const pageviews = getPageViewsPerDate()
 		const recordedErrors = getRecordedErrors()
 		const analyticsEvents = getAnalyticsEvents()
@@ -67,6 +69,16 @@ export class AdminController {
 
 	public clearCssCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		clearCssCache()
+		res.redirect("/admin")
+	}
+
+	public clearEventsCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		clearEventsCaches()
+		res.redirect("/admin")
+	}
+
+	public clearSportsCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		clearSportsCaches()
 		res.redirect("/admin")
 	}
 

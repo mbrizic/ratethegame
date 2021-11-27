@@ -14,22 +14,22 @@ import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 import { SportModel } from '../sports/sports.model';
 
+const entitiesToInclude = ["userSetting", "userSportSubscriptions"]
 class UserService {
-	private entitiesToInclude = ["userSetting", "userSportSubscriptions"]
-
-	// TODO: consider not using sports service here, but sports queries instead
+	// TODO: consider not using sports service but rather queries instead,
+	// but make sure our caching still works as expected
 	private sportsService = new SportsService()
 
-	public async getAll(userId: number | undefined) {
-		const sports = await this.sportsService.getAll(userId);
-		const users = await Users.findAll({ include: this.entitiesToInclude });
+	public async getAll() {
+		const sports = await this.sportsService.getAll();
+		const users = await Users.findAll({ include: entitiesToInclude });
 
 		return users.map(user => this.FromDatabaseWithSports(user, sports));
 	}
 
 	public async getById(userId: number): Promise<UserModel> {
-		const sports = await this.sportsService.getAll(userId);
-		const user = await Users.findByPk(userId, { include: this.entitiesToInclude });
+		const sports = await this.sportsService.getAll();
+		const user = await Users.findByPk(userId, { include: entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
 		}
@@ -58,7 +58,7 @@ class UserService {
 		ensureInputIsEmail(dto.email)
 		ensureLongerThan(dto.password, 6)
 
-		const user = await Users.findOne({ where: { email: dto.email }, include: this.entitiesToInclude });
+		const user = await Users.findOne({ where: { email: dto.email }, include: entitiesToInclude });
 
 		if (user) {
 			throw new HttpException(409, `Email ${dto.email} already taken`);

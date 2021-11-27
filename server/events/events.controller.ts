@@ -9,8 +9,8 @@ class EventsController {
 	public eventsService = new EventsService();
 
 	public getEventsList = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const upcomingEvents = await this.eventsService.getUpcoming(req.user)
-		const bestRatedEvents = await this.eventsService.getBestRated(req.user)
+		const upcomingEvents = await this.eventsService.getUpcoming()
+		const bestRatedEvents = await this.eventsService.getBestRated()
 
 		try {
 			res.send(EventListPage({
@@ -28,7 +28,7 @@ class EventsController {
 		const eventId = Number(req.params.id)
 		
 		try {
-			const event = await this.eventsService.getById(eventId, req.user)
+			const event = await this.eventsService.getById(eventId)
 
 			res.send(EventDetailsPage({
 				event,

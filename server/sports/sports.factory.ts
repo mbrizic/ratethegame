@@ -16,13 +16,13 @@ export class SportFactory {
 		)
 	}
 
-	public static FromDatabase(sport: Sports, events: Events[], userId: number | undefined) {
+	public static FromDatabase(sport: Sports, events: Events[]) {
 		if (sport == null) {
 			throw new ValidationException("No sport with that ID")
 		}
 
 		const eventModels = events.map(event =>
-			EventFactory.FromDatabase(event, sport, userId)
+			EventFactory.FromDatabase(event, sport)
 		)
 
 		return new SportModel(

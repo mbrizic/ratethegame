@@ -1,60 +1,155 @@
-import { FindOptions } from 'sequelize/types';
+import { FindOptions, IncludeOptions } from 'sequelize/types';
 import { Events, EventsAttributes } from '../../database/models/events';
 import { EventRating } from '../../database/models/event_rating';
-import { now } from '../core/date.service';
+import { addToDate, now } from '../core/date.service';
 import HttpException from '../core/exceptions/http.exception';
 import { ensureInputIsClean } from '../core/input-sanitizer';
-import { afterDate, beforeDate } from '../core/sequelize.hacks';
+import { afterDate, and, beforeDate, notNull, between } from '../core/sequelize.hacks';
 import { isEmptyObject, orderByDescending } from '../core/util';
-import { PotentialUser, UserDto } from '../users/users.dto';
+import { UserDto } from '../users/users.dto';
 import { CreateEventCommand, RateEventCommand } from './events.dto';
 import { EventFactory } from './events.factory';
 import { EventModel } from './event.model';
 import { Sports } from '../../database/models/sports';
-import { UserModel } from '../users/users.model';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
-import { EventRatingModel } from './event-rating.model';
+import eventsCache, { cacheEventsList, clearEventsCaches, getCachedEventsList } from './events.cache';
+import { clearSportsCaches } from '../sports/sports.cache';
 
 const defaultPageSize = 10;
 
-class EventsService {
-	private defaultEntitiesToInclude = [sportsEntity, ratingsEntity]
+const sportsEntity: IncludeOptions = {
+	model: Sports,
+	as: "sport",
+	attributes: {
+		exclude: [
+			"id",
+			"description",
+			"createdAt",
+			"createdBy",
+		]
+	}
+};
 
-	public async getAllEvents(user: PotentialUser): Promise<EventModel[]> {
-		return this.getAll(user)
+const ratingsEntity: IncludeOptions = {
+	model: EventRating,
+	as: "eventRatings",
+	attributes: {
+		exclude: [
+			"id",
+			"createdAt",
+			"eventId"
+		]
+	}
+};
+
+const defaultEntitiesToInclude = [sportsEntity, ratingsEntity]
+class EventsService {
+
+	public async getAllEvents() {
+		const retrieved = getCachedEventsList('ALL-EVENTS')
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const events = await this.getAll({ include: defaultEntitiesToInclude })
+
+		cacheEventsList('ALL-EVENTS', events)
+
+		return events
 	}
 
-	public async getUpcoming(user: PotentialUser): Promise<EventModel[]> {
-		return this.getAll(user, {
+	public async getUpcoming() {
+		const retrieved = getCachedEventsList('UPCOMING-EVENTS')
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const events = await this.getAll({
 			where: {
-				datetime: afterDate(now())
+				datetime: afterDate(now()),
 			},
+			include: defaultEntitiesToInclude,
 			limit: defaultPageSize
 		})
+
+		cacheEventsList('UPCOMING-EVENTS', events)
+
+		return events
 	}
 
-	public async getBestRated(user: PotentialUser): Promise<EventModel[]> {
-		const events = await this.getAll(user, {
+	public async getStartedEventsFromThisWeek() {
+		const retrieved = getCachedEventsList('RECENT-EVENTS')
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const dateNow = now();
+		const startLimit = addToDate(dateNow, { days: -7 })
+
+		const events = await this.getAll({
+			where: {
+				datetime: and(
+					afterDate(startLimit),
+					beforeDate(dateNow),
+				)
+			},
+			order: [[
+				'datetime', 'DESC'
+			]],
+			include: defaultEntitiesToInclude,
+			limit: defaultPageSize
+		})
+
+		cacheEventsList('RECENT-EVENTS', events)
+
+		return events
+	}
+
+	public async getBestRated() {
+		const retrieved = getCachedEventsList('BEST-RATED-EVENTS')
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const events = await this.getAll({
 			where: {
 				datetime: beforeDate(now()),
 			},
-			order: [ [ 'name', 'DESC'] ],
+			include: [
+				sportsEntity,
+				{
+					...ratingsEntity,
+					where: {
+						"eventId": notNull()
+					},
+				}
+			],
+			order: [['name', 'DESC']],
 			limit: defaultPageSize
 		})
 
 		orderByDescending(events, a => a.ratingPercentage)
 
+		cacheEventsList('BEST-RATED-EVENTS', events)
+
 		return events;
 	}
 
-	public async getById(id: number, user: PotentialUser) {
-		const event = await Events.findByPk(id, { include: this.entitiesToInclude });
+	public async getById(id: number) {
+		const retrieved = eventsCache.get(id)
+		if (retrieved != null) {
+			return retrieved
+		}
+
+		const event = await Events.findByPk(id, { include: defaultEntitiesToInclude });
 
 		if (event == null) {
 			throw new HttpException(400, "No event with that ID");
 		}
 
-		const model = EventFactory.FromDatabase(event, event.sport, user?.id);
+		const model = EventFactory.FromDatabase(event, event.sport);
+
+		eventsCache.set(id, model)
 
 		return model
 	}
@@ -77,6 +172,9 @@ class EventsService {
 			datetime: model.date,
 		});
 
+		clearSportsCaches(sport?.id)
+		clearEventsCaches()
+
 		return created.id
 	}
 
@@ -85,11 +183,16 @@ class EventsService {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
+		const eventModel = await this.getById(dto.eventId)
+
 		await EventRating.create({
 			eventId: dto.eventId,
 			createdBy: userId,
 			wouldRecommend: dto.wouldRecommend,
 		})
+
+		clearEventsCaches(eventModel.id)
+		clearSportsCaches(eventModel.sportId)
 
 		recordAnalyticsEvent("UserVoted", userId, dto.eventId, dto.wouldRecommend.toString())
 
@@ -101,16 +204,21 @@ class EventsService {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
+		const eventModel = await this.getById(dto.eventId)
+
 		const deleted = await EventRating.destroy({
 			where: {
 				createdBy: userId,
-				eventId: dto.eventId
+				eventId: eventModel.id
 			}
 		});
 
 		if (!deleted) {
 			throw new HttpException(409, "Rating not found");
 		}
+
+		clearEventsCaches(eventModel.id)
+		clearSportsCaches(eventModel.sportId)
 
 		recordAnalyticsEvent("UserRemovedVote", userId, dto.eventId)
 
@@ -119,7 +227,7 @@ class EventsService {
 
 	public async getEventRatingsCount(options: {
 		votedPositively: boolean
-	}): Promise<number> {
+	}) {
 		return await EventRating.count({
 			where: {
 				wouldRecommend: options.votedPositively
@@ -127,13 +235,18 @@ class EventsService {
 		})
 	}
 
-	private async getAll(user: PotentialUser, options: FindOptions<EventsAttributes> | null = {}): Promise<EventModel[]> {
+	private async getAll(options: FindOptions<EventsAttributes> = {}) {
 		const events = await Events.findAll({
 			...options,
-			include: this.entitiesToInclude
+			attributes: {
+				exclude: [
+					"createdBy",
+					"createdAt",
+				]
+			},
 		});
 
-		return events.map(event => EventFactory.FromDatabase(event, event.sport, user?.id));
+		return events.map(event => EventFactory.FromDatabase(event, event.sport));
 	}
 }
 

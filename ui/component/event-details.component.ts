@@ -9,7 +9,7 @@ interface EventFormModel {
 }
 
 function getRatingsSummary(model: EventFormModel): ChildElement {
-    if (model.event.totalRatings <= 0) {
+    if (model.event.ratings.length <= 0) {
         const noRatingsMessage = `No ratings yet. ${model.event.isVotingAllowed() ? ` Be the first one to vote.` : ``}`
         return Strong(noRatingsMessage)
     }
@@ -22,7 +22,7 @@ function getRatingsSummary(model: EventFormModel): ChildElement {
             Big(`${model.event.ratingPercentage}% ${icon}`),
         ),
         Styled({class: 'text-centered'},
-            Small(`${model.event.totalRatings} votes.`)
+            Small(`${model.event.ratings.length} votes.`)
         )
     )
 }

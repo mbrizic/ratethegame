@@ -31,7 +31,7 @@ function eventRatingSummary(event: EventModel) {
             Styled({ class: cssClass },
                 `${icon} ${event.ratingPercentage}%`
             ),
-            Small(`(${event.totalRatings} votes)`)
+            Small(`(${event.ratings.length} votes)`)
         )
         : `no votes yet`
 }

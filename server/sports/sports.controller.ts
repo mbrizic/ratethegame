@@ -9,7 +9,7 @@ class SportsController {
 	public sportsService = new SportsService();
 
 	public getSportsList = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-		const sports = await this.sportsService.getAll(req.user?.id)
+		const sports = await this.sportsService.getAll()
 
 		try {
 			res.send(SportListPage({
@@ -25,7 +25,7 @@ class SportsController {
 	public getSportsDetails = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const sportId = Number(req.params.id)
 		
-		const sport = await this.sportsService.getById(sportId, req.user)
+		const sport = await this.sportsService.getById(sportId)
 
 		try {
 			res.send(SportDetailsPage({

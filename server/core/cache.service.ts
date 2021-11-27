@@ -1,7 +1,7 @@
 import { getAppSettings } from "./app.settings";
 
 interface Cache<T> {
-	[id: number]: T | null
+	[id: number | string]: T | null
 }
 
 export interface CacheStats {
@@ -15,9 +15,9 @@ const counts: CacheStats = {
 };
 
 export function createCache<T>() {
-    const cache: Cache<T> = {}
+    let cache: Cache<T> = {}
 
-    function get(id: number): T | null {
+    function get(id: number | string) {
         if (!getAppSettings().isCacheEnabled) {
             return null
         }
@@ -33,26 +33,32 @@ export function createCache<T>() {
         return cached
     }
 
-    function set(id: number, object: T) {
+    function set(id: number | string | undefined, object: T) {
         if (!getAppSettings().isCacheEnabled) {
             return
         }
 
-        if (cache[id] == null) {
+        if (id != undefined && cache[id] == null) {
             cache[id] = object
         }
     }
 
-    function clear(id: number) {
+    function remove(id: number | string | undefined) {
         if (!getAppSettings().isCacheEnabled) {
             return
         }
         
-        cache[id] = null
+        if (id) {
+            cache[id] = null
+        }
+    }
+
+    function clear() {
+        cache = {}
     }
 
     return {
-        get, set, clear
+        get, set, remove, clear
     }
 }
 
