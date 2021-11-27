@@ -47,7 +47,7 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                     Heading3(`Users' subscriptions:`),
                     UnorderedList(
                         ...model.users.map(user => ListItem(
-                            `${user.email} (${user.totalSubscriptions}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
+                            `${user.email} (${user.subscriptions.length}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
                         )),
                     ),
                 )

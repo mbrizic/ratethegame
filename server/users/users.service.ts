@@ -12,9 +12,10 @@ import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
-import { SportModel } from '../sports/sports.model';
+import { usersCache } from './users.cache';
 
 const entitiesToInclude = ["userSetting", "userSportSubscriptions"]
+
 class UserService {
 	// TODO: consider not using sports service but rather queries instead,
 	// but make sure our caching still works as expected
@@ -24,27 +25,26 @@ class UserService {
 		const sports = await this.sportsService.getAll();
 		const users = await Users.findAll({ include: entitiesToInclude });
 
-		return users.map(user => this.FromDatabaseWithSports(user, sports));
+		return users.map(user => UserFactory.FromDatabase(user, sports));
 	}
 
 	public async getById(userId: number): Promise<UserModel> {
+		const retrieved = usersCache.get(userId)
+		if (retrieved) {
+			return retrieved
+		}
+
 		const sports = await this.sportsService.getAll();
 		const user = await Users.findByPk(userId, { include: entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
 		}
 
-		const model = await this.FromDatabaseWithSports(user, sports);
+		const model = UserFactory.FromDatabase(user, sports);
+
+		usersCache.set(userId, model)
 
 		return model;
-	}
-
-	private FromDatabaseWithSports(user: Users, sports: SportModel[]) {
-		const userSports = sports.filter(sport => 
-			user.userSportSubscriptions.some(subscription => subscription.sportId == sport.id)
-		);
-
-		return UserFactory.FromDatabase(user, userSports);
 	}
 
 	public async createUser(dto: CreateUserCommand): Promise<UserModel> {
@@ -66,7 +66,7 @@ class UserService {
 
 		const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-		const userModel = UserFactory.Create(dto.email, hashedPassword, false)
+		const userModel = UserFactory.Create(dto.email, false)
 
 		const createdUser = await Users.create({
 			email: dto.email,
@@ -102,6 +102,8 @@ class UserService {
 			throw new HttpException(409, "User not found");
 		}
 
+		usersCache.remove(userId)
+
 		return await this.getById(userId)
 	}
 
@@ -115,11 +117,11 @@ class UserService {
 		);
 
 		let settingUpdate = {}
-		var settingColumnName : ValidSettingColumName;
+		var settingColumnName: ValidSettingColumName;
 
 		if (settingData.receiveTopRatedNotifications) {
 			settingColumnName = "receiveTopRatedNotifications";
-			settingUpdate = {...settingUpdate, [settingColumnName]: (!currentSettings?.receiveTopRatedNotifications)} 
+			settingUpdate = { ...settingUpdate, [settingColumnName]: (!currentSettings?.receiveTopRatedNotifications) }
 		}
 
 		const updated = await UserSettings.update(
@@ -130,6 +132,8 @@ class UserService {
 		if (!updated) {
 			throw new HttpException(409, "User settings not found");
 		}
+
+		usersCache.remove(userId)
 
 		return await this.getById(userId)
 	}
@@ -148,6 +152,8 @@ class UserService {
 			throw new HttpException(409, "User not found");
 		}
 
+		usersCache.remove(userId)
+
 		recordAnalyticsEvent("UserDeleted", userId)
 	}
 
@@ -158,6 +164,8 @@ class UserService {
 		})
 
 		recordAnalyticsEvent("UserSubscribedToSport", userId, sportId)
+
+		usersCache.remove(userId)
 
 		return sportId
 	}
@@ -173,6 +181,8 @@ class UserService {
 		if (!deleted) {
 			throw new HttpException(409, "Subscription not found");
 		}
+
+		usersCache.remove(userId)
 
 		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sportId)
 

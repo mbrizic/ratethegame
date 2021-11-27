@@ -12,61 +12,67 @@ export type ValidSettingColumName = keyof ValidSettingColumNames
 
 export class UserFactory {
 
-	public static Create(email: string, password: string, isAdmin: boolean = false) {
+    public static Create(email: string, isAdmin: boolean = false) {
 
-        const defaultUserSettings = new UserSettingsModel(undefined, undefined, new UserSettingModel(undefined, false, undefined))
+        const defaultUserSettings = new UserSettingsModel(
+            undefined,
+            undefined,
+            new UserSettingModel(undefined, false, undefined)
+        )
 
-		return new UserModel(
-			undefined,
-			email,
-			password,
-			isAdmin,
-			[],
-			defaultUserSettings
-		)
-	}
+        return new UserModel(
+            undefined,
+            email,
+            isAdmin,
+            [],
+            defaultUserSettings
+        )
+    }
 
-	public static FromDatabase(
-		user: Users,
+    public static FromDatabase(
+        user: Users,
         sports: SportModel[],
-	) {
-		if (user == null) {
-			throw new ValidationException("No user with that ID")
-		}
-
-        function getSportName(sportId: number, sports: SportModel[]) {
-            const sport = sports.find(sport => sport.id == sportId )
-            if (!sport) {
-                throw new ValidationException("No sport with that ID")
-            }
-
-            return sport.name
+    ) {
+        if (user == null) {
+            throw new ValidationException("No user with that ID")
         }
 
         const settings = new UserSettingsModel(
             user.userSetting.id,
             user.userSetting.userId,
-            new UserSettingModel("Receive notifications about top-rated sport events", user.userSetting.receiveTopRatedNotifications, "receiveTopRatedNotifications")
+            new UserSettingModel(
+                "Receive notifications about top-rated sport events",
+                user.userSetting.receiveTopRatedNotifications,
+                "receiveTopRatedNotifications"
+            )
         )
 
         const subscriptions = user.userSportSubscriptions.map(
             userSubscription =>
-            new UserSportSubscriptionsModel(
-                userSubscription.id,
-                userSubscription.sportId,
-                getSportName(userSubscription.sportId, sports),
-                userSubscription.userId
-            )
+                new UserSportSubscriptionsModel(
+                    userSubscription.id,
+                    userSubscription.sportId,
+                    getSportName(userSubscription.sportId, sports),
+                    userSubscription.userId
+                )
         )
 
-		return new UserModel(
-			user.id,
-			user.email,
-			user.password,
-			user.isAdmin,
+        return new UserModel(
+            user.id,
+            user.email,
+            user.isAdmin,
             subscriptions,
             settings
-		)
-	}
+        )
+    }
 
+}
+
+function getSportName(sportId: number, sports: SportModel[]) {
+    const sport = sports.find(sport => sport.id == sportId)
+    if (!sport) {
+        throw new ValidationException("No sport with that ID")
+    }
+
+    return sport.name
 }

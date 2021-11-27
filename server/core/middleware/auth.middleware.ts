@@ -29,7 +29,7 @@ export async function ensureIsCurrentUser(req: RequestWithUser, res: Response, n
 	} else {
 		res.status(403)
 		res.statusMessage = 'Forbidden'
-		res.redirect(`${redirectUrl}?${returnUrlQueryParam}=${req.path}`)
+		res.redirect(`/`)
 	}
 }
 
