@@ -20,7 +20,7 @@ export function clearAnalyticsEvents() {
     analyticsEvents = []
 }
 
-export type EventType = "UserCreated" | "UserDeleted" | "UserVoted" | "UserRemovedVote"
+export type EventType = "UserCreated" | "UserDeleted" | "UserVoted" | "UserRemovedVote" | "UserSubscribedToSport" | "UserUnsubscribedFromSport"
 
 export interface AnalyticsEvent {
     type: EventType

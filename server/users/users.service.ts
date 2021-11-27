@@ -145,6 +145,34 @@ class UserService {
 
 		recordAnalyticsEvent("UserDeleted", userId)
 	}
+
+	public async addUserSportSubscription(userId: number, sportId: number) {
+		await UserSportSubscriptions.create({
+			sport_id: sportId,
+			user_id: userId,
+		})
+
+		recordAnalyticsEvent("UserSubscribedToSport", userId, sportId)
+
+		return sportId
+	}
+
+	public async removeUserSportSubscription(userId: number, sportId: number) {
+		const deleted = await UserSportSubscriptions.destroy({
+			where: {
+				sport_id: sportId,
+				user_id: userId,
+			}
+		});
+
+		if (!deleted) {
+			throw new HttpException(409, "Subscription not found");
+		}
+
+		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sportId)
+
+		return sportId
+	}
 }
 
 export default UserService;
