@@ -38,6 +38,7 @@ export class EventRating extends Model<EventRatingAttributes, EventRatingCreatio
     EventRating.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

@@ -53,6 +53,7 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
     Events.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

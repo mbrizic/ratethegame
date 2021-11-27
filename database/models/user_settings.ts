@@ -28,6 +28,7 @@ export class UserSettings extends Model<UserSettingsAttributes, UserSettingsCrea
     UserSettings.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

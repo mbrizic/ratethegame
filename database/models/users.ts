@@ -84,6 +84,7 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
     Users.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

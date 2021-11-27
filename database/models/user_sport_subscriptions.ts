@@ -34,6 +34,7 @@ export class UserSportSubscriptions extends Model<UserSportSubscriptionsAttribut
     UserSportSubscriptions.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
