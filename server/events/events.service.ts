@@ -47,7 +47,7 @@ class EventsService {
 
 	public async getAllEvents() {
 		const retrieved = getCachedEventsList('ALL-EVENTS')
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -60,7 +60,7 @@ class EventsService {
 
 	public async getUpcoming() {
 		const retrieved = getCachedEventsList('UPCOMING-EVENTS')
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -79,7 +79,7 @@ class EventsService {
 
 	public async getStartedEventsFromThisWeek() {
 		const retrieved = getCachedEventsList('RECENT-EVENTS')
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -107,7 +107,7 @@ class EventsService {
 
 	public async getBestRated() {
 		const retrieved = getCachedEventsList('BEST-RATED-EVENTS')
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -137,7 +137,7 @@ class EventsService {
 
 	public async getById(id: number) {
 		const retrieved = eventsCache.get(id)
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 

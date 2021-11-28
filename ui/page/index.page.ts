@@ -9,7 +9,7 @@ import { Layout } from "../_Layout";
 
 interface IndexModel extends PageModel {
     bestRatedEvents: EventModel[];
-    getStartedEventsFromThisWeek: EventModel[];
+    eventsFromThisWeek: EventModel[];
     upcomingEvents: EventModel[];
     sports: SportModel[];
 }
@@ -30,10 +30,10 @@ export const IndexPage: Page<IndexModel> = (model: IndexModel) => {
                     Heading2("Check out best recent events"),
                     EventList(model.bestRatedEvents),
                 ) : null,
-            model.getStartedEventsFromThisWeek.length > 0
+            model.eventsFromThisWeek.length > 0
                 ? Inline(
                     Heading2("Rate events from this week"),
-                    EventList(model.getStartedEventsFromThisWeek),
+                    EventList(model.eventsFromThisWeek),
                 ) : null,
             model.upcomingEvents.length > 0
                 ? Inline(

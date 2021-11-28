@@ -7,7 +7,7 @@ import { EventRating } from '../../database/models/event_rating'
 import { ensureInputIsClean } from '../core/input-sanitizer'
 import ValidationException from '../core/exceptions/validation.exception'
 import { SportFactory } from './sports.factory'
-import { cacheSportsList, sportsCache, getCachedSportsList } from './sports.cache'
+import { cacheSportsList, sportsCache, getCachedSportsList, clearSportsCaches } from './sports.cache'
 
 const entitiesToInclude = [{
 	model: Events, as: "events", include: [
@@ -19,7 +19,7 @@ export default class SportsService {
 	
 	public async getAll() {
 		const retrieved = getCachedSportsList('ALL-SPORTS')
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -36,7 +36,7 @@ export default class SportsService {
 
 	public async getById(id: number) {
 		const retrieved = sportsCache.get(id)
-		if (retrieved != null) {
+		if (retrieved) {
 			return retrieved
 		}
 
@@ -72,6 +72,8 @@ export default class SportsService {
 			description: sport.description,
 			createdBy: sport.createdByUserId
 		})
+
+		clearSportsCaches()
 
 		return created.id
 	}

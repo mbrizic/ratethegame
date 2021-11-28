@@ -15,7 +15,7 @@ export default class PageController {
 	private sportsService = new SportsService();
 
 	public getIndexPage = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const getStartedEventsFromThisWeek = await this.eventsService.getStartedEventsFromThisWeek();
+		const eventsFromThisWeek = await this.eventsService.getStartedEventsFromThisWeek();
 		const bestRatedEvents = await this.eventsService.getBestRated();
 		const upcomingEvents = await this.eventsService.getUpcoming();
 		const sports = await this.sportsService.getAll();
@@ -26,7 +26,7 @@ export default class PageController {
 					user: req.user,
 					bestRatedEvents,
 					upcomingEvents,
-					getStartedEventsFromThisWeek,
+					eventsFromThisWeek,
 					sports
 				})
 			)
