@@ -5,19 +5,19 @@ export interface LogAttributes {
   id: number;
   name: string;
   hash: string;
-  created_at: Date;
+  createdAt: Date;
 }
 
 export type LogPk = "id";
 export type LogId = Log[LogPk];
-export type LogOptionalAttributes = "id" | "created_at";
+export type LogOptionalAttributes = "id" | "createdAt";
 export type LogCreationAttributes = Optional<LogAttributes, LogOptionalAttributes>;
 
 export class Log extends Model<LogAttributes, LogCreationAttributes> implements LogAttributes {
   id!: number;
   name!: string;
   hash!: string;
-  created_at!: Date;
+  createdAt!: Date;
 
 
   static initModel(sequelize: Sequelize.Sequelize): typeof Log {
@@ -36,10 +36,11 @@ export class Log extends Model<LogAttributes, LogCreationAttributes> implements 
       type: DataTypes.TEXT,
       allowNull: false
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('now')
+      defaultValue: Sequelize.Sequelize.fn('now'),
+      field: 'created_at'
     }
   }, {
     sequelize,

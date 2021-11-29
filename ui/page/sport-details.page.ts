@@ -13,7 +13,7 @@ interface SportDetailsModel extends PageModel {
 }
 
 export const SportDetailsPage: Page<SportDetailsModel> = (model: SportDetailsModel) => {
-
+    
     return Layout(model,
         Column(
             SportComponent({

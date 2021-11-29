@@ -1,7 +1,6 @@
-import { Column, Heading2, Heading3, Link, Paragraph, Row, RowSpaced, Text } from "../core/html.elements"
+import { RowSpaced } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { Card } from "./card.component"
-import { orderByDescending } from "../../server/core/util"
 import { SportModel } from "../../server/sports/sports.model"
 import { UserModel } from "../../server/users/users.model"
 import { SportSubscribeComponent } from "./sport-subscribe.component"

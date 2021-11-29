@@ -11,16 +11,20 @@ interface EventFormModel {
 
 export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel) => {
 
+	const userVote = model.event.getVoteBelongingToUser(model.user)
+
 	if (!model.event.isVotingAllowed()) {
 		return RowCentered(
 			Text("You will be able to vote once the event has begun.")
 		)
 	}
 
-	if (model.event.isRatedByCurrentlyLoggedInUser) {
+	if (userVote) {
+		const icon = userVote.wouldRecommend ? '👍' : '👎'
+
 		return Form<RateEventCommand>(`/events/${model.event.id}/unvote`, 
 			HiddenInput<RateEventCommand>({ name: "eventId", value: model.event.id }),
-			SubmitButton("Remove your vote")
+			SubmitButton(`Remove your ${icon} vote`)
 		)
 	}
 

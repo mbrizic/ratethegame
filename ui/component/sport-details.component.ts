@@ -19,8 +19,8 @@ export const SportDetailsComponent: Component<SportModel> = (model: SportModel) 
         totalEvents
             ? Text(`Has ${totalEvents} events. `)
             : Text(`No events yet for this one.`),
-        bestRatedEvent && bestRatedEvent.totalRatings > 0
-            ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.totalRatings} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
+        bestRatedEvent && bestRatedEvent.ratings.length > 0
+            ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.ratings.length} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
             : null
     )
 

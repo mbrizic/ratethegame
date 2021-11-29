@@ -1,5 +1,5 @@
 import { DomainModel } from "../core/domain.model"
-import { UserSettingModel } from "./user-setting-model"
+import { UserSettingModel } from "./user-setting.model"
 
 export type SettingName = "receiveTopRatedNotifications"
 

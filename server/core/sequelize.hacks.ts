@@ -17,6 +17,18 @@ export function beforeDate(date: Date) {
     }
 }
 
+export function between(startDate: Date, endDate: Date) {
+    return {
+        [ Symbol.for('between') ]: [startDate, endDate]
+    }
+}
+
+export function and(...conditions: any[]) {
+    return {
+        [ Symbol.for('and') ]: conditions
+    }
+}
+
 export function notEqual(field: any) {
     return {
         [ Symbol.for('ne') ]: field

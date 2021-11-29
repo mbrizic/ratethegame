@@ -5,8 +5,8 @@ import type { Users, UsersId } from './users';
 
 export interface UserSportSubscriptionsAttributes {
   id: number;
-  user_id: number;
-  sport_id: number;
+  userId: number;
+  sportId: number;
 }
 
 export type UserSportSubscriptionsPk = "id";
@@ -16,15 +16,15 @@ export type UserSportSubscriptionsCreationAttributes = Optional<UserSportSubscri
 
 export class UserSportSubscriptions extends Model<UserSportSubscriptionsAttributes, UserSportSubscriptionsCreationAttributes> implements UserSportSubscriptionsAttributes {
   id!: number;
-  user_id!: number;
-  sport_id!: number;
+  userId!: number;
+  sportId!: number;
 
-  // UserSportSubscriptions belongsTo Sports via sport_id
+  // UserSportSubscriptions belongsTo Sports via sportId
   sport!: Sports;
   getSport!: Sequelize.BelongsToGetAssociationMixin<Sports>;
   setSport!: Sequelize.BelongsToSetAssociationMixin<Sports, SportsId>;
   createSport!: Sequelize.BelongsToCreateAssociationMixin<Sports>;
-  // UserSportSubscriptions belongsTo Users via user_id
+  // UserSportSubscriptions belongsTo Users via userId
   user!: Users;
   getUser!: Sequelize.BelongsToGetAssociationMixin<Users>;
   setUser!: Sequelize.BelongsToSetAssociationMixin<Users, UsersId>;
@@ -34,27 +34,30 @@ export class UserSportSubscriptions extends Model<UserSportSubscriptionsAttribut
     UserSportSubscriptions.init({
     id: {
       autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
         key: 'id'
       },
-      unique: "unique_user_per_sport"
+      unique: "unique_user_per_sport",
+      field: 'user_id'
     },
-    sport_id: {
+    sportId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'sports',
         key: 'id'
       },
-      unique: "unique_user_per_sport"
+      unique: "unique_user_per_sport",
+      field: 'sport_id'
     }
   }, {
     sequelize,

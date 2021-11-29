@@ -3,6 +3,7 @@ import { migrateDatabase } from '../server/core/migrations';
 import { SequelizeAuto } from "sequelize-auto";
 import 'dotenv/config';
 import { getAppConfig } from '../server/core/app.config';
+import { exit } from 'process';
 
 const database = new Sequelize(getAppConfig().postgresURL, {
 	logging: getAppConfig().dbLoggingEnabled
@@ -22,11 +23,14 @@ async function runMigrations() {
 		dialect: "postgres",
 		lang: "ts",
 		caseModel: "p",
+		caseProp: "c",
 		singularize: false,
 	});
 
 	sequelizeAuto.run();
 
 	console.log("\nMigration done.")
+
+	exit()
 }
 

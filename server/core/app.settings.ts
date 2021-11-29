@@ -4,7 +4,7 @@ export interface AppSettings {
 }
 
 const appSettings: AppSettings = {
-    isCacheEnabled: false,
+    isCacheEnabled: true,
     areOptimizationHacksEnabled: false
 }
 

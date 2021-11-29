@@ -47,7 +47,7 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                     Heading3(`Users' subscriptions:`),
                     UnorderedList(
                         ...model.users.map(user => ListItem(
-                            `${user.email} (${user.totalSubscriptions}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
+                            `${user.email} (${user.subscriptions.length}) > ${user.subscriptions.map(subscription => ` ${subscription.sportName}`)}`
                         )),
                     ),
                 )
@@ -122,6 +122,15 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
             Row(
                 Form("/admin/css-cache/clear",
                     SubmitButton("Clear css cache")
+                ),
+                Form("/admin/event-cache/clear",
+                    SubmitButton("Clear events cache")
+                ),
+                Form("/admin/sport-cache/clear",
+                    SubmitButton("Clear sports cache")
+                ),
+                Form("/admin/user-cache/clear",
+                    SubmitButton("Clear users cache")
                 ),
             ),
             Heading3("App settings: "),

@@ -17,7 +17,6 @@ export class EventFactory {
 			name,
 			date,
 			userId,
-			userId,
 			sport.id,
 			sport.name,
 			[]
@@ -27,19 +26,18 @@ export class EventFactory {
 	public static FromDatabase(
 		event: Events,
 		sport: Sports,
-		userId: number | undefined
 	) {
 		if (event == null) {
 			throw new ValidationException("No event with that ID")
 		}
 
-		const ratings = event.event_ratings.map(rating =>
+		const ratings = event.eventRatings.map(rating =>
 			new EventRatingModel(
 				rating.id,
-				rating.would_recommend,
-				rating.created_at,
-				rating.event_id,
-				rating.created_by
+				rating.wouldRecommend,
+				rating.createdAt,
+				rating.eventId,
+				rating.createdBy
 			)
 		)
 
@@ -47,9 +45,8 @@ export class EventFactory {
 			event.id,
 			event.name,
 			event.datetime,
-			event.created_by,
-			userId,
-			event.sport_id,
+			event.createdBy,
+			event.sportId,
 			sport.name,
 			ratings
 		)

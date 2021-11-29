@@ -12,33 +12,38 @@ import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
+import { usersCache } from './users.cache';
+
+const entitiesToInclude = ["userSetting", "userSportSubscriptions"]
 
 class UserService {
-	private entitiesToInclude = ["user_setting", "user_sport_subscriptions"]
+	// TODO: consider not using sports service but rather queries instead,
+	// but make sure our caching still works as expected
 	private sportsService = new SportsService()
 
-	public async getAll(): Promise<UserModel[]> {
-		const users = await Users.findAll({ include: this.entitiesToInclude });
+	public async getAll() {
+		const sports = await this.sportsService.getAll();
+		const users = await Users.findAll({ include: entitiesToInclude });
 
-		return Promise.all(users.map(user => this.FromDatabaseWithSports(user)));
+		return users.map(user => UserFactory.FromDatabase(user, sports));
 	}
 
 	public async getById(userId: number): Promise<UserModel> {
-		const user = await Users.findByPk(userId, { include: this.entitiesToInclude });
+		const retrieved = usersCache.get(userId)
+		if (retrieved) {
+			return retrieved
+		}
+
+		const sports = await this.sportsService.getAll();
+		const user = await Users.findByPk(userId, { include: entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
 		}
 
-		const model = await this.FromDatabaseWithSports(user);
+		const model = UserFactory.FromDatabase(user, sports);
 
-		return model;
-	}
+		usersCache.set(userId, model)
 
-	private async FromDatabaseWithSports(user: Users) {
-		const sports = await this.sportsService.getAll(user.id);
-		const userSports = sports.filter(sport => user.user_sport_subscriptions.some(subscription => subscription.sport_id == sport.id));
-
-		const model = UserFactory.FromDatabase(user, userSports);
 		return model;
 	}
 
@@ -53,7 +58,7 @@ class UserService {
 		ensureInputIsEmail(dto.email)
 		ensureLongerThan(dto.password, 6)
 
-		const user = await Users.findOne({ where: { email: dto.email }, include: this.entitiesToInclude });
+		const user = await Users.findOne({ where: { email: dto.email }, include: entitiesToInclude });
 
 		if (user) {
 			throw new HttpException(409, `Email ${dto.email} already taken`);
@@ -61,17 +66,17 @@ class UserService {
 
 		const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-		const userModel = UserFactory.Create(dto.email, hashedPassword, false)
+		const userModel = UserFactory.Create(dto.email, false)
 
 		const createdUser = await Users.create({
-			email: userModel.email,
-			password: userModel.password,
-			is_admin: userModel.isAdmin
+			email: dto.email,
+			password: hashedPassword,
+			isAdmin: false
 		});
 
 		const createdSettings = await UserSettings.create({
-			receive_top_rated_notifications: userModel.settings.receiveTopRatedNotifications,
-			user_id: createdUser.id
+			receiveTopRatedNotifications: userModel.settings.receiveTopRatedNotifications,
+			userId: createdUser.id
 		})
 
 		if (!createdSettings) {
@@ -97,6 +102,8 @@ class UserService {
 			throw new HttpException(409, "User not found");
 		}
 
+		usersCache.remove(userId)
+
 		return await this.getById(userId)
 	}
 
@@ -106,53 +113,59 @@ class UserService {
 		}
 
 		const currentSettings = await UserSettings.findOne(
-			{ where: { user_id: userId } }
+			{ where: { userId: userId } }
 		);
 
 		let settingUpdate = {}
-		var settingColumnName : ValidSettingColumName;
+		var settingColumnName: ValidSettingColumName;
 
 		if (settingData.receiveTopRatedNotifications) {
-			settingColumnName = "receive_top_rated_notifications";
-			settingUpdate = {...settingUpdate, [settingColumnName]: (!currentSettings?.receive_top_rated_notifications)} 
+			settingColumnName = "receiveTopRatedNotifications";
+			settingUpdate = { ...settingUpdate, [settingColumnName]: (!currentSettings?.receiveTopRatedNotifications) }
 		}
 
 		const updated = await UserSettings.update(
 			settingUpdate,
-			{ where: { user_id: userId } }
+			{ where: { userId: userId } }
 		);
 
 		if (!updated) {
 			throw new HttpException(409, "User settings not found");
 		}
 
+		usersCache.remove(userId)
+
 		return await this.getById(userId)
 	}
 
 	public async deleteUser(userId: number) {
-		const deletedSettings = await UserSettings.destroy({ where: { user_id: userId } });
+		const deletedSettings = await UserSettings.destroy({ where: { userId: userId } });
 		if (!deletedSettings) {
 			throw new HttpException(409, "User settings not found");
 		}
 
-		const deletedRatings = await EventRating.destroy({ where: { created_by: userId } });
-		const deletedSubscriptions = await UserSportSubscriptions.destroy({ where: { user_id: userId } });
+		const deletedRatings = await EventRating.destroy({ where: { createdBy: userId } });
+		const deletedSubscriptions = await UserSportSubscriptions.destroy({ where: { userId: userId } });
 
 		const deleted = await Users.destroy({ where: { id: userId } });
 		if (!deleted) {
 			throw new HttpException(409, "User not found");
 		}
 
+		usersCache.remove(userId)
+
 		recordAnalyticsEvent("UserDeleted", userId)
 	}
 
 	public async addUserSportSubscription(userId: number, sportId: number) {
 		await UserSportSubscriptions.create({
-			sport_id: sportId,
-			user_id: userId,
+			sportId: sportId,
+			userId: userId,
 		})
 
 		recordAnalyticsEvent("UserSubscribedToSport", userId, sportId)
+
+		usersCache.remove(userId)
 
 		return sportId
 	}
@@ -160,14 +173,16 @@ class UserService {
 	public async removeUserSportSubscription(userId: number, sportId: number) {
 		const deleted = await UserSportSubscriptions.destroy({
 			where: {
-				sport_id: sportId,
-				user_id: userId,
+				sportId: sportId,
+				userId: userId,
 			}
 		});
 
 		if (!deleted) {
 			throw new HttpException(409, "Subscription not found");
 		}
+
+		usersCache.remove(userId)
 
 		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sportId)
 

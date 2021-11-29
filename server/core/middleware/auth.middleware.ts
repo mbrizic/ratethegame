@@ -29,7 +29,7 @@ export async function ensureIsCurrentUser(req: RequestWithUser, res: Response, n
 	} else {
 		res.status(403)
 		res.statusMessage = 'Forbidden'
-		res.redirect(`${redirectUrl}?${returnUrlQueryParam}=${req.path}`)
+		res.redirect(`/`)
 	}
 }
 
@@ -65,7 +65,7 @@ export async function getUserFromCookieIfExists(req: RequestWithPotentialUser) {
 		const userId = verificationResponse.id;
 		
 		try {
-			const user = await authService.getUserByID(userId)
+			const user = await authService.getUserById(userId)
 			req.user = user;
 			
 		} catch (error) {

@@ -77,7 +77,7 @@ class AuthService {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
 	}
 
-	public async getUserByID(userId: number): Promise<UserDto> {
+	public async getUserById(userId: number): Promise<UserDto> {
 		const user = await Users.findByPk(userId);
 
 		if (!user) {
@@ -94,7 +94,7 @@ class AuthService {
 			id: model.id!,
 			email: model.email,
 			password: model.password,
-			isAdmin: model.is_admin,
+			isAdmin: model.isAdmin,
 		}
 	}
 }
