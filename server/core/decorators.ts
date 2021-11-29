@@ -1,16 +1,16 @@
 interface DecoratorOptions<T> {
-	runBefore?: (...args: any[]) => any,
+	runBefore?: (...args: any[]) => T | null,
 	runAfter?: (result: T) => void
 }
 
-export const buildDecorator = <T = any> (options: DecoratorOptions<T>) => {
+export const buildDecorator = <T = any>(options: DecoratorOptions<T>) => {
 
-	return (target: any, key: string, descriptor: TypedPropertyDescriptor<(...args: any[]) => T>) => {
+	return (target: any, key: string, descriptor: TypedPropertyDescriptor<(...args: any[]) => Promise<T>>) => {
 
-		const originalMethod = descriptor.value as () => T;
+		const originalMethod = descriptor.value as () => Promise<T>;
 
-        descriptor.value = (...args: any[]) => {
-            if (options.runBefore) {
+		descriptor.value = async (...args: any[]) => {
+			if (options.runBefore) {
 				const response = options.runBefore(...args)
 
 				if (response) {
@@ -18,15 +18,15 @@ export const buildDecorator = <T = any> (options: DecoratorOptions<T>) => {
 				}
 			}
 
-            const result = originalMethod.apply(target, args) as T;
+			const result = await originalMethod.apply(target, args) as T;
 
 			if (options.runAfter) {
 				options.runAfter(result)
 			}
 
 			return result;
-        }
+		}
 
-        return descriptor;
-    }
+		return descriptor;
+	}
 }

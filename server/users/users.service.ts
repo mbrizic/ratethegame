@@ -30,7 +30,7 @@ class UserService {
 
 	@Cacheable(usersCache)
 	public async getById(userId: number) {
-		
+
 		const sports = await sportsService.getAll();
 		const user = await Users.findByPk(userId, { include: entitiesToInclude });
 		if (!user) {
@@ -38,7 +38,6 @@ class UserService {
 		}
 
 		const model = UserFactory.FromDatabase(user, sports);
-
 
 		return model;
 	}

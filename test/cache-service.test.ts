@@ -2,17 +2,15 @@ import { Cacheable, getCacheStats, InvalidatesCache } from "../server/core/cache
 import { UserSettingModel } from "../server/users/user-setting.model";
 import { UserSettingsModel } from "../server/users/user-settings.model";
 import { usersCache } from "../server/users/users.cache";
-import { UserFactory } from "../server/users/users.factory";
 import { UserModel } from "../server/users/users.model";
 
 const userId = 1
 const userSettingsId = 1
-const sportId = 1
 
 const userModel = new UserModel(userId,
     'mail@mail.com',
     false,
-    [], 
+    [],
     new UserSettingsModel(
         userId,
         userSettingsId,

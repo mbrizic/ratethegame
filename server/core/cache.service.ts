@@ -1,10 +1,16 @@
+import { UserModel } from "../users/users.model";
 import { getAppSettings } from "./app.settings";
 import { buildDecorator } from "./decorators";
 interface KeyValueStore<T> {
-	[id: number | string]: T | null
+    [id: number | string]: T | null
 }
 
-type CacheKey = string | number
+type CacheIdKey = number | string
+type CacheObjectKey = { id?: CacheIdKey }
+type CacheListKey = CacheObjectKey[]
+
+type Cacheable = CacheIdKey | CacheObjectKey | CacheListKey
+
 export interface CacheStats {
     cacheHits: number,
     cacheMisses: number
@@ -14,7 +20,7 @@ const counts: CacheStats = {
     cacheHits: 0,
     cacheMisses: 0
 };
-export class Cache<T, K = CacheKey> {
+export class Cache<T, K = CacheIdKey> {
     private cache: KeyValueStore<T> = {}
 
     public get(id: number | string) {
@@ -23,7 +29,7 @@ export class Cache<T, K = CacheKey> {
         }
 
         const cached = this.cache[id]
-        
+
         if (cached) {
             counts.cacheHits++
         } else {
@@ -47,7 +53,7 @@ export class Cache<T, K = CacheKey> {
         if (!getAppSettings().isCacheEnabled) {
             return
         }
-        
+
         if (id) {
             this.cache[id] = null
         }
@@ -79,8 +85,8 @@ export function getCacheStats() {
  * function getById(id: number)
  * 
  */
-export function Cacheable<Type, Key, Id extends Key>(cache: Cache<Type, Key>, id?: Id) {
-    return buildDecorator<Promise<any>>({
+export function Cacheable<Type extends Cacheable>(cache: Cache<Type, CacheIdKey>, id?: CacheIdKey) {
+    return buildDecorator<Type>({
         runBefore: (...args) => {
             if (id) {
                 return cache.get(id as any)
@@ -90,14 +96,12 @@ export function Cacheable<Type, Key, Id extends Key>(cache: Cache<Type, Key>, id
                 return null
             }
         },
-        runAfter: async (promise) => {
-            const result = await promise;
-
+        runAfter: (result: Type) => {
             const cacheKey = id
                 ? id
-                : result.id
+                : (result as CacheObjectKey).id
 
-            cache.set(cacheKey as any, result as any)
+            cache.set(cacheKey, result)
         }
     })
 }
@@ -112,11 +116,9 @@ export function Cacheable<Type, Key, Id extends Key>(cache: Cache<Type, Key>, id
  *  - if nothing is provided, clear entire cache
  * 
  */
-export function InvalidatesCache<T, K>(cache: Cache<T, K>) {
-    return buildDecorator<Promise<any>>({
-        runAfter: async (promise) => {
-            const result = await promise
-
+export function InvalidatesCache<Type, Key>(cache: Cache<Type, Key>) {
+    return buildDecorator<any>({
+        runAfter: (result) => {
             let id = null
 
             if (!isNaN(result)) {
