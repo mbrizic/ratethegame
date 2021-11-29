@@ -4,7 +4,7 @@ import { Page, PageModel } from "../core/html.interfaces";
 import { Form, HiddenInput, PasswordInput, RowCentered, SubmitButton } from "../core/html.elements"
 import { Layout } from "../_Layout";
 import { Error } from '../component/error.component'
-import { Card } from "../component/card.component";
+import { Card } from "../component/card.components";
 import { Inline } from "../core/html.operator";
 import { UserSettingComponent } from "../component/user-setting.component";
 import { UserModel } from "../../server/users/users.model";

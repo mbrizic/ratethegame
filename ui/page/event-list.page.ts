@@ -1,5 +1,5 @@
 import { EventModel } from "../../server/events/event.model";
-import { EventList } from "../component/event-list.component";
+import { EventList } from "../component/event-list.components";
 import { Column, Heading2 } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Inline } from "../core/html.operator";
@@ -14,7 +14,7 @@ export const EventListPage: Page<EventListModel> = (model: EventListModel) => {
 
     return Layout(model,
         Column(
-            Heading2("Check best rated events:"),
+            Heading2("Check out the top-rated events:"),
             EventList(model.bestRatedEvents),
             model.upcomingEvents.length > 0
                 ? Inline(

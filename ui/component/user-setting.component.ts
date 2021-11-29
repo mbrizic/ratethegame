@@ -1,7 +1,7 @@
 import { Component } from "../core/html.interfaces"
 import { Column, Paragraph, RowSpaced } from "../core/html.elements";
 import { Form, HiddenInput, SubmitButton } from "../core/html.elements"
-import { Card } from "../component/card.component";
+import { Card } from "./card.components";
 import { UserSettingModel } from "../../server/users/user-setting.model";
 import { PotentialUser, UpdateSettingCommand } from "../../server/users/users.dto";
 import { SettingName } from "../../server/users/user-settings.model";
@@ -20,7 +20,7 @@ export const UserSettingComponent: Component<UserSettingComponentModel> = (model
     return Card(
         Column(
             RowSpaced(
-                Paragraph(model.userSettings.description!), 
+                Paragraph(`${model.userSettings.description!}:`), 
                 Paragraph(icon)
             ),
             Form<UpdateSettingCommand>(`/users/${model.user?.id}/setting`,

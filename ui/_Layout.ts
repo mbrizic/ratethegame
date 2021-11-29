@@ -19,7 +19,8 @@ export const Layout = (model: PageModel, ...children: ChildElement[]) => {
 
     const headerWithNavigation = Header(
         Heading1(
-            Link({ text: "Rate the game", href: "/" }),
+            Link({ text: "Rate the game.", href: "/" }),
+            { class: "title" }
         ),
         Navigation(
             Link({ text: "Sports", href: "/sports" }),

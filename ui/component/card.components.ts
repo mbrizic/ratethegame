@@ -6,3 +6,9 @@ export const Card: Component<ChildElement> = (children: ChildElement) => {
         class: "card"
     })
 }
+
+export const DimmedCard: Component<ChildElement> = (children: ChildElement) => {
+    return Div(children, {
+        class: "dimmed card"
+    })
+}

@@ -85,6 +85,9 @@ export const BlockQuote = (text: string) =>
 export const Code = (text: string) =>
     `<span class="code">${text}</span>`
 
+export const CardTag = (text: string) =>
+    `<span class="card-tag">${text}</span>`
+
 export const Strong = (text: string) =>
     `<strong>${text}</strong>`
 

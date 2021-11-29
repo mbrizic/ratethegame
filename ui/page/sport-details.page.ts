@@ -1,7 +1,7 @@
 import { SportModel } from "../../server/sports/sports.model";
 import { UserModel } from "../../server/users/users.model";
 import { EventForm } from "../component/event-form.component";
-import { EventList } from "../component/event-list.component";
+import { EventListLight } from "../component/event-list.components";
 import { SportComponent } from "../component/sport.component";
 import { Column, Heading3 } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
@@ -20,8 +20,6 @@ export const SportDetailsPage: Page<SportDetailsModel> = (model: SportDetailsMod
                 sport: model.sport, 
                 userData: model.userData
             }),
-            Heading3("Events:"),
-            EventList(model.sport.events),
             EventForm({
                 sportId: model.sport.id,
                 user: model.user,

@@ -20,6 +20,6 @@ export default class PageRoute implements Route {
 
 		this.router.post(`${this.path}login`, this.controller.login);
 		this.router.post(`${this.path}register`, this.controller.register);
-		this.router.post(`${this.path}logout`, ensureAuthenticated, this.controller.logout);
+		this.router.get(`${this.path}logout`, ensureAuthenticated, this.controller.logout);
 	}
 }
