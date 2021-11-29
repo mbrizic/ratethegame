@@ -129,6 +129,9 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                 Form("/admin/sport-cache/clear",
                     SubmitButton("Clear sports cache")
                 ),
+                Form("/admin/user-cache/clear",
+                    SubmitButton("Clear users cache")
+                ),
             ),
             Heading3("App settings: "),
             Row(

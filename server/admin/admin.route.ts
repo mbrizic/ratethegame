@@ -20,6 +20,7 @@ export default class AdminRoute implements Route {
 		this.router.post(`${this.path}/css-cache/clear`, ensureAdmin, this.controller.clearCssCache);
 		this.router.post(`${this.path}/event-cache/clear`, ensureAdmin, this.controller.clearEventsCache);
 		this.router.post(`${this.path}/sport-cache/clear`, ensureAdmin, this.controller.clearSportsCache);
+		this.router.post(`${this.path}/user-cache/clear`, ensureAdmin, this.controller.clearUsersCache);
 		this.router.post(`${this.path}/app-settings`, ensureAdmin, this.controller.setAppSettings);
 	}
 }

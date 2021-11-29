@@ -12,6 +12,7 @@ import { getCacheStats } from '../core/cache.service'
 import { AppSettings, getAppSettings, updateAppSettings } from '../core/app.settings'
 import { clearEventsCaches } from '../events/events.cache'
 import { clearSportsCaches } from '../sports/sports.cache'
+import { usersCache } from '../users/users.cache'
 
 export class AdminController {
 	
@@ -79,6 +80,11 @@ export class AdminController {
 
 	public clearSportsCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		clearSportsCaches()
+		res.redirect("/admin")
+	}
+
+	public clearUsersCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		usersCache.clear()
 		res.redirect("/admin")
 	}
 
