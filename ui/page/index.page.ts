@@ -27,17 +27,17 @@ export const IndexPage: Page<IndexModel> = (model: IndexModel) => {
             disclaimer,
             model.bestRatedEvents.length > 0
                 ? Inline(
-                    Heading2("Check out best recent events"),
+                    Heading2("Check out best recent events:"),
                     EventList(model.bestRatedEvents),
                 ) : null,
             model.eventsFromThisWeek.length > 0
                 ? Inline(
-                    Heading2("Rate events from this week"),
+                    Heading2("Rate events from this week:"),
                     EventList(model.eventsFromThisWeek),
                 ) : null,
             model.upcomingEvents.length > 0
                 ? Inline(
-                    Heading2("Or get hyped for upcoming ones"),
+                    Heading2("Or get hyped for upcoming ones:"),
                     EventList(model.upcomingEvents),
                 ) : null,
 

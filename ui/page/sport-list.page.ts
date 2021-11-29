@@ -14,7 +14,7 @@ export const SportListPage: Page<SportListModel> = (model: SportListModel) => {
 
     return Layout(model,
         Column(
-            Heading2("List of all sports"),
+            Heading2("List of all sports:"),
             SportList(model.sports),
             AdminOnlyArea(model.user,
                 SportForm({ user: model.user })

@@ -15,11 +15,14 @@ function getRatingsSummary(model: EventFormModel): ChildElement {
     }
 
     const icon = model.event.isRatedFavourably() ? "✔️" : "😒";
+    const cssClass = model.event.isRatedFavourably() ? "good" : "meh";
 
     return ColumnCentered(
         Spacing(),
         Row(
-            Big(`${model.event.ratingPercentage}% ${icon}`),
+            Styled(
+                { class: cssClass }, Big(`${model.event.ratingPercentage}% ${icon}`)
+            ),
         ),
         Styled({class: 'text-centered'},
             Small(`${model.event.ratings.length} votes.`)

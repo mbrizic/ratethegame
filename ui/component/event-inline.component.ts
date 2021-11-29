@@ -2,7 +2,7 @@ import { humanize } from "../../server/core/date.service";
 import { EventModel } from "../../server/events/event.model";
 import { Link, RowSpaced, Small, Styled, Text } from "../core/html.elements";
 import { Component } from "../core/html.interfaces";
-import { Inline } from "../core/html.operator";
+import { EventRatingSummary } from "./event-rating-summary";
 
 export const EventInline: Component<EventModel> = (event: EventModel) => {
     
@@ -15,25 +15,11 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
         ),
         Text(
             shouldDisplayRatingSummary
-                ? eventRatingSummary(event)
+                ? EventRatingSummary(event)
                 : eventTimeSummary(event)
         )
     )
 
-}
-
-function eventRatingSummary(event: EventModel) {
-    const icon = event.isRatedFavourably() ? "✔️" : "😒";
-    const cssClass = event.isRatedFavourably() ? "good" : "meh";
-
-    return event.hasAnyRatings()
-        ? Inline(
-            Styled({ class: cssClass },
-                `${icon} ${event.ratingPercentage}%`
-            ),
-            Small(`(${event.ratings.length} votes)`)
-        )
-        : `no votes yet`
 }
 
 function eventTimeSummary(event: EventModel) {

@@ -1,7 +1,8 @@
-import { Column, Heading2, Heading3, Link, Paragraph, Row, RowSpaced, Text } from "../core/html.elements"
+import { Column, Heading2, Heading3, Link, Paragraph, Row, RowSpaced, Small, Spacing, Text } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { orderByDescending } from "../../server/core/util"
 import { SportModel } from "../../server/sports/sports.model"
+import { EventRatingSummary } from "./event-rating-summary"
 
 export const SportDetailsComponent: Component<SportModel> = (model: SportModel) => {
 
@@ -17,10 +18,10 @@ export const SportDetailsComponent: Component<SportModel> = (model: SportModel) 
             Link({ text: model.name, href: `/sports/${model.id}` })
         ),
         totalEvents
-            ? Text(`Has ${totalEvents} events. `)
-            : Text(`No events yet for this one.`),
+            ? Small(`${totalEvents} events`)
+            : Small(`No events yet for this one.`),
         bestRatedEvent && bestRatedEvent.ratings.length > 0
-            ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.ratings.length} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
+            ? Text(`${Spacing()}Top rated event: ${bestRatedEventLink}: ${EventRatingSummary(bestRatedEvent)}`)
             : null
     )
 
