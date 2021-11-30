@@ -1,11 +1,9 @@
-@import url('https://rsms.me/inter/inter.css');
-
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow-y: scroll;
     color: #0a0202;
     background: #d8d6d6;
