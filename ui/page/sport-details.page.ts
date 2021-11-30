@@ -1,9 +1,8 @@
 import { SportModel } from "../../server/sports/sports.model";
 import { UserModel } from "../../server/users/users.model";
 import { EventForm } from "../component/event-form.component";
-import { EventListLight } from "../component/event-list.components";
 import { SportComponent } from "../component/sport.component";
-import { Column, Heading3 } from "../core/html.elements";
+import { Column } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
 
