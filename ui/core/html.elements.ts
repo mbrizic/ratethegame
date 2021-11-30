@@ -123,6 +123,9 @@ export const RowSpaced = (...children: ChildElement[]) =>
 export const RowCentered = (...children: ChildElement[]) =>
     `<div class="row centered">${children.join("")}</div>`
 
+export const Grid = (...children: ChildElement[]) =>
+    `<div class="grid">${children.join("")}</div>`
+
 export const Column = (...children: ChildElement[]) =>
     `<div class="column">${children.join("")}</div>`
 
