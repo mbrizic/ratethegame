@@ -2,7 +2,7 @@ import { Paragraph } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { EventInline } from "./event-inline.component"
 import { Inline } from "../core/html.operator"
-import { Card, DimmedCard } from "./card.components"
+import { Card } from "./card.components"
 import { EventModel } from "../../server/events/event.model"
 import { EventInlineLight } from "./event-inline-light.component"
 
