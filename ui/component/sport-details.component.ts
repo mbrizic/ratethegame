@@ -1,4 +1,4 @@
-import { Column, Heading2, Heading3, Link, Paragraph, Row, RowSpaced, Text } from "../core/html.elements"
+import { CardTag, Column, Heading2, Link, Small, Spacing, Text } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { orderByDescending } from "../../server/core/util"
 import { SportModel } from "../../server/sports/sports.model"
@@ -13,14 +13,14 @@ export const SportDetailsComponent: Component<SportModel> = (model: SportModel) 
         : null
 
     return Column(
-        Heading3(
+        Heading2(
             Link({ text: model.name, href: `/sports/${model.id}` })
         ),
         totalEvents
-            ? Text(`Has ${totalEvents} events. `)
-            : Text(`No events yet for this one.`),
+            ? CardTag(`${totalEvents} events`)
+            : null,
         bestRatedEvent && bestRatedEvent.ratings.length > 0
-            ? Text(`Best rated one so far is ${bestRatedEventLink} with ${bestRatedEvent.ratings.length} votes and a score of ${bestRatedEvent.ratingPercentage}%`)
+            ? Text(`${Spacing()}⭐ Top rated event: ${bestRatedEventLink}`)
             : null
     )
 

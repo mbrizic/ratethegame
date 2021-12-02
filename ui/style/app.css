@@ -29,13 +29,27 @@ a, a:visited, a:hover {
 
 .dimmed {
     color: black;
-    background: #29262625;
+    background-color: #f0e6e6;
+}
+
+.card-tag {
+    border: 1px solid rgb(146, 146, 146);
+    color: gray;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+    font-size: 14px;
+    padding: 0 10px;
+    min-width: 50px;
+    width: fit-content;
+}
+
+.card-tag > a {
+    color: gray;
 }
 
 button {
     color: #fffcfc;
     background: #292626;
-    height: 30px;
     border-radius: 25px;
     font-size: 14px;
     padding: 0 20px;

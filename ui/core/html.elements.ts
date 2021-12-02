@@ -85,6 +85,9 @@ export const BlockQuote = (text: string) =>
 export const Code = (text: string) =>
     `<span class="code">${text}</span>`
 
+export const CardTag = (text: string) =>
+    `<span class="card-tag">${text}</span>`
+
 export const Strong = (text: string) =>
     `<strong>${text}</strong>`
 
@@ -119,6 +122,9 @@ export const RowSpaced = (...children: ChildElement[]) =>
 
 export const RowCentered = (...children: ChildElement[]) =>
     `<div class="row centered">${children.join("")}</div>`
+
+export const Grid = (...children: ChildElement[]) =>
+    `<div class="grid">${children.join("")}</div>`
 
 export const Column = (...children: ChildElement[]) =>
     `<div class="column">${children.join("")}</div>`

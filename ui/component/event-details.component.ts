@@ -1,6 +1,6 @@
 import { humanize } from "../../server/core/date.service"
 import { EventModel } from "../../server/events/event.model"
-import { Big, ChildElement, Column, ColumnCentered, Heading2, Link, Paragraph, Row, RowSpaced, Small, Spacing, Strong, Styled } from "../core/html.elements"
+import { Big, CardTag, ChildElement, Column, ColumnCentered, Heading2, Link, Paragraph, Row, RowSpaced, Small, Spacing, Strong, Styled } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { Inline } from "../core/html.operator"
 
@@ -15,11 +15,14 @@ function getRatingsSummary(model: EventFormModel): ChildElement {
     }
 
     const icon = model.event.isRatedFavourably() ? "✔️" : "😒";
+    const cssClass = model.event.isRatedFavourably() ? "good" : "meh";
 
     return ColumnCentered(
         Spacing(),
         Row(
-            Big(`${model.event.ratingPercentage}% ${icon}`),
+            Styled(
+                { class: cssClass }, Big(`${model.event.ratingPercentage}% ${icon}`)
+            ),
         ),
         Styled({class: 'text-centered'},
             Small(`${model.event.ratings.length} votes.`)
@@ -36,7 +39,7 @@ export const EventDetails: Component<EventFormModel> = (model: EventFormModel) =
         Heading2(
             Inline(
                 eventLink,
-                Small(`(${sportLink})`)
+                CardTag(`${sportLink}`)
             )
         ),
         RowSpaced(

@@ -4,7 +4,7 @@ import { EventDetails } from "../component/event-details.component";
 import { Column, Spacing } from "../core/html.elements";
 import { Page, PageModel } from "../core/html.interfaces";
 import { Layout } from "../_Layout";
-import { Card } from "../component/card.component";
+import { Card } from "../component/card.components";
 import { EventModel } from "../../server/events/event.model";
 
 interface EventDetailsModel extends PageModel {
