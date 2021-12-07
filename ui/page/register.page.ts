@@ -10,7 +10,7 @@ interface RegisterModel extends PageModel { }
 
 export const RegisterPage: Page<RegisterModel> = (model: RegisterModel) => {
 
-    const username = getAppConfig().isDebugMode ? "mario@mail.com" : ""
+    const username = getAppConfig().isDebugMode ? "admin@mail.com" : ""
     const password = getAppConfig().isDebugMode ? "123456" : ""
 
     const loginLink = Link({ href: "/login", text: "login"}, { id: "login" })
