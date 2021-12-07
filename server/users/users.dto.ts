@@ -1,27 +1,27 @@
-export class UserDto {
-	public id: number;
-	public email: string;
-	public password: string;
-	public isAdmin: boolean;
+export interface UserDto {
+	id: number;
+	email: string;
+	password: string;
+	isAdmin: boolean;
 }
 
-export class CreateUserCommand {
+export interface CreateUserCommand {
 	email: string;
 	password: string;
 }
 
-export class UpdateUserCommand {
+export interface UpdateUserCommand {
 	email: string;
 	password: string;
 }
 
-export class RemoveUserCommand {
+export interface RemoveUserCommand {
 	id: number;
 	password: string;
 }
 
 export type PotentialUser = UserDto | null | undefined;
 
-export class UpdateSettingCommand {
+export interface UpdateSettingCommand {
 	receiveTopRatedNotifications: boolean;
 }

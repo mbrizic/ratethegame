@@ -1,4 +1,4 @@
-import { createCache } from "../core/cache.service";
+import { Cache } from "../core/cache.service";
 import { UserModel } from "./users.model";
 
-export const usersCache = createCache<UserModel>()
+export const usersCache = new Cache<UserModel>()

@@ -7,34 +7,31 @@ import { ensureInputIsClean } from '../core/input-sanitizer';
 import { ensureInputIsEmail, ensureLongerThan } from '../core/validation';
 import { UserFactory, ValidSettingColumName } from './users.factory';
 import SportsService from '../sports/sports.service';
-import { UserModel } from './users.model';
 import { UserSettings } from '../../database/models/user_settings';
 import { EventRating } from '../../database/models/event_rating';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 import { usersCache } from './users.cache';
+import { Cacheable, InvalidatesCache } from '../core/cache.service';
 
+// TODO: consider not using sports service but rather queries instead,
+// but make sure our caching still works as expected
+const sportsService = new SportsService()
 const entitiesToInclude = ["userSetting", "userSportSubscriptions"]
 
 class UserService {
-	// TODO: consider not using sports service but rather queries instead,
-	// but make sure our caching still works as expected
-	private sportsService = new SportsService()
 
 	public async getAll() {
-		const sports = await this.sportsService.getAll();
+		const sports = await sportsService.getAll();
 		const users = await Users.findAll({ include: entitiesToInclude });
 
 		return users.map(user => UserFactory.FromDatabase(user, sports));
 	}
 
-	public async getById(userId: number): Promise<UserModel> {
-		const retrieved = usersCache.get(userId)
-		if (retrieved) {
-			return retrieved
-		}
+	@Cacheable(usersCache)
+	public async getById(userId: number) {
 
-		const sports = await this.sportsService.getAll();
+		const sports = await sportsService.getAll();
 		const user = await Users.findByPk(userId, { include: entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
@@ -42,12 +39,10 @@ class UserService {
 
 		const model = UserFactory.FromDatabase(user, sports);
 
-		usersCache.set(userId, model)
-
 		return model;
 	}
 
-	public async createUser(dto: CreateUserCommand): Promise<UserModel> {
+	public async createUser(dto: CreateUserCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -86,7 +81,8 @@ class UserService {
 		return userModel;
 	}
 
-	public async updateUser(userId: number, userData: UpdateUserCommand): Promise<UserModel> {
+	@InvalidatesCache(usersCache)
+	public async updateUser(userId: number, userData: UpdateUserCommand) {
 		if (isEmptyObject(userData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -102,12 +98,11 @@ class UserService {
 			throw new HttpException(409, "User not found");
 		}
 
-		usersCache.remove(userId)
-
 		return await this.getById(userId)
 	}
 
-	public async updateUserSetting(userId: number, settingData: UpdateSettingCommand): Promise<UserModel> {
+	@InvalidatesCache(usersCache)
+	public async updateUserSetting(userId: number, settingData: UpdateSettingCommand) {
 		if (isEmptyObject(settingData)) {
 			throw new HttpException(400, "Incorrect input data");
 		}
@@ -133,11 +128,10 @@ class UserService {
 			throw new HttpException(409, "User settings not found");
 		}
 
-		usersCache.remove(userId)
-
 		return await this.getById(userId)
 	}
 
+	@InvalidatesCache(usersCache)
 	public async deleteUser(userId: number) {
 		const deletedSettings = await UserSettings.destroy({ where: { userId: userId } });
 		if (!deletedSettings) {
@@ -152,9 +146,9 @@ class UserService {
 			throw new HttpException(409, "User not found");
 		}
 
-		usersCache.remove(userId)
-
 		recordAnalyticsEvent("UserDeleted", userId)
+
+		return userId
 	}
 
 	public async addUserSportSubscription(userId: number, sportId: number) {
@@ -182,9 +176,9 @@ class UserService {
 			throw new HttpException(409, "Subscription not found");
 		}
 
-		usersCache.remove(userId)
-
 		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sportId)
+
+		usersCache.remove(userId)
 
 		return sportId
 	}

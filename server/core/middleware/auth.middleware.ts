@@ -27,8 +27,6 @@ export async function ensureIsCurrentUser(req: RequestWithUser, res: Response, n
 	if (req.user.id?.toString() == req.params.id) {
 		next()
 	} else {
-		res.status(403)
-		res.statusMessage = 'Forbidden'
 		res.redirect(`/`)
 	}
 }
@@ -39,9 +37,7 @@ export async function ensureAdmin(req: RequestWithPotentialUser, res: Response, 
 	if (req.user?.isAdmin) {
 		next()
 	} else {
-		res.status(401)
-		res.statusMessage = 'No authentication token'
-		res.redirect(redirectUrl)
+		res.redirect('/')
 	}
 }
 

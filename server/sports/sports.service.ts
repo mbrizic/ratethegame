@@ -7,7 +7,8 @@ import { EventRating } from '../../database/models/event_rating'
 import { ensureInputIsClean } from '../core/input-sanitizer'
 import ValidationException from '../core/exceptions/validation.exception'
 import { SportFactory } from './sports.factory'
-import { cacheSportsList, sportsCache, getCachedSportsList, clearSportsCaches } from './sports.cache'
+import { cacheSportsList, sportsCache, getCachedSportsList, sportsListCache } from './sports.cache'
+import { Cacheable, InvalidatesCache } from '../core/cache.service'
 
 const entitiesToInclude = [{
 	model: Events, as: "events", include: [
@@ -34,25 +35,18 @@ export default class SportsService {
 		return sports
 	}
 
+	@Cacheable(sportsCache)
 	public async getById(id: number) {
-		const retrieved = sportsCache.get(id)
-		if (retrieved) {
-			return retrieved
-		}
-
 		const sport = await Sports.findByPk(id, { include: entitiesToInclude })
 
 		if (sport == null) {
 			throw new ValidationException("No sport with that ID")
 		}
 
-		const model = SportFactory.FromDatabase(sport, sport.events)
-
-		sportsCache.set(id, model)
-
-		return model
+		return SportFactory.FromDatabase(sport, sport.events)
 	}
 
+	@InvalidatesCache(sportsListCache)
 	public async addSport(userId: number, dto: CreateSportCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO")
@@ -72,8 +66,6 @@ export default class SportsService {
 			description: sport.description,
 			createdBy: sport.createdByUserId
 		})
-
-		clearSportsCaches()
 
 		return created.id
 	}

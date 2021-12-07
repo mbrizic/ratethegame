@@ -1,11 +1,11 @@
-import { createCache } from '../core/cache.service';
+import { Cache } from '../core/cache.service';
 import eventsCache from '../events/events.cache';
 import { SportModel } from './sports.model';
 
 export type SportCacheKey = 'ALL-SPORTS'
 
-export const sportsCache = createCache<SportModel>()
-const sportsListCache = createCache<SportModel[]>()
+export const sportsCache = new Cache<SportModel>()
+export const sportsListCache = new Cache<SportModel[]>()
 
 export function cacheSportsList(cacheKey: SportCacheKey, sports: SportModel[]) {
     sportsListCache.set(cacheKey, sports)

@@ -9,11 +9,11 @@ import { isEmptyObject, orderByDescending } from '../core/util';
 import { UserDto } from '../users/users.dto';
 import { CreateEventCommand, RateEventCommand } from './events.dto';
 import { EventFactory } from './events.factory';
-import { EventModel } from './event.model';
 import { Sports } from '../../database/models/sports';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
-import eventsCache, { cacheEventsList, clearEventsCaches, getCachedEventsList } from './events.cache';
+import eventsCache, { clearEventsCaches, eventsListCache } from './events.cache';
 import { clearSportsCaches } from '../sports/sports.cache';
+import { Cacheable, InvalidatesCache } from '../core/cache.service';
 
 const defaultPageSize = 10;
 
@@ -45,48 +45,28 @@ const ratingsEntity: IncludeOptions = {
 const defaultEntitiesToInclude = [sportsEntity, ratingsEntity]
 class EventsService {
 
+	@Cacheable(eventsListCache, 'ALL-EVENTS')
 	public async getAllEvents() {
-		const retrieved = getCachedEventsList('ALL-EVENTS')
-		if (retrieved) {
-			return retrieved
-		}
-
-		const events = await this.getAll({ include: defaultEntitiesToInclude })
-
-		cacheEventsList('ALL-EVENTS', events)
-
-		return events
+		return await this.getAll({ include: defaultEntitiesToInclude })
 	}
 
+	@Cacheable(eventsListCache, 'UPCOMING-EVENTS')
 	public async getUpcoming() {
-		const retrieved = getCachedEventsList('UPCOMING-EVENTS')
-		if (retrieved) {
-			return retrieved
-		}
-
-		const events = await this.getAll({
+		return await this.getAll({
 			where: {
 				datetime: afterDate(now()),
 			},
 			include: defaultEntitiesToInclude,
 			limit: defaultPageSize
 		})
-
-		cacheEventsList('UPCOMING-EVENTS', events)
-
-		return events
 	}
 
+	@Cacheable(eventsListCache, 'RECENT-EVENTS')
 	public async getStartedEventsFromThisWeek() {
-		const retrieved = getCachedEventsList('RECENT-EVENTS')
-		if (retrieved) {
-			return retrieved
-		}
-
 		const dateNow = now();
 		const startLimit = addToDate(dateNow, { days: -7 })
 
-		const events = await this.getAll({
+		return await this.getAll({
 			where: {
 				datetime: and(
 					afterDate(startLimit),
@@ -99,18 +79,10 @@ class EventsService {
 			include: defaultEntitiesToInclude,
 			limit: defaultPageSize
 		})
-
-		cacheEventsList('RECENT-EVENTS', events)
-
-		return events
 	}
 
+	@Cacheable(eventsListCache, 'BEST-RATED-EVENTS')
 	public async getBestRated() {
-		const retrieved = getCachedEventsList('BEST-RATED-EVENTS')
-		if (retrieved) {
-			return retrieved
-		}
-
 		const events = await this.getAll({
 			where: {
 				datetime: beforeDate(now()),
@@ -130,30 +102,21 @@ class EventsService {
 
 		orderByDescending(events, a => a.ratingPercentage)
 
-		cacheEventsList('BEST-RATED-EVENTS', events)
-
 		return events;
 	}
 
+	@Cacheable(eventsCache)
 	public async getById(id: number) {
-		const retrieved = eventsCache.get(id)
-		if (retrieved) {
-			return retrieved
-		}
-
 		const event = await Events.findByPk(id, { include: defaultEntitiesToInclude });
 
 		if (event == null) {
 			throw new HttpException(400, "No event with that ID");
 		}
 
-		const model = EventFactory.FromDatabase(event, event.sport);
-
-		eventsCache.set(id, model)
-
-		return model
+		return EventFactory.FromDatabase(event, event.sport);
 	}
 
+	@InvalidatesCache(eventsListCache)
 	public async addEvent(user: UserDto, dto: CreateEventCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Invalid DTO");
@@ -173,7 +136,6 @@ class EventsService {
 		});
 
 		clearSportsCaches(sport?.id)
-		clearEventsCaches()
 
 		return created.id
 	}
