@@ -23,7 +23,7 @@ export const SportComponent: Component<SportComponentModel> = (model: SportCompo
                 })
             ),
             Spacing(),
-            Heading3("Events:"),
+            Heading3(`Events (${model.sport.events.length}):`),
             EventListLight(model.sport.events)
         )
     )

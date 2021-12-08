@@ -1,5 +1,7 @@
+import e from "express"
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
+import { orderByAscending, orderByDescending } from "../core/util"
 import { EventModel } from "../events/event.model"
 
 export class SportModel implements DomainModel {
@@ -20,7 +22,7 @@ export class SportModel implements DomainModel {
 		this.name = name
 		this.description = description
 		this.createdByUserId = createdByUserId
-		this.events = events
+		this.events = orderByAscending(events, event => event.ratingPercentage)
 
 		this.ensureValid()
 	}

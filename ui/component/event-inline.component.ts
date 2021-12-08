@@ -1,6 +1,6 @@
 import { humanize } from "../../server/core/date.service";
 import { EventModel } from "../../server/events/event.model";
-import { CardTag, Link, RowSpaced, Text } from "../core/html.elements";
+import { Tag, Link, RowSpaced, Text, Small } from "../core/html.elements";
 import { Component } from "../core/html.interfaces";
 import { Inline } from "../core/html.operator";
 import { EventRatingSummary } from "./event-rating-summary.component";
@@ -13,7 +13,12 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
         Text(
             Inline(
                 Link({ text: event.name, href: `/events/${event.id}` }),
-                CardTag(`${event.sportName}`),
+                Small(
+                    Link({ text: 
+                        `(${event.sportName})`, 
+                        href: `/sports/${event.sportId}` 
+                    }),
+                ),
             )
         ),
         Text(

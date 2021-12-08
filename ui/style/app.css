@@ -1,7 +1,7 @@
 .card {
-    border: 2px solid silver;
+    border: 2px solid #c5c5c5;
+    border-radius: 8px;
     background-color: white;
-    border-radius: 5px;
     padding: 10px 20px;
     width: 100%;
     margin: 5px 0;
@@ -29,22 +29,15 @@ a, a:visited, a:hover {
 
 .dimmed {
     color: black;
-    background-color: #f0e6e6;
+    background-color: #d7d4d4;
 }
 
-.card-tag {
+.tag {
     border: 1px solid rgb(146, 146, 146);
-    color: gray;
     background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 2px;
-    font-size: 14px;
-    padding: 0 10px;
-    min-width: 50px;
-    width: fit-content;
-}
-
-.card-tag > a {
-    color: gray;
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 5px 10px;
 }
 
 button {

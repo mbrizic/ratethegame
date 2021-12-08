@@ -32,12 +32,12 @@ export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel
         Form<RateEventCommand>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: true }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
-			SubmitButton("Would recommend 👍")
+			SubmitButton(`Would recommend 👍`)
 		),
 		Form<RateEventCommand>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: false }),
 			HiddenInput({ name: "eventId", value: model.event.id }),
-			SubmitButton("Would not recommend 👎")
+			SubmitButton(`Would not recommend 👎`)
 		)
     )
 }

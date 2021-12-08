@@ -1,5 +1,6 @@
 import { SportModel } from "../../server/sports/sports.model";
 import { UserModel } from "../../server/users/users.model";
+import { AdminOnlyArea } from "../component/admin-area.component";
 import { EventForm } from "../component/event-form.component";
 import { SportComponent } from "../component/sport.component";
 import { Column } from "../core/html.elements";
@@ -19,10 +20,14 @@ export const SportDetailsPage: Page<SportDetailsModel> = (model: SportDetailsMod
                 sport: model.sport, 
                 userData: model.userData
             }),
-            EventForm({
-                sportId: model.sport.id,
-                user: model.user,
-            })
+            AdminOnlyArea(
+                model.user,
+                EventForm({
+                    sportId: model.sport.id,
+                    user: model.user,
+                })
+            )
+            
         )
     )
 

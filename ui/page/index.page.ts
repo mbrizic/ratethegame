@@ -14,17 +14,18 @@ interface IndexModel extends PageModel {
     sports: SportModel[];
 }
 
+export const websiteIntro = Inline(
+    Paragraph("Want to find out if last night's game is worth watching today, but don't want to Google it to save yourselves from any spoilers?", { class: "text-centered" }),
+    Paragraph(`This website is a ${Strong("spoiler-free")} zone to find it out.`, { class: "text-centered" }),
+);
+
 export const IndexPage: Page<IndexModel> = (model: IndexModel) => {
 
-    const disclaimer = model.user === null
-        ? Inline(
-            Paragraph("Want to find out if last night's game is worth watching today, but don't want to Google it to save yourselves from any spoilers?", { class: "text-centered" }),
-            Paragraph(`This website is a ${Strong("spoiler-free")} zone to find it out.`, { class: "text-centered" }),
-        ) : null
+    const intro = model.user == null ? websiteIntro : null
 
     return Layout(model,
         Column(
-            disclaimer,
+            intro,
             model.bestRatedEvents.length > 0
                 ? Inline(
                     Heading2("Check out the top-rated recent events:"),
