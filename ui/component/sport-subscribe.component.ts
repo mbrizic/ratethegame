@@ -1,5 +1,5 @@
 import { UserModel } from "../../server/users/users.model"
-import { Column, ColumnCentered, Form, Small, Styled, SubmitButton } from "../core/html.elements"
+import { Column, ColumnCentered, Form, Small, Spacing, Styled, SubmitButton } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 
 export interface SportSubscribeComponentModel {
@@ -11,11 +11,12 @@ export const SportSubscribeComponent: Component<SportSubscribeComponentModel> = 
 
     const subscribed = model.user?.subscriptions.some(subscription => subscription.sportId == model.sportId)
 
-    return ColumnCentered(
+    return Column(
+        Spacing(),
         subscribed
             ? Column(
                 Styled({ class: "good text-centered" },
-                    Small("Subscribed to this sport.")
+                    Small("You are subscribed to this sport.")
                 ),
                 Form(`/sports/${model.sportId}/unsubscribe`,
                     SubmitButton("Unsubscribe", { class: "dimmed" })

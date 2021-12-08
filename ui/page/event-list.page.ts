@@ -6,19 +6,27 @@ import { Inline } from "../core/html.operator";
 import { Layout } from "../_Layout";
 
 interface EventListModel extends PageModel {
-    upcomingEvents: EventModel[];
     bestRatedEvents: EventModel[];
+    eventsFromThisWeek: EventModel[];
+    upcomingEvents: EventModel[];
 }
 
 export const EventListPage: Page<EventListModel> = (model: EventListModel) => {
 
     return Layout(model,
         Column(
-            Heading2("Check out the top-rated events:"),
+            Heading2("Top-rated:"),
             EventList(model.bestRatedEvents),
+
+            model.eventsFromThisWeek.length > 0
+                ? Inline(
+                    Heading2("Recent:"),
+                    EventList(model.eventsFromThisWeek),
+                ) : null,
+
             model.upcomingEvents.length > 0
                 ? Inline(
-                    Heading2("Or get hyped for upcoming ones:"),
+                    Heading2("Upcoming:"),
                     EventList(model.upcomingEvents),
                 ) : null,
         )

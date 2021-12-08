@@ -1,5 +1,5 @@
 import HttpException from '../core/exceptions/http.exception'
-import { isEmptyObject } from '../core/util'
+import { isEmptyObject, orderByAscending } from '../core/util'
 import { Sports } from '../../database/models/sports'
 import { CreateSportCommand } from './sports.dto'
 import { Events } from '../../database/models/events'

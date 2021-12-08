@@ -56,6 +56,9 @@ class EventsService {
 			where: {
 				datetime: afterDate(now()),
 			},
+			order: [[
+				'datetime', 'ASC'
+			]],
 			include: defaultEntitiesToInclude,
 			limit: defaultPageSize
 		})
@@ -96,7 +99,6 @@ class EventsService {
 					},
 				}
 			],
-			order: [['name', 'DESC']],
 			limit: defaultPageSize
 		})
 

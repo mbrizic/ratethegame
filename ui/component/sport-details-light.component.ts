@@ -1,7 +1,8 @@
-import { CardTag, Column, Heading3, Link, Row, Small, Spacing, Text } from "../core/html.elements"
+import { Column, Heading3, Link, Row, RowSpaced, Small, Spacing, Tag, Text } from "../core/html.elements"
 import { Component } from "../core/html.interfaces"
 import { orderByDescending } from "../../server/core/util"
 import { SportModel } from "../../server/sports/sports.model"
+import { Inline } from "../core/html.operator"
 
 export const SportDetailsLightComponent: Component<SportModel> = (model: SportModel) => {
 
@@ -13,17 +14,22 @@ export const SportDetailsLightComponent: Component<SportModel> = (model: SportMo
         : null
 
     return Column(
-        Heading3(
-            Link({ text: model.name, href: `/sports/${model.id}` })
+        Text(
+            Inline(
+                Link({ text: `${model.name}`, href: `/sports/${model.id}` }),
+                Small(
+                    totalEvents
+                        ? `(${totalEvents} events)`
+                        : `(No events yet)`
+                )
+            ),
         ),
-        Row(
-            totalEvents
-                ? CardTag(`${totalEvents} events`)
-                : CardTag("No events"),
+        Spacing(),
+        Text(
             bestRatedEvent && bestRatedEvent.ratings.length > 0
-                ? Text(`&nbsp⭐${bestRatedEventLink}`)
-                : null
-        )
-    )
+                ? `⭐ ${bestRatedEventLink}`
+                : " ",
+        ),
 
+    )
 }
