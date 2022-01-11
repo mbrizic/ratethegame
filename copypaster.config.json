@@ -1,0 +1,32 @@
+{
+    "sports": {
+        "replacementKey": "sport",
+        "folders": [
+            "/server/sports/"
+        ],
+        "files": [
+            "/server/sports/sports.controller.ts",
+            "/server/sports/sports.dto.ts",
+            "/server/sports/sports.route.ts",
+            "/server/sports/sports.service.ts",
+        
+            "/ui/page/sport-list.page.ts",
+            "/ui/page/sport-details.page.ts",
+            "/ui/page/sport-list.page.ts",
+            "/ui/page/sport-details.page.ts",
+        
+            "/ui/component/sport-list.component.ts",
+            "/ui/component/sport-details.component.ts"
+        ],
+        "lines": [
+            {
+                "file": "/server/server.ts",
+                "content": "import SportsRoute from './sports/sports.route';"
+            },
+            {
+                "file": "/server/server.ts",
+                "content": "\t\tnew SportsRoute(),"
+            }
+        ]
+    }
+}
