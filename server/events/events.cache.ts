@@ -10,13 +10,13 @@ export function cacheEventsList(key: EventCacheKey, events: EventModel[]) {
     eventsListCache.set(key, events)
 
     events.forEach(event => {
-        eventsCache.set(event.id, event)
+        eventsCache.set(event.slug, event)
     })
 }
 
-export function clearEventsCaches(eventId?: number | string) {
-    if (eventId) {
-        eventsCache.remove(eventId)
+export function clearEventsCaches(slug?: string) {
+    if (slug) {
+        eventsCache.remove(slug)
     } else {
         eventsCache.clear()
     }

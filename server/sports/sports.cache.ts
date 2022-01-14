@@ -11,10 +11,10 @@ export function cacheSportsList(cacheKey: SportCacheKey, sports: SportModel[]) {
     sportsListCache.set(cacheKey, sports)
 
     sports.forEach(sport => {
-        sportsCache.set(sport.id, sport)
+        sportsCache.set(sport.slug, sport)
 
         sport.events.forEach(event => {
-            eventsCache.set(event.id, event)
+            eventsCache.set(event.slug, event)
         })
     })
 }
