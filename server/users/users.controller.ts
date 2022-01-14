@@ -10,6 +10,19 @@ class UsersController {
 	private authService = new AuthService();
 	public userService = new UserService();
 
+	public getCurrentlyLoggedInUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+		try {
+			const userData = await this.userService.getById(req.user.id);
+
+			res.send(UserPage({
+				userData: userData,
+				user: req.user,
+			}));
+		} catch (error) {
+			next(error);
+		}
+	}
+
 	public getUserById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		const userId: number = Number(req.params.id);
 

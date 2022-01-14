@@ -14,8 +14,8 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
             Inline(
                 Link({ text: event.name, href: `/events/${event.slug}` }),
                 Small(
-                    Link({ text: 
-                        `(${event.sportName})`, 
+                    Link({ 
+                        text: `(${event.sportName})`, 
                         href: `/sports/${event.sportSlug}` 
                     }),
                 ),
