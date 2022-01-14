@@ -16,15 +16,12 @@ UPDATE sports
 UPDATE events 
     SET slug = LOWER(
         REPLACE(
+            -- handling special cases of events with dash in their names
             REPLACE(events.name, ' - ', ' '),
             ' ',
             '-'
         )
     );
-
--- fix some incorrectly named events which end up with duplicated dashes
--- UPDATE events 
---     SET slug = REPLACE(events.slug, '--', '-');
 
 -- set not null and unique constraints on it for future items
 
@@ -35,7 +32,13 @@ ALTER TABLE sports
 	ALTER COLUMN slug SET NOT NULL;
 
 ALTER TABLE events
-    ADD CONSTRAINT event_slug_unique unique (slug);
+    ADD CONSTRAINT event_slug_unique UNIQUE (slug);
 
 ALTER TABLE sports
-    ADD CONSTRAINT sport_slug_unique unique (slug);
+    ADD CONSTRAINT sport_slug_unique UNIQUE (slug);
+
+
+-- add indexes to slug columns as we're gonna be querying for them a lot
+
+CREATE INDEX event_slug_index ON events(slug);
+CREATE INDEX sport_slug_index ON sports(slug);

@@ -104,6 +104,12 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
     timestamps: false,
     indexes: [
       {
+        name: "event_slug_index",
+        fields: [
+          { name: "slug" },
+        ]
+      },
+      {
         name: "event_slug_unique",
         unique: true,
         fields: [

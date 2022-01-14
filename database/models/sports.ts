@@ -101,6 +101,12 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
     timestamps: false,
     indexes: [
       {
+        name: "sport_slug_index",
+        fields: [
+          { name: "slug" },
+        ]
+      },
+      {
         name: "sport_slug_unique",
         unique: true,
         fields: [
