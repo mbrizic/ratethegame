@@ -108,17 +108,6 @@ class EventsService {
 		return events;
 	}
 
-	// @Cacheable(eventsCache)
-	// public async getById(id: number) {
-	// 	const event = await Events.findByPk(id, { include: defaultEntitiesToInclude });
-
-	// 	if (event == null) {
-	// 		throw new HttpException(400, "No event with that ID");
-	// 	}
-
-	// 	return EventFactory.FromDatabase(event, event.sport);
-	// }
-
 	@Cacheable(eventsCache)
 	public async getBySlug(slug: string) {
 		const event = await Events.findOne({

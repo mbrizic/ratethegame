@@ -10,7 +10,7 @@ class UsersController {
 	private authService = new AuthService();
 	public userService = new UserService();
 
-	public getCurrentlyLoggedInUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+	public getUserProfile = async (req: RequestWithUser, res: Response, next: NextFunction) => {
 		try {
 			const userData = await this.userService.getById(req.user.id);
 
