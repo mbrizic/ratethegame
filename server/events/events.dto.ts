@@ -6,6 +6,6 @@ export interface CreateEventCommand {
 }
 
 export interface RateEventCommand {
-	eventId: number;
+	eventSlug: string;
 	wouldRecommend: boolean;
 }

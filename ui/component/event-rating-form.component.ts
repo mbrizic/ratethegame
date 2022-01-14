@@ -23,7 +23,7 @@ export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel
 		const icon = userVote.wouldRecommend ? '👍' : '👎'
 
 		return Form<RateEventCommand>(`/events/${model.event.id}/unvote`, 
-			HiddenInput<RateEventCommand>({ name: "eventId", value: model.event.id }),
+			HiddenInput<RateEventCommand>({ name: "eventSlug", value: model.event.slug }),
 			SubmitButton(`Remove your ${icon} vote`)
 		)
 	}
@@ -31,12 +31,12 @@ export const EventRatingForm: Component<EventFormModel> = (model: EventFormModel
     return RowCentered(
         Form<RateEventCommand>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: true }),
-			HiddenInput({ name: "eventId", value: model.event.id }),
+			HiddenInput({ name: "eventSlug", value: model.event.slug }),
 			SubmitButton(`Would recommend 👍`)
 		),
 		Form<RateEventCommand>(`/events/${model.event.id}/vote`, 
 			HiddenInput({ name: "wouldRecommend", value: false }),
-			HiddenInput({ name: "eventId", value: model.event.id }),
+			HiddenInput({ name: "eventSlug", value: model.event.slug }),
 			SubmitButton(`Would not recommend 👎`)
 		)
     )

@@ -19,6 +19,7 @@ export class EventFactory {
 			userId,
 			sport.id,
 			sport.name,
+			sport.slug,
 			[]
 		)
 	}
@@ -48,6 +49,7 @@ export class EventFactory {
 			event.createdBy,
 			event.sportId,
 			sport.name,
+			sport.slug,
 			ratings
 		)
 	}

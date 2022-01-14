@@ -14,6 +14,7 @@ import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import eventsCache, { clearEventsCaches, eventsListCache } from './events.cache';
 import { clearSportsCaches } from '../sports/sports.cache';
 import { Cacheable, InvalidatesCache } from '../core/cache.service';
+import ValidationException from '../core/exceptions/validation.exception';
 
 const defaultPageSize = 10;
 
@@ -107,9 +108,25 @@ class EventsService {
 		return events;
 	}
 
+	// @Cacheable(eventsCache)
+	// public async getById(id: number) {
+	// 	const event = await Events.findByPk(id, { include: defaultEntitiesToInclude });
+
+	// 	if (event == null) {
+	// 		throw new HttpException(400, "No event with that ID");
+	// 	}
+
+	// 	return EventFactory.FromDatabase(event, event.sport);
+	// }
+
 	@Cacheable(eventsCache)
-	public async getById(id: number) {
-		const event = await Events.findByPk(id, { include: defaultEntitiesToInclude });
+	public async getBySlug(slug: string) {
+		const event = await Events.findOne({
+			where: {
+				slug: slug
+			},
+			include: defaultEntitiesToInclude
+		});
 
 		if (event == null) {
 			throw new HttpException(400, "No event with that ID");
@@ -132,6 +149,7 @@ class EventsService {
 
 		const created = await Events.create({
 			name: model.name,
+			slug: model.slug,
 			sportId: model.sportId,
 			createdBy: user.id,
 			datetime: model.date,
@@ -139,7 +157,7 @@ class EventsService {
 
 		clearSportsCaches(sport?.id)
 
-		return created.id
+		return created.slug
 	}
 
 	public async addRating(userId: number, dto: RateEventCommand) {
@@ -147,18 +165,22 @@ class EventsService {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
-		const eventModel = await this.getById(dto.eventId)
+		const eventModel = await this.getBySlug(dto.eventSlug)
+
+		if (eventModel.id == null) {
+			throw new ValidationException("No event with such id")
+		}
 
 		await EventRating.create({
-			eventId: dto.eventId,
+			eventId: eventModel.id,
 			createdBy: userId,
 			wouldRecommend: dto.wouldRecommend,
 		})
 
-		clearEventsCaches(eventModel.id)
+		clearEventsCaches(eventModel.slug)
 		clearSportsCaches(eventModel.sportId)
 
-		recordAnalyticsEvent("UserVoted", userId, dto.eventId, dto.wouldRecommend.toString())
+		recordAnalyticsEvent("UserVoted", userId, eventModel.id, dto.wouldRecommend.toString())
 
 		return true
 	}
@@ -168,7 +190,11 @@ class EventsService {
 			throw new HttpException(400, "Invalid DTO");
 		}
 
-		const eventModel = await this.getById(dto.eventId)
+		const eventModel = await this.getBySlug(dto.eventSlug)
+
+		if (eventModel.id == null) {
+			throw new ValidationException("No event with such id")
+		}
 
 		const deleted = await EventRating.destroy({
 			where: {
@@ -181,10 +207,10 @@ class EventsService {
 			throw new HttpException(409, "Rating not found");
 		}
 
-		clearEventsCaches(eventModel.id)
+		clearEventsCaches(eventModel.slug)
 		clearSportsCaches(eventModel.sportId)
 
-		recordAnalyticsEvent("UserRemovedVote", userId, dto.eventId)
+		recordAnalyticsEvent("UserRemovedVote", userId, eventModel.id)
 
 		return true
 	}

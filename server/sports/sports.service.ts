@@ -36,8 +36,13 @@ export default class SportsService {
 	}
 
 	@Cacheable(sportsCache)
-	public async getById(id: number) {
-		const sport = await Sports.findByPk(id, { include: entitiesToInclude })
+	public async getBySlug(slug: string) {
+		const sport = await Sports.findOne({
+			where: {
+				slug: slug,
+			},
+			include: entitiesToInclude
+		})
 
 		if (sport == null) {
 			throw new ValidationException("No sport with that ID")
@@ -63,10 +68,11 @@ export default class SportsService {
 
 		const created = await Sports.create({
 			name: sport.name,
+			slug: sport.slug,
 			description: sport.description,
-			createdBy: sport.createdByUserId
+			createdBy: sport.createdByUserId,
 		})
 
-		return created.id
+		return created.slug
 	}
 }

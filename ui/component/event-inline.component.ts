@@ -12,11 +12,11 @@ export const EventInline: Component<EventModel> = (event: EventModel) => {
     return RowSpaced(
         Text(
             Inline(
-                Link({ text: event.name, href: `/events/${event.id}` }),
+                Link({ text: event.name, href: `/events/${event.slug}` }),
                 Small(
                     Link({ text: 
                         `(${event.sportName})`, 
-                        href: `/sports/${event.sportId}` 
+                        href: `/sports/${event.sportSlug}` 
                     }),
                 ),
             )
