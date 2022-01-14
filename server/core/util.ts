@@ -38,7 +38,9 @@ export function matchAll(str: string, regex: RegExp) {
 }
 
 export function replaceAll(str: string, find: string, replace: string) {
-    return str.replace(new RegExp(find, 'g'), replace);
+    const sanitized = find.replace(/\W/g, "\\$&") 
+
+    return str.replace(new RegExp(sanitized, 'g'), replace);
 }
   
 export function sum(array: number[]) {

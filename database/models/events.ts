@@ -11,6 +11,7 @@ export interface EventsAttributes {
   createdAt: Date;
   createdBy: number;
   sportId: number;
+  slug: string;
 }
 
 export type EventsPk = "id";
@@ -25,6 +26,7 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
   createdAt!: Date;
   createdBy!: number;
   sportId!: number;
+  slug!: string;
 
   // Events hasMany EventRating via eventId
   eventRatings!: EventRating[];
@@ -89,6 +91,11 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
         key: 'id'
       },
       field: 'sport_id'
+    },
+    slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: "event_slug_unique"
     }
   }, {
     sequelize,
@@ -96,6 +103,13 @@ export class Events extends Model<EventsAttributes, EventsCreationAttributes> im
     schema: 'public',
     timestamps: false,
     indexes: [
+      {
+        name: "event_slug_unique",
+        unique: true,
+        fields: [
+          { name: "slug" },
+        ]
+      },
       {
         name: "events_pkey",
         unique: true,
