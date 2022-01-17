@@ -21,7 +21,7 @@
             "/ui/component/sport-list.component.ts",
             "/ui/component/sport-details.component.ts"
         ],
-        "lines": [
+        "snippets": [
             {
                 "file": "/server/server.ts",
                 "content": "import SportsRoute from './sports/sports.route';"
