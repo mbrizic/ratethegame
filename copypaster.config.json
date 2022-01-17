@@ -6,7 +6,10 @@
         ],
         "files": [
             "/server/sports/sports.controller.ts",
+            "/server/sports/sports.cache.ts",
             "/server/sports/sports.dto.ts",
+            "/server/sports/sports.factory.ts",
+            "/server/sports/sports.model.ts",
             "/server/sports/sports.route.ts",
             "/server/sports/sports.service.ts",
         
