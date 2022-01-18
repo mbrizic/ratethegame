@@ -13,6 +13,7 @@ import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 import { usersCache } from './users.cache';
 import { Cacheable, InvalidatesCache } from '../core/cache.service';
+import ValidationException from '../core/exceptions/validation.exception';
 
 // TODO: consider not using sports service but rather queries instead,
 // but make sure our caching still works as expected
@@ -151,23 +152,25 @@ class UserService {
 		return userId
 	}
 
-	public async addUserSportSubscription(userId: number, sportId: number) {
+	public async addUserSportSubscription(userId: number, sportSlug: string) {
+		const sport = await sportsService.getBySlug(sportSlug)
+
 		await UserSportSubscriptions.create({
-			sportId: sportId,
+			sportId: sport.id!!,
 			userId: userId,
 		})
 
-		recordAnalyticsEvent("UserSubscribedToSport", userId, sportId)
+		recordAnalyticsEvent("UserSubscribedToSport", userId, sport.id)
 
 		usersCache.remove(userId)
-
-		return sportId
 	}
 
-	public async removeUserSportSubscription(userId: number, sportId: number) {
+	public async removeUserSportSubscription(userId: number, sportSlug: string) {
+		const sport = await sportsService.getBySlug(sportSlug)
+
 		const deleted = await UserSportSubscriptions.destroy({
 			where: {
-				sportId: sportId,
+				sportId: sport.id,
 				userId: userId,
 			}
 		});
@@ -176,11 +179,9 @@ class UserService {
 			throw new HttpException(409, "Subscription not found");
 		}
 
-		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sportId)
+		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sport.id)
 
 		usersCache.remove(userId)
-
-		return sportId
 	}
 }
 

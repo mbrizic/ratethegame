@@ -6,7 +6,7 @@ import { EventModel } from "./event.model"
 
 export class EventFactory {
 
-	public static Create(name: string, date: Date, sport: Sports | null, userId: number) {
+	public static Create(name: string, slug: string, date: Date, sport: Sports | null, userId: number) {
 
 		if (sport == null || sport.id == null) {
 			throw new ValidationException("Event needs to be associated with sport.")
@@ -15,10 +15,12 @@ export class EventFactory {
 		return new EventModel(
 			undefined,
 			name,
+			slug,
 			date,
 			userId,
 			sport.id,
 			sport.name,
+			sport.slug,
 			[]
 		)
 	}
@@ -44,10 +46,12 @@ export class EventFactory {
 		return new EventModel(
 			event.id,
 			event.name,
+			event.slug,
 			event.datetime,
 			event.createdBy,
 			event.sportId,
 			sport.name,
+			sport.slug,
 			ratings
 		)
 	}

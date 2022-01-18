@@ -27,10 +27,10 @@ class EventsController {
 	}
 
 	public getEventsDetails = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
-		const eventId = Number(req.params.id)
+		const eventSlug = req.params.slug
 		
 		try {
-			const event = await this.eventsService.getById(eventId)
+			const event = await this.eventsService.getBySlug(eventSlug)
 
 			res.send(EventDetailsPage({
 				event,
@@ -45,8 +45,8 @@ class EventsController {
 		const dto = req.body;
 
 		try {
-			const createdEventId = await this.eventsService.addEvent(req.user, dto)
-			res.redirect(`/events/${createdEventId}`);
+			const createdEventSlug = await this.eventsService.addEvent(req.user, dto)
+			res.redirect(`/events/${createdEventSlug}`);
 		} catch (error) {
 			next(error);
 		}
@@ -57,7 +57,7 @@ class EventsController {
 
 		try {
 			await this.eventsService.addRating(req.user.id, dto)
-			res.redirect(`/events/${dto.eventId}`);
+			res.redirect(`/events/${dto.eventSlug}`);
 		} catch (error) {
 			next(error);
 		}
@@ -68,7 +68,7 @@ class EventsController {
 		
 		try {
 			await this.eventsService.removeRating(req.user.id, dto)
-			res.redirect(`/events/${dto.eventId}`);
+			res.redirect(`/events/${dto.eventSlug}`);
 		} catch (error) {
 			next(error);
 		}

@@ -10,7 +10,7 @@ export const EventInlineLight: Component<EventModel> = (event: EventModel) => {
 
     return RowSpaced(
         Text(
-            Link({ text: event.name, href: `/events/${event.id}` }),
+            Link({ text: event.name, href: `/events/${event.slug}` }),
         ),
         Text(
             shouldDisplayRatingSummary

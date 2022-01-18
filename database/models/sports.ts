@@ -10,6 +10,7 @@ export interface SportsAttributes {
   description?: string;
   createdAt: Date;
   createdBy: number;
+  slug: string;
 }
 
 export type SportsPk = "id";
@@ -23,6 +24,7 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
   description?: string;
   createdAt!: Date;
   createdBy!: number;
+  slug!: string;
 
   // Sports hasMany Events via sportId
   events!: Events[];
@@ -86,6 +88,11 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
         key: 'id'
       },
       field: 'created_by'
+    },
+    slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: "sport_slug_unique"
     }
   }, {
     sequelize,
@@ -93,6 +100,19 @@ export class Sports extends Model<SportsAttributes, SportsCreationAttributes> im
     schema: 'public',
     timestamps: false,
     indexes: [
+      {
+        name: "sport_slug_index",
+        fields: [
+          { name: "slug" },
+        ]
+      },
+      {
+        name: "sport_slug_unique",
+        unique: true,
+        fields: [
+          { name: "slug" },
+        ]
+      },
       {
         name: "sports_pkey",
         unique: true,

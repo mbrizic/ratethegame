@@ -1,4 +1,3 @@
-import { UserModel } from "../users/users.model";
 import { getAppSettings } from "./app.settings";
 import { buildDecorator } from "./decorators";
 interface KeyValueStore<T> {
@@ -6,7 +5,7 @@ interface KeyValueStore<T> {
 }
 
 type CacheIdKey = number | string
-type CacheObjectKey = { id?: CacheIdKey }
+type CacheObjectKey = { id?: CacheIdKey, slug?: CacheIdKey }
 type CacheListKey = CacheObjectKey[]
 
 type Cacheable = CacheIdKey | CacheObjectKey | CacheListKey
@@ -79,7 +78,7 @@ export function getCacheStats() {
  * 
  * 2. Without `id` param - id gets inferred from annotated function's return value.
  * When reading from cache it tries to get it from function's first param, and when writing 
- * it uses `id` property of returned object.
+ * it uses properties of returned object - first it tries `slug`, then `id` param.
  * 
  * @Cacheable(someCache)
  * function getById(id: number)
@@ -87,21 +86,31 @@ export function getCacheStats() {
  */
 export function Cacheable<Type extends Cacheable>(cache: Cache<Type, CacheIdKey>, id?: CacheIdKey) {
     return buildDecorator<Type>({
+        // Checks if item is already in cache
         runBefore: (...args) => {
             if (id) {
                 return cache.get(id as any)
-            } else if (!isNaN(args[0])) {
+            } else if (args[0]) {
                 return cache.get(args[0])
             } else {
                 return null
             }
         },
+        // Writes the item to cache
         runAfter: (result: Type) => {
-            const cacheKey = id
-                ? id
-                : (result as CacheObjectKey).id
+            const hasExplicitCacheKey = id != null;
 
-            cache.set(cacheKey, result)
+            if (hasExplicitCacheKey) {
+                cache.set(id, result)
+            } else {
+                const cacheableResult = result as CacheObjectKey
+
+                const cacheKey = cacheableResult.slug
+                    ? cacheableResult.slug
+                    : cacheableResult.id
+
+                cache.set(cacheKey, result)
+            }
         }
     })
 }
@@ -121,10 +130,10 @@ export function InvalidatesCache<Type, Key>(cache: Cache<Type, Key>) {
         runAfter: (result) => {
             let id = null
 
-            if (!isNaN(result)) {
-                id = result
-            } else if (result.id) {
+            if (result.id) {
                 id = result.id
+            } else {
+                id = result
             }
 
             if (cache.get(id)) {
