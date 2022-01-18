@@ -134,7 +134,7 @@ class EventsService {
 
 		const sport = await Sports.findByPk(dto.sportId)
 
-		const model = EventFactory.Create(dto.name, dto.date, sport, user.id)
+		const model = EventFactory.Create(dto.name, dto.slug, dto.date, sport, user.id)
 
 		const created = await Events.create({
 			name: model.name,

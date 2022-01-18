@@ -29,6 +29,7 @@ export const EventForm: Component<EventFormModel> = (model: EventFormModel) => {
         Form<CreateEventCommand>("/events",
             TextInput({ placeholder: "Name", name: "name" }),
             TextInput({ placeholder: "Description", name: "description" }),
+            TextInput({ placeholder: "URL slug (optional)", name: "slug" }),
             DateInput({ placeholder: "", name: "date", value: date }),
             HiddenInput({ name: "sportId", value: model.sportId }),
             SubmitButton("Add event")

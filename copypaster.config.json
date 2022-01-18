@@ -19,7 +19,9 @@
             "/ui/page/sport-details.page.ts",
         
             "/ui/component/sport-list.component.ts",
-            "/ui/component/sport-details.component.ts"
+            "/ui/component/sport-details.component.ts",
+            "/ui/component/sport-form.component.ts",
+            "/ui/component/sport.component.ts"
         ],
         "snippets": [
             {

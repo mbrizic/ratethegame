@@ -25,6 +25,7 @@ export class EventModel implements DomainModel {
 	constructor(
 		eventId: number | undefined,
 		name: string,
+		slug: string | null,
 		date: Date,
 		createdByUserId: number,
 		sportId: number,
@@ -44,7 +45,11 @@ export class EventModel implements DomainModel {
 
 		this.ensureValid()
 
-		this.slug = createSlug(name)
+		if (slug == null || slug.length == 0) {
+			this.slug = createSlug(name)
+		} else {
+			this.slug = slug
+		}
 		this.ratingPercentage = this.calculateRatingPercentage(ratings)
 	}
 
