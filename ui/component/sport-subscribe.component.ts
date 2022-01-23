@@ -4,6 +4,7 @@ import { Component } from "../core/html.interfaces"
 
 export interface SportSubscribeComponentModel {
     user: UserModel | undefined;
+    sportSlug: string;
     sportId: number;
 }
 
@@ -18,11 +19,11 @@ export const SportSubscribeComponent: Component<SportSubscribeComponentModel> = 
                 Styled({ class: "good text-centered" },
                     Small("You are subscribed to this sport.")
                 ),
-                Form(`/sports/${model.sportId}/unsubscribe`,
+                Form(`/sports/${model.sportSlug}/unsubscribe`,
                     SubmitButton("Unsubscribe", { class: "dimmed" })
                 )
             )
-            : Form(`/sports/${model.sportId}/subscribe`,
+            : Form(`/sports/${model.sportSlug}/subscribe`,
                 SubmitButton("Subscribe")
             )
     )
