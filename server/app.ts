@@ -8,6 +8,7 @@ import Routes from './core/route.interface';
 import errorMiddleware from './core/middleware/error.middleware';
 import { database } from './core/database';
 import pageViewMiddleware from './core/middleware/pageview.middleware';
+import { topRatedMailJob } from './core/scheduled-jobs';
 
 class App {
 	public app: express.Application;
@@ -22,6 +23,7 @@ class App {
 		this.initializeMiddlewares();
 		this.initializeRoutes(routes);
 		this.initializeErrorHandling();
+		this.initializeScheduledJobs();
 	}
 
 	public listen() {
@@ -59,6 +61,10 @@ class App {
 
 	private initializeErrorHandling() {
 		this.app.use(errorMiddleware);
+	}
+
+	private initializeScheduledJobs() {
+		topRatedMailJob();
 	}
 
 }
