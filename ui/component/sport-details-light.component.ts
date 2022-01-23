@@ -10,13 +10,13 @@ export const SportDetailsLightComponent: Component<SportModel> = (model: SportMo
     const bestRatedEvent = orderByDescending(model.events, e => e.ratingPercentage)[0]
 
     const bestRatedEventLink = bestRatedEvent != null
-        ? Link({ href: `/events/${bestRatedEvent.id}`, text: bestRatedEvent.name }, { style: "color: grey" })
+        ? Link({ href: `/events/${bestRatedEvent.slug}`, text: bestRatedEvent.name }, { style: "color: grey" })
         : null
 
     return Column(
         Text(
             Inline(
-                Link({ text: `${model.name}`, href: `/sports/${model.id}` }),
+                Link({ text: `${model.name}`, href: `/sports/${model.slug}` }),
                 Small(
                     totalEvents
                         ? `(${totalEvents} events)`

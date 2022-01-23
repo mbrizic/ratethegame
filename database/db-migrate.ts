@@ -16,7 +16,7 @@ async function runMigrations() {
 
 	await migrateDatabase(database)
 
-	console.log("Generating TypeScript classes from DB tables...")
+	console.log("\nGenerating TypeScript classes from DB tables...")
 
 	const sequelizeAuto = new SequelizeAuto(database, null, null, {
 		directory: "./database/models",
@@ -27,7 +27,7 @@ async function runMigrations() {
 		singularize: false,
 	});
 
-	sequelizeAuto.run();
+	await sequelizeAuto.run();
 
 	console.log("\nMigration done.")
 

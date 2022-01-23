@@ -1,3 +1,4 @@
+import { urlencoded } from "express"
 import EventsService from "../events/events.service"
 import UserService from "../users/users.service"
 
@@ -17,13 +18,20 @@ export default class NotificationService {
         const users = await this.userService.getAll()
         const events = await this.eventsService.getAllEvents()
 
-        // TODO extract all relevant events per sport
-        var relevantEvents = events.filter(event => this.betweenHoursAgo(now, event.date.getMilliseconds(), 6.01, 5)).filter(event => event.isRatedFavourably)
+        console.log('running sendTopRatedEvents')
 
-        var groupedRelevantEvents = events.groupBy
+        // TODO extract all relevant events per sport
+        var relevantEvents = events.filter(event => this.betweenHoursAgo(now, event.date.valueOf(), 6.01, 5)).filter(event => event.isRatedFavourably)
+
+        console.log(`relevant events`)
+        console.log(relevantEvents)
+
+        // TODO optimization: group relevantEvents by sportId
 
         for (var user of users) {
-            // TODO send each user that is subscribet to the sport in question the relevant sport's events
+            var userRelevantEvents = relevantEvents.filter(event => user.subscriptions.some(sub => sub.sportId === event.sportId))
+            console.log(`relevant events for user ${user.email}`)
+            console.log(userRelevantEvents)
         }
     }
 }

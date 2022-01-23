@@ -1,12 +1,13 @@
-import e from "express"
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
-import { orderByAscending, orderByDescending } from "../core/util"
+import { createSlug } from "../core/slug.service"
+import { orderByAscending } from "../core/util"
 import { EventModel } from "../events/event.model"
 
 export class SportModel implements DomainModel {
 	public readonly id?: number
 	public readonly name: string
+	public readonly slug: string
 	public readonly createdByUserId: number
 	public readonly description?: string
 	public readonly events: EventModel[]
@@ -25,6 +26,8 @@ export class SportModel implements DomainModel {
 		this.events = orderByAscending(events, event => event.ratingPercentage)
 
 		this.ensureValid()
+
+		this.slug = createSlug(name)
 	}
 
 	public ensureValid = () => {

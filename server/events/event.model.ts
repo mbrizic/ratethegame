@@ -2,6 +2,7 @@ import { EventRating } from "../../database/models/event_rating"
 import { now } from "../core/date.service"
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
+import { createSlug } from "../core/slug.service"
 import { PotentialUser } from "../users/users.dto"
 import { EventRatingModel } from "./event-rating.model"
 
@@ -12,20 +13,24 @@ export class EventModel implements DomainModel {
 
 	public readonly id: number | undefined
 	public readonly name: string
+	public readonly slug: string
 	public readonly date: Date
 	public readonly createdByUserId: number
 	public readonly sportId: number
 	public readonly sportName: string
+	public readonly sportSlug: string
 	public readonly ratingPercentage: number
 	public readonly ratings: EventRatingModel[]
 
 	constructor(
 		eventId: number | undefined,
 		name: string,
+		slug: string | null,
 		date: Date,
 		createdByUserId: number,
 		sportId: number,
 		sportName: string,
+		sportSlug: string,
 		ratings: EventRatingModel[]
 	) {
 
@@ -35,10 +40,16 @@ export class EventModel implements DomainModel {
 		this.createdByUserId = createdByUserId
 		this.sportId = sportId
 		this.sportName = sportName
+		this.sportSlug = sportSlug
 		this.ratings = ratings
 
 		this.ensureValid()
 
+		if (slug == null || slug.length == 0) {
+			this.slug = createSlug(name)
+		} else {
+			this.slug = slug
+		}
 		this.ratingPercentage = this.calculateRatingPercentage(ratings)
 	}
 

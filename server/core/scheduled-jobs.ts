@@ -6,7 +6,8 @@ const notificationService = new NotificationService()
 // TODO async?
 export function topRatedMailJob() {
     const job = new cron.CronJob({
-        cronTime: '50 * * * *',
+        // cronTime: '50 * * * *',
+        cronTime: '* * * * *',
         onTick: function () {
             notificationService.sendTopRatedEvents()
         },

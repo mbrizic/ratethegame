@@ -32,8 +32,8 @@ function getRatingsSummary(model: EventFormModel): ChildElement {
 
 export const EventDetails: Component<EventFormModel> = (model: EventFormModel) => {
 
-    const eventLink = Link({ text: model.event.name, href: `/events/${model.event.id}` })
-    const sportLink = Link({ text: model.event.sportName, href: `/sports/${model.event.sportId}` })
+    const eventLink = Link({ text: model.event.name, href: `/events/${model.event.slug}` })
+    const sportLink = Link({ text: model.event.sportName, href: `/sports/${model.event.sportSlug}` })
 
     return Column(
         Heading2(
