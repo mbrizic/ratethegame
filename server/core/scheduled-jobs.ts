@@ -1,13 +1,15 @@
 import * as cron from 'cron';
+import { getAppConfig } from './app.config';
 import NotificationService from './notification-service';
 
 const notificationService = new NotificationService()
 
 // TODO async?
 export function topRatedMailJob() {
+    const cronTime = getAppConfig().isDebugMode ? '* * * * *' : '50 * * * *'
+
     const job = new cron.CronJob({
-        // cronTime: '50 * * * *',
-        cronTime: '* * * * *',
+        cronTime: cronTime,
         onTick: function () {
             notificationService.sendTopRatedEvents()
         },

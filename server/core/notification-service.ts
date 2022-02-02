@@ -1,6 +1,9 @@
-import { urlencoded } from "express"
+import { LineBreak, Link } from "../../ui/core/html.elements"
+import { EventModel } from "../events/event.model"
 import EventsService from "../events/events.service"
 import UserService from "../users/users.service"
+import { getAppConfig } from "./app.config"
+import { sendEmail } from "./mail.service"
 
 export default class NotificationService {
     private userService = new UserService()
@@ -18,20 +21,42 @@ export default class NotificationService {
         const users = await this.userService.getAll()
         const events = await this.eventsService.getAllEvents()
 
-        console.log('running sendTopRatedEvents')
-
-        // TODO extract all relevant events per sport
         var relevantEvents = events.filter(event => this.betweenHoursAgo(now, event.date.valueOf(), 6.01, 5)).filter(event => event.isRatedFavourably)
-
-        console.log(`relevant events`)
-        console.log(relevantEvents)
 
         // TODO optimization: group relevantEvents by sportId
 
         for (var user of users) {
+            if (! user.settings.getReceiveTopRatedNotificationsSetting().value) 
+            {
+                continue
+            }
+
             var userRelevantEvents = relevantEvents.filter(event => user.subscriptions.some(sub => sub.sportId === event.sportId))
-            console.log(`relevant events for user ${user.email}`)
-            console.log(userRelevantEvents)
+            var hostname = getAppConfig().hostname
+
+            if (userRelevantEvents.length == 0) 
+            {
+                continue
+            }
+
+            if (getAppConfig().isDebugMode) {
+                console.log(
+                    this.generateNotificationText(userRelevantEvents, hostname)
+                )
+
+                continue
+            }
+
+            sendEmail(user.email, 'Recent Top rated events', 'Events:', 
+                this.generateNotificationText(userRelevantEvents, hostname)
+            )
         }
+    }
+
+    private generateNotificationText(userRelevantEvents: EventModel[], hostname: string): any {
+        return userRelevantEvents.map(event => `${event.name} - ${Link({
+            text: "Link to event",
+            href: `${hostname}/events/${event.slug}`
+        })} ${LineBreak()} `).join("")
     }
 }

@@ -13,9 +13,9 @@ export function sendEmail(recipientEmail: string, subject: string, title: string
         }],
         from: {
             email: mailClientSenderEmail,
-            name: `${subject}`      
+            name: "Rate the Game mailer"      
         },
-        subject: "Your RTG report",
+        subject: subject,
         content: [
           {
             type: "text/html",
