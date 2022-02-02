@@ -15,6 +15,13 @@ export default class NotificationService {
     
         return (lower < date) && (date <= upper)
     }
+
+    private generateNotificationText = (userRelevantEvents: EventModel[], hostname: string) => {
+        return userRelevantEvents.map(event => `${event.name} - ${Link({
+            text: "Link to event",
+            href: `${hostname}/events/${event.slug}`
+        })} ${LineBreak()} `).join("")
+    }
     
     public async sendTopRatedEvents() {
         const now = Date.now();
@@ -51,12 +58,5 @@ export default class NotificationService {
                 this.generateNotificationText(userRelevantEvents, hostname)
             )
         }
-    }
-
-    private generateNotificationText(userRelevantEvents: EventModel[], hostname: string): any {
-        return userRelevantEvents.map(event => `${event.name} - ${Link({
-            text: "Link to event",
-            href: `${hostname}/events/${event.slug}`
-        })} ${LineBreak()} `).join("")
     }
 }
