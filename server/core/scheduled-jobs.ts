@@ -4,7 +4,6 @@ import NotificationService from './notification-service';
 
 const notificationService = new NotificationService()
 
-// TODO async?
 export function topRatedMailJob() {
     const cronTime = getAppConfig().isDebugMode ? '* * * * *' : '50 * * * *'
 
