@@ -24,11 +24,16 @@ export default class NotificationService {
     }
     
     public async sendTopRatedEvents() {
-        const now = Date.now();
+        var coeff = 1000 * 60 * 1;
+        const now = Math.round(Date.now() / coeff) * coeff  // current timestamp rounded to nearest minute
         const users = await this.userService.getAll()
         const events = await this.eventsService.getAllEvents()
 
-        var relevantEvents = events.filter(event => this.betweenHoursAgo(now, event.date.valueOf(), 6.01, 5)).filter(event => event.isRatedFavourably)
+        var relevantEvents = events.filter(event => 
+                this.betweenHoursAgo(now, event.date.valueOf(), 6, 5)
+            ).filter(
+                event => event.isRatedFavourably
+            )
 
         // TODO optimization: group relevantEvents by sportId
 

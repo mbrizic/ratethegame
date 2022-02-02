@@ -5,7 +5,9 @@ import NotificationService from './notification-service';
 const notificationService = new NotificationService()
 
 export function topRatedMailJob() {
-    const cronTime = getAppConfig().isDebugMode ? '* * * * *' : '50 * * * *'
+    const cronTime = getAppConfig().isDebugMode 
+        ? '* * * * *'   // every minute
+        : '50 * * * *'  // at minute 50
 
     const job = new cron.CronJob({
         cronTime: cronTime,
