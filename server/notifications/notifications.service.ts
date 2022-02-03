@@ -2,10 +2,10 @@ import { LineBreak, Link } from "../../ui/core/html.elements"
 import { EventModel } from "../events/event.model"
 import EventsService from "../events/events.service"
 import UserService from "../users/users.service"
-import { getAppConfig } from "./app.config"
-import { sendEmail } from "./mail.service"
+import { getAppConfig } from "../core/app.config"
+import { sendEmail } from "../core/mail.service"
 
-export default class NotificationService {
+export default class NotificationsService {
     private userService = new UserService()
     private eventsService = new EventsService()
 
@@ -28,6 +28,7 @@ export default class NotificationService {
         const now = Math.round(Date.now() / coeff) * coeff  // current timestamp rounded to nearest minute
         const users = await this.userService.getAll()
         const events = await this.eventsService.getAllEvents()
+        const hostname = getAppConfig().hostname
 
         var relevantEvents = events.filter(event => 
                 this.betweenHoursAgo(now, event.date.valueOf(), 6, 5)
@@ -44,7 +45,6 @@ export default class NotificationService {
             }
 
             var userRelevantEvents = relevantEvents.filter(event => user.subscriptions.some(sub => sub.sportId === event.sportId))
-            var hostname = getAppConfig().hostname
 
             if (userRelevantEvents.length == 0) 
             {

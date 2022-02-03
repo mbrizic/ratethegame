@@ -8,7 +8,7 @@ import Routes from './core/route.interface';
 import errorMiddleware from './core/middleware/error.middleware';
 import { database } from './core/database';
 import pageViewMiddleware from './core/middleware/pageview.middleware';
-import { topRatedMailJob } from './core/scheduled-jobs';
+import { topRatedMailJob } from './notifications/notification.jobs';
 
 class App {
 	public app: express.Application;

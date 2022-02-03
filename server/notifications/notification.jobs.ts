@@ -1,8 +1,8 @@
 import * as cron from 'cron';
-import { getAppConfig } from './app.config';
-import NotificationService from './notification-service';
+import { getAppConfig } from '../core/app.config';
+import NotificationsService from './notifications.service';
 
-const notificationService = new NotificationService()
+const notificationService = new NotificationsService()
 
 export function topRatedMailJob() {
     const cronTime = getAppConfig().isDebugMode 
