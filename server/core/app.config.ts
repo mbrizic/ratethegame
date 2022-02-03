@@ -6,6 +6,7 @@ export interface AppConfig {
     dbLoggingEnabled: boolean;
     cssCachingEnabled: boolean;
     isDebugMode: boolean;
+    hostname: string;
     port: string;
     nodeEnv: string;
 }
@@ -22,6 +23,7 @@ const appConfig: AppConfig = {
     dbLoggingEnabled: ensureExists("DB_LOGGING_ENABLED") === "true",
     cssCachingEnabled: ensureExists("CSS_CACHING_ENABLED") === "true",
     isDebugMode: ensureExists("IS_DEBUG_MODE") === "true",
+    hostname: ensureExists("HOSTNAME"),
     port: ensureExists("PORT"),
     nodeEnv: ensureExists("NODE_ENV"),
 }

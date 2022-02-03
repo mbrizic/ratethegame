@@ -19,7 +19,8 @@ export const SportComponent: Component<SportComponentModel> = (model: SportCompo
                 SportDetailsComponent(model.sport),
                 SportSubscribeComponent({
                         user: model.userData,
-                        sportId: model.sport.id!,
+                        sportSlug: model.sport.slug!,
+                        sportId: model.sport.id!
                 })
             ),
             Spacing(),

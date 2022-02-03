@@ -41,7 +41,7 @@ export class UserFactory {
             user.userSetting.id,
             user.userSetting.userId,
             new UserSettingModel(
-                "Receive notifications about top-rated sport events",
+                "Receive notifications about top-rated events of subscribed sports",
                 user.userSetting.receiveTopRatedNotifications,
                 "receiveTopRatedNotifications"
             )

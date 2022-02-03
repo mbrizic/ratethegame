@@ -144,7 +144,7 @@ class EventsService {
 			datetime: model.date,
 		});
 
-		clearSportsCaches(sport?.id)
+		clearSportsCaches(sport?.slug)
 
 		return created.slug
 	}
@@ -167,7 +167,7 @@ class EventsService {
 		})
 
 		clearEventsCaches(eventModel.slug)
-		clearSportsCaches(eventModel.sportId)
+		clearSportsCaches(eventModel.slug)
 
 		recordAnalyticsEvent("UserVoted", userId, eventModel.id, dto.wouldRecommend.toString())
 
@@ -197,7 +197,7 @@ class EventsService {
 		}
 
 		clearEventsCaches(eventModel.slug)
-		clearSportsCaches(eventModel.sportId)
+		clearSportsCaches(eventModel.slug)
 
 		recordAnalyticsEvent("UserRemovedVote", userId, eventModel.id)
 

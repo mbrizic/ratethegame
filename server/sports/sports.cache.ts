@@ -23,9 +23,9 @@ export function getCachedSportsList(key: SportCacheKey) {
     return sportsListCache.get(key)
 }
 
-export function clearSportsCaches(sportId?: string | number) {
-    if (sportId) {
-        sportsCache.remove(sportId)
+export function clearSportsCaches(slug?: string) {
+    if (slug) {
+        sportsCache.remove(slug)
     } else {
         sportsCache.clear()
     }

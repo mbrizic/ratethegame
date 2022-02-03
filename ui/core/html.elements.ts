@@ -67,6 +67,9 @@ export const Tag = (text: string) =>
 export const Div = (children: ChildElement, options: BasicAttributes = {}) =>
     `<div ${addBasicAttributes(options)}>${children}</div>`
 
+export const LineBreak = () =>
+    `<br>`
+
 export const Text = (...text: ChildElement[]) =>
     `<span>${text.join("")}</span>`
 

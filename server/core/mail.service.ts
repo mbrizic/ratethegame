@@ -3,7 +3,7 @@ import * as https from 'https';
 
 const { mailClientApiKey, mailClientSenderEmail } = getAppConfig()
 
-export function sendEmail(recipientEmail: string, text: string) {
+export function sendEmail(recipientEmail: string, subject: string, title: string, text: string) {
     const body = {
         personalizations: [{
             to: [ {
@@ -15,12 +15,12 @@ export function sendEmail(recipientEmail: string, text: string) {
             email: mailClientSenderEmail,
             name: "Rate the Game mailer"      
         },
-        subject: "Your RTG report",
+        subject: subject,
         content: [
           {
             type: "text/html",
             value: `
-                <h1>Your RTG report</h1>
+                <h1>${title}</h1>
                 <p>${text}</p>
                 <a href="http://ratethegame.supercollider.hr/">unsubscribe here</a>
             `
