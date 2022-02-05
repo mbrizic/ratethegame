@@ -22,7 +22,7 @@ export function sendEmail(recipientEmail: string, subject: string, title: string
             value: `
                 <h1>${title}</h1>
                 <p>${text}</p>
-                <a href="${hostname}/unsubscribe?${unsubscribeLink}">unsubscribe here</a>
+                <a href="${hostname}/unsubscribe/${unsubscribeLink}">unsubscribe here</a>
             `
           }
         ],
