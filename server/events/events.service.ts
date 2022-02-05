@@ -13,7 +13,7 @@ import { Sports } from '../../database/models/sports';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import eventsCache, { clearEventsCaches, eventsListCache } from './events.cache';
 import { clearSportsCaches } from '../sports/sports.cache';
-import { Cacheable, InvalidatesCache } from '../core/cache.service';
+import { Cacheable, InvalidatesCache } from '../core/cache/cache.decorator';
 import ValidationException from '../core/exceptions/validation.exception';
 
 const defaultPageSize = 10;

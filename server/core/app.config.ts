@@ -32,7 +32,7 @@ function ensureExists(settingName: string): string {
     const setting = process.env[settingName];
 
     if (setting == undefined) {
-        throw new Error(`Setting ${settingName} does not exist`);
+        throw new Error(`Setting ${settingName} does not exist in .env file`);
     }
 
     return setting;

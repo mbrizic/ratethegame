@@ -8,7 +8,7 @@ import { ensureInputIsClean } from '../core/input-sanitizer'
 import ValidationException from '../core/exceptions/validation.exception'
 import { SportFactory } from './sports.factory'
 import { cacheSportsList, sportsCache, getCachedSportsList, sportsListCache } from './sports.cache'
-import { Cacheable, InvalidatesCache } from '../core/cache.service'
+import { Cacheable, InvalidatesCache } from '../core/cache/cache.decorator'
 
 const entitiesToInclude = [{
 	model: Events, as: "events", include: [
