@@ -12,6 +12,8 @@ export interface UsersAttributes {
   password: string;
   isAdmin: boolean;
   createdAt: Date;
+  salt: string;
+  uuid: string;
 }
 
 export type UsersPk = "id";
@@ -25,6 +27,8 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
   password!: string;
   isAdmin!: boolean;
   createdAt!: Date;
+  salt!: string;
+  uuid!: string;
 
   // Users hasMany EventRating via createdBy
   eventRatings!: EventRating[];
@@ -109,6 +113,16 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       field: 'created_at'
+    },
+    salt: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: "user_salt_unique"
+    },
+    uuid: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      unique: "user_uuid_unique"
     }
   }, {
     sequelize,
@@ -121,6 +135,32 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
         unique: true,
         fields: [
           { name: "email" },
+        ]
+      },
+      {
+        name: "user_salt_index",
+        fields: [
+          { name: "salt" },
+        ]
+      },
+      {
+        name: "user_salt_unique",
+        unique: true,
+        fields: [
+          { name: "salt" },
+        ]
+      },
+      {
+        name: "user_uuid_index",
+        fields: [
+          { name: "uuid" },
+        ]
+      },
+      {
+        name: "user_uuid_unique",
+        unique: true,
+        fields: [
+          { name: "uuid" },
         ]
       },
       {

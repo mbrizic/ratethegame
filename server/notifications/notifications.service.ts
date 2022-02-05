@@ -55,12 +55,17 @@ export default class NotificationsService {
                 console.log(
                     this.generateNotificationText(userRelevantEvents, hostname)
                 )
+                console.log(
+                    user.getUnsubscribeLink()
+                )
 
                 continue
             }
 
             sendEmail(user.email, 'Recent Top rated events', 'Events:', 
-                this.generateNotificationText(userRelevantEvents, hostname)
+                this.generateNotificationText(userRelevantEvents, hostname),
+                hostname,
+                user.getUnsubscribeLink()
             )
         }
     }

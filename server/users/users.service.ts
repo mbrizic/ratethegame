@@ -1,4 +1,6 @@
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateUserCommand, UpdateSettingCommand, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
@@ -43,6 +45,19 @@ class UserService {
 		return model;
 	}
 
+	public async getByUUID(uuid: string) {
+
+		const sports = await sportsService.getAll();
+		const user = await Users.findOne({ where: { uuid: uuid }, include: entitiesToInclude });
+		if (!user) {
+			throw new HttpException(409, "User not found.");
+		}
+
+		const model = UserFactory.FromDatabase(user, sports);
+
+		return model;
+	}
+
 	public async createUser(dto: CreateUserCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
@@ -61,13 +76,17 @@ class UserService {
 		}
 
 		const hashedPassword = await bcrypt.hash(dto.password, 10);
+		const salt = crypto.randomBytes(32).toString('base64');
+		const uuid = uuidv4();
 
 		const userModel = UserFactory.Create(dto.email, false)
 
 		const createdUser = await Users.create({
 			email: dto.email,
 			password: hashedPassword,
-			isAdmin: false
+			isAdmin: false,
+			salt: salt,
+			uuid: uuid
 		});
 
 		const createdSettings = await UserSettings.create({

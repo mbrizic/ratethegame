@@ -5,6 +5,8 @@ import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand, RemoveUserCommand, UpdateSettingCommand, UserDto } from './users.dto';
 import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
+import { InfoPage } from '../../ui/page/info.page';
+import { ErrorPage } from '../../ui/page/error.page';
 
 class UsersController {
 	private authService = new AuthService();
@@ -98,6 +100,35 @@ class UsersController {
 		try {
 			const updated = await this.userService.updateUserSetting(userId, settingData);
 			res.redirect(`/users/${userId}`)
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public unsubscribeUser = async (req: Request, res: Response, next: NextFunction) => {
+		const uuid = req.params.id;
+		const receivedHashedIdentifier = req.params.u;
+
+		try {
+			const userData = await this.userService.getByUUID(uuid);
+			const hashedIdentifier = await userData.getHashedIdentifier();
+			if (hashedIdentifier == receivedHashedIdentifier) {
+				if (userData.settings.getReceiveTopRatedNotificationsSetting().value) {
+					const settingData: UpdateSettingCommand = {
+						receiveTopRatedNotifications: true
+					}
+					const updated = await this.userService.updateUserSetting(userData.id!, settingData);
+				}
+				res.send(InfoPage({
+					user: undefined,
+					infoMessage: `User ${userData.email} unsubscribed. You will no longer receive emails from this site.`
+				}))
+			}
+
+			res.send(ErrorPage({
+				user: undefined,
+				errorMessage: "Wrong user data."
+			}))
 		} catch (error) {
 			next(error);
 		}

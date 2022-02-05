@@ -18,7 +18,10 @@ class UsersRoute implements Route {
 		// this.router.post(`${this.path}`, ensureAdmin, this.usersController.createUser);
 		// this.router.put(`${this.path}/:id(\\d+)`, ensureAdmin, this.usersController.updateUser);
 		this.router.post(`${this.path}/:id(\\d+)/remove`, ensureAuthenticated, ensureIsCurrentUser, this.usersController.deleteUser);
+		
+		// TODO remove ids from paths
 		this.router.post(`${this.path}/:id(\\d+)/setting`, ensureAuthenticated, ensureIsCurrentUser, this.usersController.updateUserSetting);
+		this.router.get(`/unsubscribe/:id&:u`, this.usersController.unsubscribeUser)
 	}
 }
 
