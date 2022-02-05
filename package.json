@@ -7,7 +7,6 @@
 		"test": "jest --forceExit --detectOpenHandles",
 		"db-migrate": "cross-env NODE_ENV=production ts-node --transpile-only database/db-migrate.ts",
 		"db-purge": "cross-env NODE_ENV=production ts-node --transpile-only database/db-purge.ts",
-		"generator": "cross-env NODE_ENV=production ts-node --transpile-only tools/generator/generator.ts",
 		"lint": "tslint -p tsconfig.json -c tslint.json"
 	},
 	"dependencies": {
