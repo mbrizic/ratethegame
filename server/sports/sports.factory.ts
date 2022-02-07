@@ -1,6 +1,7 @@
 import { Events } from "../../database/models/init-models"
 import { Sports } from "../../database/models/sports"
 import ValidationException from "../core/exceptions/validation.exception"
+import { createSlug } from "../core/slug.service"
 import { EventFactory } from "../events/events.factory"
 import { SportModel } from "./sports.model"
 
@@ -10,6 +11,7 @@ export class SportFactory {
 		return new SportModel(
 			undefined,
 			name,
+			createSlug(name),
 			description,
 			userId,
 			[]
@@ -28,6 +30,7 @@ export class SportFactory {
 		return new SportModel(
 			sport.id,
 			sport.name,
+			sport.slug,
 			sport.description,
 			sport.createdBy,
 			eventModels

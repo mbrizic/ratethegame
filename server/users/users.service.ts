@@ -14,8 +14,7 @@ import { EventRating } from '../../database/models/event_rating';
 import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 import { usersCache } from './users.cache';
-import { Cacheable, InvalidatesCache } from '../core/cache.service';
-import ValidationException from '../core/exceptions/validation.exception';
+import { Cacheable, InvalidatesCache } from '../core/cache/cache.decorator';
 
 // TODO: consider not using sports service but rather queries instead,
 // but make sure our caching still works as expected

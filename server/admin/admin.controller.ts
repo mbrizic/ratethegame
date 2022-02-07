@@ -2,13 +2,13 @@ import { NextFunction, Response } from 'express'
 import AuthService from '../auth/auth.service'
 import { RequestWithPotentialUser } from '../auth/auth.interface'
 import EventsService from '../events/events.service'
-import { StatsPage } from '../../ui/page/stats.page'
+import { AdminPage } from '../../ui/page/admin.page'
 import UserService from '../users/users.service'
 import { clearPageViews, getPageViewsPerDate } from '../core/pageview.service'
 import { clearRecordedErrors, getRecordedErrors } from '../core/error.service'
 import { clearCssCache } from '../../ui/core/css.service'
 import { clearAnalyticsEvents, getAnalyticsEvents } from '../core/analytics-event.service'
-import { getCacheStats } from '../core/cache.service'
+import { getCacheStats, purgeAllCaches } from '../core/cache/cache.service'
 import { AppSettings, getAppSettings, updateAppSettings } from '../core/app.settings'
 import { clearEventsCaches } from '../events/events.cache'
 import { clearSportsCaches } from '../sports/sports.cache'
@@ -35,7 +35,7 @@ export class AdminController {
 
 		try {
 			res.send(
-				StatsPage({
+				AdminPage({
 					user: req.user,
 					users,
 					events,
@@ -70,6 +70,11 @@ export class AdminController {
 
 	public clearCssCache = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
 		clearCssCache()
+		res.redirect("/admin")
+	}
+
+	public clearAllCaches = async (req: RequestWithPotentialUser, res: Response, next: NextFunction) => {
+		purgeAllCaches()
 		res.redirect("/admin")
 	}
 

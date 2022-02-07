@@ -1,6 +1,7 @@
 import { Events } from "../../database/models/init-models"
 import { Sports } from "../../database/models/sports"
 import ValidationException from "../core/exceptions/validation.exception"
+import { createSlug } from "../core/slug.service"
 import { EventRatingModel } from "./event-rating.model"
 import { EventModel } from "./event.model"
 
@@ -15,7 +16,7 @@ export class EventFactory {
 		return new EventModel(
 			undefined,
 			name,
-			slug,
+			createSlug(name),
 			date,
 			userId,
 			sport.id,

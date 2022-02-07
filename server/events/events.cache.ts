@@ -1,10 +1,10 @@
-import { Cache } from '../core/cache.service';
+import { createNewCache } from '../core/cache/cache.service';
 import { EventModel } from './event.model';
 
 type EventCacheKey = 'ALL-EVENTS' | 'UPCOMING-EVENTS' | 'BEST-RATED-EVENTS' | 'RECENT-EVENTS'
 
-const eventsCache = new Cache<EventModel>()
-export const eventsListCache = new Cache<EventModel[], EventCacheKey>()
+const eventsCache = createNewCache<EventModel>()
+export const eventsListCache = createNewCache<EventModel[], EventCacheKey>()
 
 export function cacheEventsList(key: EventCacheKey, events: EventModel[]) {
     eventsListCache.set(key, events)

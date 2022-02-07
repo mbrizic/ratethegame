@@ -1,6 +1,5 @@
 import { DomainModel } from "../core/domain.model"
 import ValidationException from "../core/exceptions/validation.exception"
-import { createSlug } from "../core/slug.service"
 import { orderByAscending } from "../core/util"
 import { EventModel } from "../events/event.model"
 
@@ -15,19 +14,19 @@ export class SportModel implements DomainModel {
 	constructor(
 		id: number | undefined,
 		name: string,
+		slug: string,
 		description: string | undefined,
 		createdByUserId: number,
 		events: EventModel[],
 	) {
 		this.id = id
 		this.name = name
+		this.slug = slug
 		this.description = description
 		this.createdByUserId = createdByUserId
 		this.events = orderByAscending(events, event => event.ratingPercentage)
 
 		this.ensureValid()
-
-		this.slug = createSlug(name)
 	}
 
 	public ensureValid = () => {

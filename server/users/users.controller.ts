@@ -99,7 +99,7 @@ class UsersController {
 
 		try {
 			const updated = await this.userService.updateUserSetting(userId, settingData);
-			res.redirect(`/users/${userId}`)
+			res.redirect(`/profile`)
 		} catch (error) {
 			next(error);
 		}

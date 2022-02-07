@@ -1,72 +1,5 @@
-import { getAppSettings } from "./app.settings";
-import { buildDecorator } from "./decorators";
-interface KeyValueStore<T> {
-    [id: number | string]: T | null
-}
-
-type CacheIdKey = number | string
-type CacheObjectKey = { id?: CacheIdKey, slug?: CacheIdKey }
-type CacheListKey = CacheObjectKey[]
-
-type Cacheable = CacheIdKey | CacheObjectKey | CacheListKey
-
-export interface CacheStats {
-    cacheHits: number,
-    cacheMisses: number
-}
-
-const counts: CacheStats = {
-    cacheHits: 0,
-    cacheMisses: 0
-};
-export class Cache<T, K = CacheIdKey> {
-    private cache: KeyValueStore<T> = {}
-
-    public get(id: number | string) {
-        if (!getAppSettings().isCacheEnabled) {
-            return null
-        }
-
-        const cached = this.cache[id]
-
-        if (cached) {
-            counts.cacheHits++
-        } else {
-            counts.cacheMisses++
-        }
-
-        return cached
-    }
-
-    public set(id: number | string | undefined, object: T) {
-        if (!getAppSettings().isCacheEnabled) {
-            return
-        }
-
-        if (id != undefined && this.cache[id] == null) {
-            this.cache[id] = object
-        }
-    }
-
-    public remove(id: number | string | undefined) {
-        if (!getAppSettings().isCacheEnabled) {
-            return
-        }
-
-        if (id) {
-            this.cache[id] = null
-        }
-    }
-
-    public clear() {
-        this.cache = {}
-    }
-
-}
-
-export function getCacheStats() {
-    return counts
-}
+import { buildDecorator } from "../decorators";
+import { Cacheable, CacheIdKey, ICache, CacheObjectKey } from "./cache.service";
 
 /**
  * Sets automatic cache. Examples on how to use:
@@ -84,7 +17,7 @@ export function getCacheStats() {
  * function getById(id: number)
  * 
  */
-export function Cacheable<Type extends Cacheable>(cache: Cache<Type, CacheIdKey>, id?: CacheIdKey) {
+export function Cacheable<Type extends Cacheable>(cache: ICache<Type, CacheIdKey>, id?: CacheIdKey) {
     return buildDecorator<Type>({
         // Checks if item is already in cache
         runBefore: (...args) => {
@@ -125,7 +58,7 @@ export function Cacheable<Type extends Cacheable>(cache: Cache<Type, CacheIdKey>
  *  - if nothing is provided, clear entire cache
  * 
  */
-export function InvalidatesCache<Type, Key>(cache: Cache<Type, Key>) {
+export function InvalidatesCache<Type, Key>(cache: ICache<Type, Key>) {
     return buildDecorator<any>({
         runAfter: (result) => {
             let id = null

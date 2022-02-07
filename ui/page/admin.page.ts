@@ -1,6 +1,6 @@
 import { AnalyticsEvent } from "../../server/core/analytics-event.service";
 import { AppSettings } from "../../server/core/app.settings";
-import { CacheStats } from "../../server/core/cache.service";
+import { CacheStats } from "../../server/core/cache/cache.service";
 import { RecordedError } from "../../server/core/error.service";
 import { PageViewsForDate } from "../../server/core/pageview.service";
 import { EventModel } from "../../server/events/event.model";
@@ -21,7 +21,7 @@ interface StatsModel extends PageModel {
     appSettings: AppSettings
 }
 
-export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
+export const AdminPage: Page<StatsModel> = (model: StatsModel) => {
 
     const mapped = Object.entries(model.pageviews)
 
@@ -131,6 +131,9 @@ export const StatsPage: Page<StatsModel> = (model: StatsModel) => {
                 ),
                 Form("/admin/user-cache/clear",
                     SubmitButton("Clear users cache")
+                ),
+                Form("/admin/all-caches/clear",
+                    SubmitButton("Purge all caches")
                 ),
             ),
             Heading3("App settings: "),
