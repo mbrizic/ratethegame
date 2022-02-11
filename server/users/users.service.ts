@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserCommand, UpdateSettingCommand, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
@@ -44,10 +43,10 @@ class UserService {
 		return model;
 	}
 
-	public async getByUUID(uuid: string) {
+	public async getByUnsubscribeToken(token: string) {
 
 		const sports = await sportsService.getAll();
-		const user = await Users.findOne({ where: { uuid: uuid }, include: entitiesToInclude });
+		const user = await Users.findOne({ where: { unsubscribeToken: token }, include: entitiesToInclude });
 		if (!user) {
 			throw new HttpException(409, "User not found.");
 		}
@@ -75,8 +74,7 @@ class UserService {
 		}
 
 		const hashedPassword = await bcrypt.hash(dto.password, 10);
-		const salt = crypto.randomBytes(32).toString('base64');
-		const uuid = uuidv4();
+		const unsubscribeToken = uuidv4();
 
 		const userModel = UserFactory.Create(dto.email, false)
 
@@ -84,8 +82,7 @@ class UserService {
 			email: dto.email,
 			password: hashedPassword,
 			isAdmin: false,
-			salt: salt,
-			uuid: uuid
+			unsubscribeToken: unsubscribeToken
 		});
 
 		const createdSettings = await UserSettings.create({

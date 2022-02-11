@@ -21,7 +21,7 @@ class UsersRoute implements Route {
 		
 		// TODO remove ids from paths
 		this.router.post(`${this.path}/:id(\\d+)/setting`, ensureAuthenticated, ensureIsCurrentUser, this.usersController.updateUserSetting);
-		this.router.get(`/unsubscribe/:id&:u`, this.usersController.unsubscribeUser)
+		this.router.get(`/unsubscribe/:u`, this.usersController.unsubscribeUser)
 	}
 }
 

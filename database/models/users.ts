@@ -12,8 +12,7 @@ export interface UsersAttributes {
   password: string;
   isAdmin: boolean;
   createdAt: Date;
-  salt: string;
-  uuid: string;
+  unsubscribeToken: string;
 }
 
 export type UsersPk = "id";
@@ -27,8 +26,7 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
   password!: string;
   isAdmin!: boolean;
   createdAt!: Date;
-  salt!: string;
-  uuid!: string;
+  unsubscribeToken!: string;
 
   // Users hasMany EventRating via createdBy
   eventRatings!: EventRating[];
@@ -114,15 +112,11 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       field: 'created_at'
     },
-    salt: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      unique: "user_salt_unique"
-    },
-    uuid: {
+    unsubscribeToken: {
       type: DataTypes.UUID,
       allowNull: false,
-      unique: "user_uuid_unique"
+      unique: "user_unsubscribe_token_unique",
+      field: 'unsubscribe_token'
     }
   }, {
     sequelize,
@@ -138,29 +132,10 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
         ]
       },
       {
-        name: "user_salt_index",
-        fields: [
-          { name: "salt" },
-        ]
-      },
-      {
-        name: "user_salt_unique",
+        name: "user_unsubscribe_token_unique",
         unique: true,
         fields: [
-          { name: "salt" },
-        ]
-      },
-      {
-        name: "user_uuid_index",
-        fields: [
-          { name: "uuid" },
-        ]
-      },
-      {
-        name: "user_uuid_unique",
-        unique: true,
-        fields: [
-          { name: "uuid" },
+          { name: "unsubscribe_token" },
         ]
       },
       {

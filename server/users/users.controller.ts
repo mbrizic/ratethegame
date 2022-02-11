@@ -106,13 +106,11 @@ class UsersController {
 	}
 
 	public unsubscribeUser = async (req: Request, res: Response, next: NextFunction) => {
-		const uuid = req.params.id;
-		const receivedHashedIdentifier = req.params.u;
+		const receivedUnsubscribeToken = req.params.u;
 
 		try {
-			const userData = await this.userService.getByUUID(uuid);
-			const hashedIdentifier = await userData.getHashedIdentifier();
-			if (hashedIdentifier == receivedHashedIdentifier) {
+			const userData = await this.userService.getByUnsubscribeToken(receivedUnsubscribeToken);
+			if (userData.unsubscribeToken == receivedUnsubscribeToken) {
 				if (userData.settings.getReceiveTopRatedNotificationsSetting().value) {
 					const settingData: UpdateSettingCommand = {
 						receiveTopRatedNotifications: true
