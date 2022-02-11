@@ -7,6 +7,7 @@ import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
 import { InfoPage } from '../../ui/page/info.page';
 import { ErrorPage } from '../../ui/page/error.page';
+import { UserModel } from './users.model';
 
 class UsersController {
 	private authService = new AuthService();
@@ -111,12 +112,8 @@ class UsersController {
 		try {
 			const userData = await this.userService.getByUnsubscribeToken(receivedUnsubscribeToken);
 			if (userData.unsubscribeToken == receivedUnsubscribeToken) {
-				if (userData.settings.getReceiveTopRatedNotificationsSetting().value) {
-					const settingData: UpdateSettingCommand = {
-						receiveTopRatedNotifications: true
-					}
-					const updated = await this.userService.updateUserSetting(userData.id!, settingData);
-				}
+				await this.userService.unsubscribeUser(userData);
+				
 				res.send(InfoPage({
 					user: undefined,
 					infoMessage: `User ${userData.email} unsubscribed. You will no longer receive emails from this site.`
