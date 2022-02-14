@@ -22,6 +22,7 @@ export class UserFactory {
 
         return new UserModel(
             undefined,
+            undefined,
             email,
             isAdmin,
             [],
@@ -59,6 +60,7 @@ export class UserFactory {
 
         return new UserModel(
             user.id,
+            user.unsubscribeToken,
             user.email,
             user.isAdmin,
             subscriptions,

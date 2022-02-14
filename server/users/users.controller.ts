@@ -5,6 +5,9 @@ import { RequestWithUser } from '../auth/auth.interface';
 import { CreateUserCommand, RemoveUserCommand, UpdateSettingCommand, UserDto } from './users.dto';
 import { returnUrlQueryParam } from '../core/constants';
 import UserService from './users.service';
+import { InfoPage } from '../../ui/page/info.page';
+import { ErrorPage } from '../../ui/page/error.page';
+import { UserModel } from './users.model';
 
 class UsersController {
 	private authService = new AuthService();
@@ -98,6 +101,29 @@ class UsersController {
 		try {
 			const updated = await this.userService.updateUserSetting(userId, settingData);
 			res.redirect(`/profile`)
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public unsubscribeUser = async (req: Request, res: Response, next: NextFunction) => {
+		const receivedUnsubscribeToken = req.params.u;
+
+		try {
+			const userData = await this.userService.getByUnsubscribeToken(receivedUnsubscribeToken);
+			if (userData.unsubscribeToken == receivedUnsubscribeToken) {
+				await this.userService.unsubscribeUser(userData);
+				
+				res.send(InfoPage({
+					user: undefined,
+					infoMessage: `User ${userData.email} unsubscribed. You will no longer receive emails from this site.`
+				}))
+			}
+
+			res.send(ErrorPage({
+				user: undefined,
+				errorMessage: "Wrong user data."
+			}))
 		} catch (error) {
 			next(error);
 		}

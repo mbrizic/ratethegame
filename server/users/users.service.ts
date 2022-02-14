@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 import { CreateUserCommand, UpdateSettingCommand, UpdateUserCommand } from './users.dto';
 import HttpException from '../core/exceptions/http.exception';
 import { isEmptyObject } from '../core/util';
@@ -13,6 +14,7 @@ import { recordAnalyticsEvent } from '../core/analytics-event.service';
 import { UserSportSubscriptions } from '../../database/models/user_sport_subscriptions';
 import { usersCache } from './users.cache';
 import { Cacheable, InvalidatesCache } from '../core/cache/cache.decorator';
+import { UserModel } from './users.model';
 
 // TODO: consider not using sports service but rather queries instead,
 // but make sure our caching still works as expected
@@ -42,6 +44,19 @@ class UserService {
 		return model;
 	}
 
+	public async getByUnsubscribeToken(token: string) {
+
+		const sports = await sportsService.getAll();
+		const user = await Users.findOne({ where: { unsubscribeToken: token }, include: entitiesToInclude });
+		if (!user) {
+			throw new HttpException(409, "User not found.");
+		}
+
+		const model = UserFactory.FromDatabase(user, sports);
+
+		return model;
+	}
+
 	public async createUser(dto: CreateUserCommand) {
 		if (isEmptyObject(dto)) {
 			throw new HttpException(400, "Incorrect input data");
@@ -60,13 +75,15 @@ class UserService {
 		}
 
 		const hashedPassword = await bcrypt.hash(dto.password, 10);
+		const unsubscribeToken = uuidv4();
 
 		const userModel = UserFactory.Create(dto.email, false)
 
 		const createdUser = await Users.create({
 			email: dto.email,
 			password: hashedPassword,
-			isAdmin: false
+			isAdmin: false,
+			unsubscribeToken: unsubscribeToken
 		});
 
 		const createdSettings = await UserSettings.create({
@@ -181,6 +198,32 @@ class UserService {
 		recordAnalyticsEvent("UserUnsubscribedFromSport", userId, sport.id)
 
 		usersCache.remove(userId)
+	}
+
+	public async unsubscribeUser(userData: UserModel) {
+		if (userData.settings.getReceiveTopRatedNotificationsSetting().value) {
+			const settingData: UpdateSettingCommand = {
+				receiveTopRatedNotifications: true
+			};
+			const updated = await this.updateUserSetting(userData.id!, settingData);
+		}
+
+		await this.generateNewUnsubscribeToken(userData.id!);
+
+		return userData.id
+	}
+
+	public async generateNewUnsubscribeToken(userId: number) {
+		const newUnsubscribeToken = uuidv4();
+
+		const createdUser = await Users.update(
+			{ unsubscribeToken: newUnsubscribeToken },
+			{ where: { id: userId } }
+		);
+
+		if (!createdUser) {
+			throw new HttpException(409, "User not found");
+		}
 	}
 }
 

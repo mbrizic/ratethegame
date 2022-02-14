@@ -12,6 +12,7 @@ export interface UsersAttributes {
   password: string;
   isAdmin: boolean;
   createdAt: Date;
+  unsubscribeToken: string;
 }
 
 export type UsersPk = "id";
@@ -25,6 +26,7 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
   password!: string;
   isAdmin!: boolean;
   createdAt!: Date;
+  unsubscribeToken!: string;
 
   // Users hasMany EventRating via createdBy
   eventRatings!: EventRating[];
@@ -109,6 +111,12 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       field: 'created_at'
+    },
+    unsubscribeToken: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      unique: "user_unsubscribe_token_unique",
+      field: 'unsubscribe_token'
     }
   }, {
     sequelize,
@@ -121,6 +129,13 @@ export class Users extends Model<UsersAttributes, UsersCreationAttributes> imple
         unique: true,
         fields: [
           { name: "email" },
+        ]
+      },
+      {
+        name: "user_unsubscribe_token_unique",
+        unique: true,
+        fields: [
+          { name: "unsubscribe_token" },
         ]
       },
       {
